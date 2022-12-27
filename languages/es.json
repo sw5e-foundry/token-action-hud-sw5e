@@ -1,0 +1,57 @@
+{
+  "tokenActionHud": {
+    "dnd5e": {
+      "abilities": "Características",
+      "bonusActions": "Acciones de bonificación",
+      "checks": "Pruebas",
+      "conditions": "Estados",
+      "crewActions": "Acciones de la tripulación",
+      "inventory": "Inventario",
+      "lair": "Guarida",
+      "lairActions": "Acciones de guarida",
+      "legendary": "Legendario",
+      "legendaryActions": "Acciones legendarias",
+      "otherActions": "Otras acciones",
+      "rests": "Descansos",
+      "skills": "Habilidades",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "Si se activa, las habilidades y características utilizarán una abreviatura de tres letras.",
+          "name": "Nombres de habilidades y características abreviados"
+        },
+        "displaySpellInfo": {
+          "hint": "Si se activa, la información de los componentes del conjuro, la concentración y el estado del ritual se indicarán junto al nombre del conjuro.",
+          "name": "Mostrar información del conjuro"
+        },
+        "itemMacroReplace": {
+          "hint": "Selecciona qué elementos se mostrarán en el inventario.",
+          "name": "Objeto-Macro: macro del objeto, objeto original, o ambos"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showPassiveFeats": {
+          "hint": "Mostrar rasgos pasivos",
+          "name": "Mostrar rasgos pasivos"
+        },
+        "showSlowActions": {
+          "hint": "Mostrar acciones que toman más de una ronda",
+          "name": "Mostrar acciones lentas"
+        },
+        "showUnchargedItems": {
+          "hint": "Si se activa, los elementos se muestran en el HUD incluso si no tienen cargas restantes.",
+          "name": "Mostrar elementos sin carga (incluye objetos y conjuros)"
+        },
+        "showUnequippedItems": {
+          "hint": "Si se activa, se muestran todos los objetos de los PNJ, no sólo los equipados.",
+          "name": "Mostrar todos los objetos de los PNJ"
+        },
+        "showUnpreparedSpells": {
+          "hint": "Si se desactiva, los conjuros como los trucos, innatos, del pactos y los conjuros a voluntad, se deben 'preparar' a través de los detalles del conjuro para que se muestren en el HUD.",
+          "name": "Mostrar todos los conjuros no preparables"
+        }
+      }
+    }
+  }
+}

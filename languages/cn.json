@@ -1,0 +1,56 @@
+{
+  "tokenActionHud": {
+    "dnd5e": {
+      "abilities": "属性",
+      "bonusActions": "獎勵行動",
+      "checks": "检定",
+      "conditions": "状态",
+      "crewActions": "船員行動",
+      "lair": "巢穴",
+      "lairActions": "巢穴行動",
+      "legendary": "传奇",
+      "legendaryActions": "傳奇動作",
+      "otherActions": "其他行為",
+      "rests": "休息",
+      "skills": "技能",
+      "settings": {
+        "abbreviateSkills": {
+          "name": "缩写技能和属性名",
+          "hint": "启用后，技能和属性都会用其三字母缩写。"
+        },
+        "displaySpellInfo": {
+          "name": "显示法术信息",
+          "hint": "启用后，法术构材信息、专注、仪式状态会在法术名旁标记出来。"
+        },
+        "itemMacroReplace": {
+          "name": "物品宏：覆盖原有物品",
+          "hint": "启用后，有宏的物品的物品宏将会覆盖原本的物品，否则两个都会显示。"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showPassiveFeats": {
+          "name": "顯示被動功能",
+          "hint": "顯示被動功能"
+        },
+        "showSlowActions": {
+          "name": "顯示緩慢的動作",
+          "hint": "顯示超過一輪的動作"
+        },
+        "showUnchargedItems": {
+          "name": "显示空物品（包含物品和法术）",
+          "hint": "启用后，HUD上会显示没有剩余充能的物品。"
+        },
+        "showUnequippedItems": {
+          "name": "显示所有NPC物品",
+          "hint": "启用后，NPC的所有物品都会显示，而不仅仅是已装备的物品。"
+        },
+        "showUnpreparedSpells": {
+          "name": "显示所有未准备法术",
+          "hint": "禁用后，戏法、天生、契约和随意使用的法术需要在法术详情页设置为‘准备’状态才能显示在HUD上。"
+        }
+      }
+    }
+  }
+}

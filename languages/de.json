@@ -1,0 +1,57 @@
+{
+  "tokenActionHud": {
+    "dnd5e": {
+      "abilities": "Abilities",
+      "bonusActions": "Bonus Actions",
+      "checks": "Checks",
+      "conditions": "Conditions",
+      "crewActions": "Crew Actions",
+      "lair": "Lair",
+      "lairActions": "Lair Actions",
+      "legendary": "Legendär",
+      "legendaryActions": "Legendary Actions",
+      "otherActions": "Other Actions",
+      "rests": "Rests",
+      "skills": "Skills",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+          "name": "Abbreviate Skill and Ability Names"
+        },
+        "displaySpellInfo": {
+          "hint": "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
+          "name": "Display spell information"
+        },
+        "itemMacroReplace": {
+          "hint": "Select which of the items will be shown in the inventory.",
+          "name": "Item-Macro: item macro, original item, or both"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showPassiveFeats": {
+          "hint": "Show passive feats",
+          "name": "Show passive feats"
+        },
+        "showSlowActions": {
+          "hint": "Aktionen anzeigen, die länger als eine Runde dauern",
+          "name": "Langsame Aktionen anzeigen"
+        },
+        "showUnchargedItems": {
+          "hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
+          "name": "Show empty items (includes items and spells)"
+        },
+        "showUnequippedItems": {
+          "hint": "If enabled, all items are shown for NPCs, not just equipped items.",
+          "name": "Show all NPC items"
+        },
+        "showUnpreparedSpells": {
+          "hint": "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
+          "name": "Show all non-preparable spells"
+        }
+        
+      }
+    }
+  }
+}

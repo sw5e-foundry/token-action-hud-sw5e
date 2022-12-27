@@ -1,0 +1,56 @@
+{
+  "tokenActionHud": {
+    "dnd5e": {
+      "abilities": "Abilities",
+      "bonusActions": "Bonus Actions",
+      "checks": "Checks",
+      "conditions": "Conditions",
+      "crewActions": "Crew Actions",
+      "lair": "Lair",
+      "lairActions": "Lair Actions",
+      "legendary": "Legendary",
+      "legendaryActions": "Legendary Actions",
+      "otherActions": "Other Actions",
+      "rests": "Rests",
+      "skills": "Skills",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "Display skill and ability names as a three-character abbreviation",
+          "name": "Abbreviate Skill and Ability Names"
+        },
+        "displaySpellInfo": {
+          "hint": "Display spell component information, concentration, and ritual status next to the spell's name",
+          "name": "Display Spell Information"
+        },
+        "itemMacroReplace": {
+          "hint": "Select which of the items will be shown in the inventory",
+          "name": "Item-Macro: item macro, original item, or both"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "Show items without an activation cost",
+          "name": "Show Items without Activation Costs"
+        },
+        "showPassiveFeats": {
+          "hint": "Show passive features",
+          "name": "Show Passive Features"
+        },
+        "showSlowActions": {
+          "hint": "Show actions that take longer than one round",
+          "name": "Show Slow Actions"
+        },
+        "showUnchargedItems": {
+          "hint": "Show items with no charges remaining",
+          "name": "Show Uncharged Items"
+        },
+        "showUnequippedItems": {
+          "hint": "Show unequipped items",
+          "name": "Show Unequipped Items"
+        },
+        "showUnpreparedSpells": {
+          "hint": "Show unprepared spells",
+          "name": "Show Unprepared Spells"
+        }
+      }
+    }
+  }
+}

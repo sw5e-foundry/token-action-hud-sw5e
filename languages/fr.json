@@ -1,0 +1,56 @@
+{
+  "tokenActionHud": {
+    "dnd5e": {
+      "abilities": "Abilités",
+      "bonusActions": "Actions bonus",
+      "checks": "Tests",
+      "conditions": "Conditions",
+      "crewActions": "Actions de l'équipage",
+      "lair": "Antre",
+      "lairActions": "Actions de antre",
+      "legendary": "Légendaire",
+      "legendaryActions": "Actions légendaires",
+      "otherActions": "D'autres actions",
+      "rests": "Repos",
+      "skills": "Compétences",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "Si activée les caractéristiques et les compétences utiliserons une abréviation de 3 caractères.",
+          "name": "Abréger les noms des caractéristiques et des compétences"
+        },
+        "displaySpellInfo": {
+          "hint": "Si activée, les informations sur les composantes de sort, la concentration et les rituels seront affichées à côté du nom du sort.",
+          "name": "Afficher les informations des sorts"
+        },
+        "itemMacroReplace": {
+          "hint": "Sélectionne quels objets seront montrés dans l'inventaire.",
+          "name": "Item-Macro: macro d'objet, objet original, ou les deux"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showPassiveFeats": {
+          "hint": "Afficher les dons passifs",
+          "name": "Afficher les dons passifs"
+        },
+        "showSlowActions": {
+          "hint": "Afficher les actions qui prennent plus d'un tour",
+          "name": "Afficher les actions lentes"
+        },
+        "showUnchargedItems": {
+          "hint": "Si activée, les objets seront affichés dans le HUD même s'ils n'ont plus de charges.",
+          "name": "Afficher les objets vides (y compris les objets et les sorts)"
+        },
+        "showUnequippedItems": {
+          "hint": "Si activée, tous les objets seront affichés pour les PNJ, et pas seulement les objets équipés.",
+          "name": "Afficher tous les objets des PNJs"
+        },
+        "showUnpreparedSpells": {
+          "hint": "Si désactivée, les sorts tels que les tours de magie, innés, de pacte et à volonté doivent être préparés dans le détail du sort pour être affiché dans le HUD.",
+          "name": "Afficher tous les sorts non préparés"
+        }
+      }
+    }
+  }
+}
