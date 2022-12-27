@@ -104,6 +104,8 @@
   },
   "socket": false,
   "manifest": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e/releases/download/0.1.0/module.zip",
+  "download": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e/releases/latest/download/module.zip",
+  "readme": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e#readme",
   "protected": false,
   "coreTranslation": false,
   "library": false
