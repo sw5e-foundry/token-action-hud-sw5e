@@ -22,10 +22,6 @@
           "hint": "Si activée, les informations sur les composantes de sort, la concentration et les rituels seront affichées à côté du nom du sort.",
           "name": "Afficher les informations des sorts"
         },
-        "itemMacroReplace": {
-          "hint": "Sélectionne quels objets seront montrés dans l'inventaire.",
-          "name": "Item-Macro: macro d'objet, objet original, ou les deux"
-        },
         "showItemsWithoutActivationCosts": {
           "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
           "name": "Show Items without Activation costs"

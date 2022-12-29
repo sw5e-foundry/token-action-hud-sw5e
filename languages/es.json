@@ -23,10 +23,6 @@
           "hint": "Si se activa, la información de los componentes del conjuro, la concentración y el estado del ritual se indicarán junto al nombre del conjuro.",
           "name": "Mostrar información del conjuro"
         },
-        "itemMacroReplace": {
-          "hint": "Selecciona qué elementos se mostrarán en el inventario.",
-          "name": "Objeto-Macro: macro del objeto, objeto original, o ambos"
-        },
         "showItemsWithoutActivationCosts": {
           "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
           "name": "Show Items without Activation costs"

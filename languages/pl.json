@@ -22,10 +22,6 @@
           "hint": "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
           "name": "Display spell information"
         },
-        "itemMacroReplace": {
-          "hint": "If enabled, items with an item macro will overwrite their original, otherwise both options will be shown.",
-          "name": "Item-Macro: overwrite original item"
-        },
         "showItemsWithoutActivationCosts": {
           "hint": "Show items without an activation cost",
           "name": "Show Items without Activation Costs"

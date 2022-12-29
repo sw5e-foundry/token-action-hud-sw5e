@@ -22,10 +22,6 @@
           "hint": "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
           "name": "Display spell information"
         },
-        "itemMacroReplace": {
-          "hint": "Select which of the items will be shown in the inventory.",
-          "name": "Item-Macro: item macro, original item, or both"
-        },
         "showItemsWithoutActivationCosts": {
           "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
           "name": "Show Items without Activation costs"

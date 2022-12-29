@@ -1,30 +1,5 @@
-import { ItemMacroOptions } from './item-macro-options.js'
-
 export function register (updateFunc) {
     const appName = 'token-action-hud-dnd5e'
-
-    if (game.modules.get('itemacro')?.active) {
-        game.settings.register(appName, 'itemMacroReplace', {
-            name: game.i18n.localize(
-                'tokenActionHud.dnd5e.settings.itemMacroReplace.name'
-            ),
-            hint: game.i18n.localize(
-                'tokenActionHud.dnd5e.settings.itemMacroReplace.hint'
-            ),
-            scope: 'client',
-            config: true,
-            type: String,
-            choices: {
-                showBoth: game.i18n.localize(ItemMacroOptions.SHOW_BOTH),
-                showItemMacro: game.i18n.localize(ItemMacroOptions.SHOW_ITEM_MACRO),
-                showOriginal: game.i18n.localize(ItemMacroOptions.SHOW_ORIGINAL_ITEM)
-            },
-            default: 'showBoth',
-            onChange: (value) => {
-                updateFunc(value)
-            }
-        })
-    }
 
     game.settings.register(appName, 'abbreviateSkills', {
         name: game.i18n.localize(

@@ -22,10 +22,6 @@
           "hint": "Display spell component information, concentration, and ritual status next to the spell's name",
           "name": "Display Spell Information"
         },
-        "itemMacroReplace": {
-          "hint": "Select which of the items will be shown in the inventory",
-          "name": "Item-Macro: item macro, original item, or both"
-        },
         "showItemsWithoutActivationCosts": {
           "hint": "Show items without an activation cost",
           "name": "Show Items without Activation Costs"

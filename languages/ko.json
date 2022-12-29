@@ -15,40 +15,36 @@
       "skills": "기술",
       "settings": {
         "abbreviateSkills": {
-          "name": "기술 및 능력치 이름을 줄임",
-          "hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다."
+          "hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
+          "name": "기술 및 능력치 이름을 줄임"
         },
         "displaySpellInfo": {
-          "name": "주문 정보 표시",
-          "hint": "활성화할 경우 주문 구성요소 정보, 집중, 의식 상태가 주문 이름 옆에 표시된다."
-        },
-        "itemMacroReplace": {
-          "name": "아이템 매크로: 원항목 덮어쓰기",
-          "hint": "활성화될 경우 아이템 매크로가 있는 아이템은 원래 아이템을 덮어쓰게 되며 그렇지 않을 경우 두 옵션이 모두 표시된다."
+          "hint": "활성화할 경우 주문 구성요소 정보, 집중, 의식 상태가 주문 이름 옆에 표시된다.",
+          "name": "주문 정보 표시"
         },
         "showItemsWithoutActivationCosts": {
           "hint": "Show items without an activation cost",
           "name": "Show Items without Activation Costs"
         },
         "showPassiveFeats": {
-          "name": "패시브 투수 표시",
-          "hint": "패시브 투수 표시"
+          "hint": "패시브 투수 표시",
+          "name": "패시브 투수 표시"
         },
         "showSlowActions": {
-          "name": "느린 동작 표시",
-          "hint": "한 라운드보다 오래 걸리는 작업 표시"
+          "hint": "한 라운드보다 오래 걸리는 작업 표시",
+          "name": "느린 동작 표시"
         },
         "showUnchargedItems": {
-          "name": "빈 항목 표시 (아이템과 주문 포함)",
-          "hint": "활성화할 경우 남은 충전량이 없더라도 HUD에 항목이 표시된다."
+          "hint": "활성화할 경우 남은 충전량이 없더라도 HUD에 항목이 표시된다.",
+          "name": "빈 항목 표시 (아이템과 주문 포함)"
         },
         "showUnequippedItems": {
-          "name": "모든 NPC 아이템 표시",
-          "hint": "활성화할 경우 NPC가 장비한 아이템 뿐만이 아닌, 모든 아이템이 표시된다."
+          "hint": "활성화할 경우 NPC가 장비한 아이템 뿐만이 아닌, 모든 아이템이 표시된다.",
+          "name": "모든 NPC 아이템 표시"
         },
         "showUnpreparedSpells": {
-          "name": "모든 준비 불가능한 주문들 표시",
-          "hint": "비활성화할 경우 캔트립(소마법), 선천적, 계약, 의지(At-will) 주문들은 주문 상세 정보에서 '준비'하여야 HUD에 표시된다."
+          "hint": "비활성화할 경우 캔트립(소마법), 선천적, 계약, 의지(At-will) 주문들은 주문 상세 정보에서 '준비'하여야 HUD에 표시된다.",
+          "name": "모든 준비 불가능한 주문들 표시"
         }
       }
     }
