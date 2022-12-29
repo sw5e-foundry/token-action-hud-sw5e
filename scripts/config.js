@@ -1,6 +1,6 @@
 import { importClass } from './utils.js'
 
-export const coreModuleVersion = '0.1.0'
+export const coreModuleVersion = '0.1.1'
 const coreModulePath = '../../token-action-hud-core/'
 const coreActionHandlerFile = `${coreModulePath}scripts/action-handlers/action-handler.js`
 const coreActionListExtenderFile = `${coreModulePath}scripts/action-handlers/action-list-extender.js`
