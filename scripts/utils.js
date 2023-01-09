@@ -31,13 +31,3 @@ export async function setSetting (key, value) {
         Logger.debug(`Setting '${key}' not found`)
     }
 }
-
-/**
- * Import a default class
- * @param {string} path The path of the file
- */
-export async function importClass (path) {
-    return await import(path).then(module => {
-        return module.default
-    })
-}

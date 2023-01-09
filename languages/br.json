@@ -1,8 +1,19 @@
 {
   "tokenActionHud": {
     "dnd5e": {
+      "1stLevelSpells": "1st Level Spells",
+      "2ndLevelSpells": "2nd Level Spells",
+      "3rdLevelSpells": "3rd Level Spells",
+      "4thLevelSpells": "4th Level Spells",
+      "5thLevelSpells": "5th Level Spells",
+      "6thLevelSpells": "6th Level Spells",
+      "7thLevelSpells": "7th Level Spells",
+      "8thLevelSpells": "8th Level Spells",
+      "9thLevelSpells": "9th Level Spells",
       "abilities": "Atributos",
+      "activeFeatures": "Active Features",
       "bonusActions": "Ações de bônus",
+      "cantrips": "Truques",
       "checks": "Testes",
       "conditions": "Condições",
       "crewActions": "Ações da tripulação",
@@ -10,8 +21,11 @@
       "lairActions": "Ações de covil",
       "legendary": "Lendária",
       "legendaryActions": "Ações Lendárias",
+      "magicItems": "Itens Mágicos",
       "otherActions": "Outras ações",
+      "passiveFeatures": "Passive Features",
       "rests": "Descansos",
+      "rollInitiative": "Rolar Iniciativa",
       "saves": "Salvaguarda",
       "skills": "Pericias",
       "settings": {
@@ -26,10 +40,6 @@
         "showItemsWithoutActivationCosts": {
           "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
           "name": "Show Items without Activation costs"
-        },
-        "showPassiveFeats": {
-          "hint": "Mostrar talentos passivos",
-          "name": "Mostrar talentos passivos"
         },
         "showSlowActions": {
           "hint": "Mostrar ações que levam mais de uma rodada",
@@ -46,7 +56,7 @@
         "showUnpreparedSpells": {
           "hint": "Se desativado, magias como cantrips, magias inatas, pactos e à vontade precisam ser 'preparadas' através dos detalhes da magia que serão mostrados no HUD. ",
           "name": "Exibe todas as magias não preparadas"
-        },
+        }
       }
     }
   }

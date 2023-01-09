@@ -33,22 +33,6 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'showPassiveFeats', {
-        name: game.i18n.localize(
-            'tokenActionHud.dnd5e.settings.showPassiveFeats.name'
-        ),
-        hint: game.i18n.localize(
-            'tokenActionHud.dnd5e.settings.showPassiveFeats.hint'
-        ),
-        scope: 'client',
-        config: true,
-        type: Boolean,
-        default: true,
-        onChange: (value) => {
-            updateFunc(value)
-        }
-    })
-
     game.settings.register(appName, 'displaySpellInfo', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.displaySpellInfo.name'

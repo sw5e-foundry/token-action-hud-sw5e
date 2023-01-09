@@ -88,6 +88,7 @@
     "requires": [
       {
         "id": "token-action-hud-core",
+        "type": "module",
         "compatibility": [
           {
             "minimum": "0.1.1",

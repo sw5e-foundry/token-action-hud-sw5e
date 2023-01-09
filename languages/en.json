@@ -1,8 +1,19 @@
 {
   "tokenActionHud": {
     "dnd5e": {
+      "1stLevelSpells": "1st Level Spells",
+      "2ndLevelSpells": "2nd Level Spells",
+      "3rdLevelSpells": "3rd Level Spells",
+      "4thLevelSpells": "4th Level Spells",
+      "5thLevelSpells": "5th Level Spells",
+      "6thLevelSpells": "6th Level Spells",
+      "7thLevelSpells": "7th Level Spells",
+      "8thLevelSpells": "8th Level Spells",
+      "9thLevelSpells": "9th Level Spells",
       "abilities": "Abilities",
+      "activeFeatures": "Active Features",
       "bonusActions": "Bonus Actions",
+      "cantrips": "Cantrips",
       "checks": "Checks",
       "conditions": "Conditions",
       "crewActions": "Crew Actions",
@@ -10,8 +21,11 @@
       "lairActions": "Lair Actions",
       "legendary": "Legendary",
       "legendaryActions": "Legendary Actions",
+      "magicItems": "Magic Items",
       "otherActions": "Other Actions",
+      "passiveFeatures": "Passive Features",
       "rests": "Rests",
+      "rollInitiative": "Roll Initiative",
       "skills": "Skills",
       "settings": {
         "abbreviateSkills": {
@@ -25,10 +39,6 @@
         "showItemsWithoutActivationCosts": {
           "hint": "Show items without an activation cost",
           "name": "Show Items without Activation Costs"
-        },
-        "showPassiveFeats": {
-          "hint": "Show passive features",
-          "name": "Show Passive Features"
         },
         "showSlowActions": {
           "hint": "Show actions that take longer than one round",

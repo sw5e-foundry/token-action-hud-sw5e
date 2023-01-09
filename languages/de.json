@@ -1,8 +1,19 @@
 {
   "tokenActionHud": {
     "dnd5e": {
+      "1stLevelSpells": "1st Level Spells",
+      "2ndLevelSpells": "2nd Level Spells",
+      "3rdLevelSpells": "3rd Level Spells",
+      "4thLevelSpells": "4th Level Spells",
+      "5thLevelSpells": "5th Level Spells",
+      "6thLevelSpells": "6th Level Spells",
+      "7thLevelSpells": "7th Level Spells",
+      "8thLevelSpells": "8th Level Spells",
+      "9thLevelSpells": "9th Level Spells",
       "abilities": "Abilities",
+      "activeFeatures": "Active Features",
       "bonusActions": "Bonus Actions",
+      "cantrips": "Cantrips",
       "checks": "Checks",
       "conditions": "Conditions",
       "crewActions": "Crew Actions",
@@ -10,43 +21,41 @@
       "lairActions": "Lair Actions",
       "legendary": "Legendär",
       "legendaryActions": "Legendary Actions",
+      "magicItems": "Magische Gegenstände",
       "otherActions": "Other Actions",
+      "passiveFeatures": "Passive Features",
       "rests": "Rests",
+      "rollInitiative": "Initiativewurf",
       "skills": "Skills",
       "settings": {
         "abbreviateSkills": {
-          "hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+          "hint": "Display skill and ability names as a three-character abbreviation",
           "name": "Abbreviate Skill and Ability Names"
         },
         "displaySpellInfo": {
-          "hint": "If enabled, spell component information, concentration, and ritual status will be noted next to the spell name.",
-          "name": "Display spell information"
+          "hint": "Display spell component information, concentration, and ritual status next to the spell's name",
+          "name": "Display Spell Information"
         },
         "showItemsWithoutActivationCosts": {
-          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
-          "name": "Show Items without Activation costs"
-        },
-        "showPassiveFeats": {
-          "hint": "Show passive feats",
-          "name": "Show passive feats"
+          "hint": "Show items without an activation cost",
+          "name": "Show Items without Activation Costs"
         },
         "showSlowActions": {
           "hint": "Aktionen anzeigen, die länger als eine Runde dauern",
           "name": "Langsame Aktionen anzeigen"
         },
         "showUnchargedItems": {
-          "hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
-          "name": "Show empty items (includes items and spells)"
+          "hint": "Show items with no charges remaining",
+          "name": "Show Uncharged Items"
         },
         "showUnequippedItems": {
-          "hint": "If enabled, all items are shown for NPCs, not just equipped items.",
-          "name": "Show all NPC items"
+          "hint": "Show unequipped items",
+          "name": "Show Unequipped Items"
         },
         "showUnpreparedSpells": {
-          "hint": "If disabled, spells such as cantrips, innate, pact, and at-will spells need to be 'prepared' via the spell details to be shown on the HUD.",
-          "name": "Show all non-preparable spells"
+          "hint": "Show unprepared spells",
+          "name": "Show Unprepared Spells"
         }
-        
       }
     }
   }

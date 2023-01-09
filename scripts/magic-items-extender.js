@@ -1,6 +1,6 @@
 import { CoreActionListExtender } from './config.js'
 
-export default class MagicItemActionListExtender extends CoreActionListExtender {
+export class MagicItemActionListExtender extends CoreActionListExtender {
     /**
      * Extend the action list
      * @param {object} actionList The action list
@@ -28,7 +28,7 @@ export default class MagicItemActionListExtender extends CoreActionListExtender 
 
             const subcategoryId = `magic-items_${magicItem.id}`
             const subcategoryName = magicItem.name
-            const subcategory = this.initializeEmptySubcategory(subcategoryId, parentSubcategoryId, subcategoryName, 'system')
+            const subcategory = this.initializeEmptySubcategory(subcategoryId, subcategoryId, subcategoryName, 'system')
             subcategory.info1 = `${magicItem.uses}/${magicItem.charges}`
 
             const actions = magicItem.ownedEntries.map((entry) => {
@@ -45,7 +45,7 @@ export default class MagicItemActionListExtender extends CoreActionListExtender 
                 const info1 = effect.consumption
                 let info2 = ''
                 if (effect.baseLevel) {
-                    info2 = `${this.i18n('tokenActionHud.levelAbbreviation')} ${effect.baseLevel}`
+                    info2 = `${this.i18n('DND5E.AbbreviationLevel')} ${effect.baseLevel}`
                 }
                 return {
                     id,

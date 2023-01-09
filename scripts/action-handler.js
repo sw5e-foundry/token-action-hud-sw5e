@@ -4,7 +4,7 @@ import { getSetting } from './utils.js'
 // Core Module Imports
 import { CoreActionHandler, Logger } from './config.js'
 
-export default class ActionHandler extends CoreActionHandler {
+export class ActionHandler extends CoreActionHandler {
     /**
      * Build System Actions
      * @override
@@ -25,8 +25,6 @@ export default class ActionHandler extends CoreActionHandler {
         if (!actor) {
             return this._buildMultipleTokenActions(actionList, subcategoryIds)
         }
-
-        return actionList
     }
 
     /**
@@ -59,6 +57,29 @@ export default class ActionHandler extends CoreActionHandler {
             subcategoryId === 'other-actions'
         )
 
+        const effectSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
+            subcategoryId === 'passive-effects' ||
+            subcategoryId === 'temporary-effects'
+        )
+
+        const featureSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
+            subcategoryId === 'active-features' ||
+            subcategoryId === 'passive-features'
+        )
+
+        const spellSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
+            subcategoryId === 'cantrips' ||
+            subcategoryId === '1st-level-spells' ||
+            subcategoryId === '2nd-level-spells' ||
+            subcategoryId === '3rd-level-spells' ||
+            subcategoryId === '4th-level-spells' ||
+            subcategoryId === '5th-level-spells' ||
+            subcategoryId === '6th-level-spells' ||
+            subcategoryId === '7th-level-spells' ||
+            subcategoryId === '8th-level-spells' ||
+            subcategoryId === '9th-level-spells'
+        )
+
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'abilities')) {
             this._buildAbilities(actionList, character, 'ability', 'abilities')
         }
@@ -74,11 +95,11 @@ export default class ActionHandler extends CoreActionHandler {
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'conditions')) {
             this._buildConditions(actionList, character)
         }
-        if (subcategoryIds.some((subcategoryId) => subcategoryId === 'features')) {
-            this._buildFeatures(actionList, character)
+        if (featureSubcategoryIds) {
+            this._buildFeatures(actionList, character, featureSubcategoryIds)
         }
-        if (subcategoryIds.some((subcategoryId) => subcategoryId === 'effects')) {
-            this._buildEffects(actionList, character)
+        if (effectSubcategoryIds) {
+            this._buildEffects(actionList, character, effectSubcategoryIds)
         }
         if (inventorySubcategoryIds) {
             this._buildInventory(actionList, character, inventorySubcategoryIds)
@@ -92,14 +113,12 @@ export default class ActionHandler extends CoreActionHandler {
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'skills')) {
             this._buildSkills(actionList, character)
         }
-        if (subcategoryIds.some((subcategoryId) => subcategoryId === 'spells')) {
-            this._buildSpells(actionList, character)
+        if (spellSubcategoryIds) {
+            this._buildSpells(actionList, character, spellSubcategoryIds)
         }
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'utility')) {
             this._buildUtility(actionList, character)
         }
-
-        return actionList
     }
 
     /**
@@ -118,6 +137,17 @@ export default class ActionHandler extends CoreActionHandler {
             subcategoryId === 'weapons'
         )
 
+        const effectSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
+            subcategoryId === 'passive-effects' ||
+            subcategoryId === 'temporary-effects' ||
+            subcategoryId === 'inactive-effects'
+        )
+
+        const featureSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
+            subcategoryId === 'active-features' ||
+            subcategoryId === 'passive-features'
+        )
+
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'abilities')) {
             this._buildAbilities(actionList, character, 'ability', 'abilities')
         }
@@ -131,9 +161,9 @@ export default class ActionHandler extends CoreActionHandler {
             this._buildConditions(actionList, character)
         }
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'effects')) {
-            this._buildEffects(actionList, character)
+            this._buildEffects(actionList, character, effectSubcategoryIds)
         }
-        if (subcategoryIds.some((subcategoryId) => subcategoryId === 'features')) {
+        if (featureSubcategoryIds) {
             this._buildFeatures(actionList, character)
         }
         if (inventorySubcategoryIds) {
@@ -145,8 +175,6 @@ export default class ActionHandler extends CoreActionHandler {
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'utility')) {
             this._buildUtility(actionList, character)
         }
-
-        return actionList
     }
 
     /**
@@ -198,8 +226,6 @@ export default class ActionHandler extends CoreActionHandler {
         if (subcategoryIds.some((subcategoryId) => subcategoryId === 'utility')) {
             this._buildUtility(actionList, character)
         }
-
-        return actionList
     }
 
     /**
@@ -310,7 +336,7 @@ export default class ActionHandler extends CoreActionHandler {
         const subcategoryId = 'combat'
 
         const combatTypes = {
-            initiative: { id: 'initiative', name: this.i18n('tokenActionHud.rollInitiative') },
+            initiative: { id: 'initiative', name: this.i18n('tokenActionHud.dnd5e.rollInitiative') },
             endTurn: { id: 'endTurn', name: this.i18n('tokenActionHud.endTurn') }
         }
 
@@ -360,6 +386,7 @@ export default class ActionHandler extends CoreActionHandler {
      * @param {object} character
      */
     _buildConditions (actionList, character) {
+        if (!character?.token) return
         const actor = character?.actor
         const actorId = character?.actor?.id
         const tokenId = character?.token?.id
@@ -406,57 +433,26 @@ export default class ActionHandler extends CoreActionHandler {
      * @param {object} actionList
      * @param {object} character
      */
-    _buildEffects (actionList, character) {
+    _buildEffects (actionList, character, effectSubcategoryIds) {
         const actor = character?.actor
-        const actorId = character?.actor?.id
-        const tokenId = character?.token?.id
         const actionType = 'effect'
-        const parentSubcategoryId = 'effects'
-        const subcategoryList = []
 
-        const effectTypes = {
-            temporary: { label: this.i18n('tokenActionHud.temporary'), effects: [] },
-            passive: { label: this.i18n('tokenActionHud.passive'), effects: [] }
-        }
-
-        // Group effects by type
+        // Get effects
         const effects = actor.effects
 
-        if (effects.length === 0) return
+        if (effects.size === 0) return
 
-        effects.forEach((effect) => {
-            if (effect.isTemporary) {
-                effectTypes.temporary.effects.push(effect)
-            } else {
-                effectTypes.passive.effects.push(effect)
-            }
-        })
+        // Build passive effects
+        if (effectSubcategoryIds.some((subcategoryId) => subcategoryId === 'passive-effects')) {
+            const passiveEffects = effects.filter((effect) => !effect.isTemporary)
+            this._buildItems(actionList, character, passiveEffects, 'passive-effects', actionType)
+        }
 
-        Object.entries(effectTypes).forEach((effectType) => {
-            const subcategoryId = `effects_${effectType[0]}`
-            const subcategoryName = effectType[1].label
-            const subcategory = this.initializeEmptySubcategory(subcategoryId, parentSubcategoryId, subcategoryName, 'system')
-            const actions = effectType[1].effects.map((effect) => {
-                const id = effect.id
-                const name = effect.label
-                const encodedValue = [actionType, actorId, tokenId, id].join(this.delimiter)
-                const active = (!effect.disabled) ? ' active' : ''
-                const cssClass = `toggle${active}`
-                const img = effect.icon
-                return {
-                    id,
-                    name,
-                    encodedValue,
-                    cssClass,
-                    img,
-                    selected: true
-                }
-            })
-
-            this.addToSubcategoryList(subcategoryList, subcategoryId, subcategory, actions)
-        })
-
-        this.addSubcategoriesToActionList(actionList, subcategoryList, parentSubcategoryId)
+        // Build temporary effects
+        if (effectSubcategoryIds.some((subcategoryId) => subcategoryId === 'temporary-effects')) {
+            const temporaryEffects = effects.filter((effect) => effect.isTemporary)
+            this._buildItems(actionList, character, temporaryEffects, 'temporary-effects', actionType)
+        }
     }
 
     /**
@@ -465,21 +461,9 @@ export default class ActionHandler extends CoreActionHandler {
      * @param {object} actionList
      * @param {object} character
      */
-    _buildFeatures (actionList, character) {
+    _buildFeatures (actionList, character, featureSubcategoryIds) {
         const actor = character?.actor
         const actionType = 'feature'
-        const parentSubcategoryId = 'features'
-        const subcategoryList = []
-
-        const featureTypes = {
-            active: { label: this.i18n('tokenActionHud.active'), items: [] },
-            passive: { label: this.i18n('tokenActionHud.passive'), items: [] },
-            lair: { label: this.i18n('tokenActionHud.dnd5e.lair'), items: [] },
-            legendary: { label: this.i18n('tokenActionHud.dnd5e.legendary'), items: [] },
-            actions: { label: this.i18n('tokenActionHud.actions'), items: [] },
-            features: { label: this.i18n('tokenActionHud.features'), items: [] },
-            reactions: { label: this.i18n('tokenActionHud.reactions'), items: [] }
-        }
 
         // Get feat items
         let feats = actor.items.filter((item) => item.type === 'feat')
@@ -492,79 +476,26 @@ export default class ActionHandler extends CoreActionHandler {
         // Sort items
         feats = this.sortItems(feats)
 
-        // Group feats by type
-        feats.forEach((item) => {
-            const activationType = item.system.activation.type
-            if (actor.type === 'vehicle') {
-                if (
+        if (featureSubcategoryIds.some((subcategoryId) => subcategoryId === 'active-features')) {
+            const activeFeatures = feats.filter((item) => {
+                const activationType = item.system.activation.type
+                return (
                     activationType &&
-                    activationType !== 'none' &&
-                    activationType !== 'reaction'
-                ) {
-                    featureTypes.actions.items.push(item)
-                }
-                if (!activationType || activationType === 'none') {
-                    featureTypes.features.items.push(item)
-                }
-                if (activationType === 'reaction') {
-                    featureTypes.reactions.items.push(item)
-                }
-            }
-            if (actor.type === 'character' || actor.type === 'npc') {
-                if (
-                    activationType && activationType !== '' &&
+                    activationType !== '' &&
                     activationType !== 'lair' &&
                     activationType !== 'legendary'
-                ) {
-                    featureTypes.active.items.push(item)
-                }
-                if (!activationType || activationType === '') {
-                    featureTypes.passive.items.push(item)
-                }
-                if (activationType === 'lair') {
-                    featureTypes.lair.items.push(item)
-                }
-                if (activationType === 'legendary') {
-                    featureTypes.legendary.items.push(item)
-                }
-            }
-        })
-
-        // Delete unneeded feature types
-        if (actor.type === 'vehicle') {
-            delete featureTypes.active
-            delete featureTypes.passive
-            delete featureTypes.lair
-            delete featureTypes.legendary
-        }
-        if (actor.type === 'character' || actor.type === 'npc') {
-            if (!getSetting('showPassiveFeats')) { delete featureTypes.passive }
-            delete featureTypes.actions
-            delete featureTypes.features
-            delete featureTypes.reactions
+                )
+            })
+            this._buildItems(actionList, character, activeFeatures, 'active-features', actionType)
         }
 
-        // Loop feature types
-        Object.entries(featureTypes).forEach((featureType) => {
-            const subcategoryId = `features_${featureType[0]}`
-            const subcategoryName = featureType[1].label
-            const subcategory = this.initializeEmptySubcategory(
-                subcategoryId,
-                parentSubcategoryId,
-                subcategoryName,
-                'system'
-            )
-
-            // Get items
-            const items = featureType[1].items
-
-            // Get actions
-            const actions = items.map((item) => this._getAction(actionType, character, item))
-
-            this.addToSubcategoryList(subcategoryList, subcategoryId, subcategory, actions)
-        })
-
-        this.addSubcategoriesToActionList(actionList, subcategoryList, parentSubcategoryId)
+        if (featureSubcategoryIds.some((subcategoryId) => subcategoryId === 'passive-features')) {
+            const activeFeatures = feats.filter((item) => {
+                const activationType = item.system.activation.type
+                return (!activationType || activationType === '')
+            })
+            this._buildItems(actionList, character, activeFeatures, 'passive-features', actionType)
+        }
     }
 
     /**
@@ -663,10 +594,9 @@ export default class ActionHandler extends CoreActionHandler {
      * @param {object} items
      * @param {string} subcategoryId
      */
-    _buildItems (actionList, character, items, subcategoryId) {
+    _buildItems (actionList, character, items, subcategoryId, actionType = 'item') {
         if (items.length === 0) return
 
-        const actionType = 'item'
         const actions = items.map((item) =>
             this._getAction(actionType, character, item)
         )
@@ -712,13 +642,20 @@ export default class ActionHandler extends CoreActionHandler {
         const actorId = character?.actor?.id
         const tokenId = character?.token?.id
         const id = entity.id ?? entity._id
-        let name = entity.name
+        let name = entity?.name ?? entity?.label
         if (
             entity?.system?.recharge &&
             !entity?.system?.recharge?.charged &&
             entity?.system?.recharge?.value
         ) {
-            name += ` (${this.i18n('tokenActionHud.recharge')})`
+            name += ` (${this.i18n('DND5E.Recharge')})`
+        }
+        let cssClass = ''
+        if (Object.hasOwn(entity, 'disabled')) {
+            const active = (!entity.disabled)
+                ? ' active'
+                : ''
+            cssClass = `toggle${active}`
         }
         const encodedValue = [actionType, actorId, tokenId, id].join(
             this.delimiter
@@ -733,6 +670,7 @@ export default class ActionHandler extends CoreActionHandler {
             id,
             name,
             encodedValue,
+            cssClass,
             img,
             icon,
             info1,
@@ -772,8 +710,8 @@ export default class ActionHandler extends CoreActionHandler {
         const subcategoryId = 'rests'
 
         const restTypes = {
-            shortRest: { name: this.i18n('tokenActionHud.shortRest') },
-            longRest: { name: this.i18n('tokenActionHud.longRest') }
+            shortRest: { name: this.i18n('DND5E.ShortRest') },
+            longRest: { name: this.i18n('DND5E.LongRest') }
         }
 
         const actions = Object.entries(restTypes)
@@ -845,7 +783,6 @@ export default class ActionHandler extends CoreActionHandler {
     _buildSpells (actionList, character) {
         const actor = character?.actor
         const actionType = 'spell'
-        const parentSubcategoryId = 'spells'
 
         // Get spell items
         let spells = actor.items.filter((item) => item.type === 'spell')
@@ -866,9 +803,7 @@ export default class ActionHandler extends CoreActionHandler {
 
         // Reverse sort spells by level
         const spellSlotInfo = Object.entries(actor.system.spells).sort((a, b) => {
-            return b[0].toUpperCase().localeCompare(a[0].toUpperCase(), undefined, {
-                sensitivity: 'base'
-            })
+            return Intl.Collator().compare(b[0], a[0])
         })
 
         // Go through spells and if higher available slots exist, mark spell slots available at lower levels.
@@ -923,31 +858,51 @@ export default class ActionHandler extends CoreActionHandler {
 
         // Get spell levels
         const spellLevels = spellLevelIds.map((spellLevel) => {
-            const isPrep = !!(
-                spellLevel === 'pact' ||
-                spellLevel === 'atwill' ||
-                spellLevel === 'innate'
-            )
-            const id = isPrep ? spellLevel : `spell${spellLevel}`
-            const name = isPrep
-                ? game.dnd5e.config.spellPreparationModes[spellLevel]
-                : spellLevel === 0
-                    ? this.i18n('tokenActionHud.cantrips')
-                    : `${this.i18n('tokenActionHud.level')} ${spellLevel}`
-            return [id, name]
+            const id = spellLevel
+            return id
         })
 
-        const subcategoryList = []
-
         for (const spellLevel of spellLevels) {
-            const spellLevelId = `spells_${spellLevel[0]}`
-            const spellLevelName = spellLevel[1]
+            let subcategoryId = null
+            switch (spellLevel) {
+            case 0:
+                subcategoryId = 'cantrips'
+                break
+            case 1:
+                subcategoryId = '1st-level-spells'
+                break
+            case 2:
+                subcategoryId = '2nd-level-spells'
+                break
+            case 3:
+                subcategoryId = '3rd-level-spells'
+                break
+            case 4:
+                subcategoryId = '4th-level-spells'
+                break
+            case 5:
+                subcategoryId = '5th-level-spells'
+                break
+            case 6:
+                subcategoryId = '6th-level-spells'
+                break
+            case 7:
+                subcategoryId = '7th-level-spells'
+                break
+            case 8:
+                subcategoryId = '8th-level-spells'
+                break
+            case 9:
+                subcategoryId = '9th-level-spells'
+                break
+            }
+            const spellLevelId = spellLevel
             const isPrep = !!(
                 spellLevelId === 'pact' ||
                 spellLevelId === 'atwill' ||
                 spellLevelId === 'innate'
             )
-            const levelInfo = spellSlotInfo.find((level) => level[0] === spellLevel[0])?.[1]
+            const levelInfo = spellSlotInfo.find((level) => level[0] === `spell${spellLevelId}`)?.[1]
             const slots = levelInfo?.value
             const max = levelInfo?.max
             const slotsAvailable = levelInfo?.slotsAvailable
@@ -955,20 +910,18 @@ export default class ActionHandler extends CoreActionHandler {
 
             if (max && !(slotsAvailable || ignoreSlotsAvailable)) continue
 
-            const subcategory = this.initializeEmptySubcategory(
-                spellLevelId,
-                parentSubcategoryId,
-                spellLevelName,
-                'system'
-            )
-            if (max > 0) subcategory.info1 = `${slots}/${max}`
+            if (max > 0) {
+                const data = {}
+                data.info1 = `${slots}/${max}`
+                this.addSubcategoryInfo(actionList, subcategoryId, data)
+            }
 
             // Get actions
             const actions = []
             for (const spell of spells) {
                 const spellSpellLevelId = isPrep
-                    ? `spells_${spell.system.preparation.mode}`
-                    : `spells_spell${spell.system.level}`
+                    ? spell.system.preparation.mode
+                    : spell.system.level
 
                 if (spellSpellLevelId === spellLevelId) {
                     const action = this._getAction(actionType, character, spell)
@@ -979,15 +932,8 @@ export default class ActionHandler extends CoreActionHandler {
                 }
             }
 
-            this.addToSubcategoryList(
-                subcategoryList,
-                spellLevelId,
-                subcategory,
-                actions
-            )
+            this.addActionsToActionList(actionList, actions, subcategoryId)
         }
-
-        this.addSubcategoriesToActionList(actionList, subcategoryList, 'spells')
     }
 
     /**
@@ -1000,11 +946,7 @@ export default class ActionHandler extends CoreActionHandler {
         const result = Object.values(spells)
         result.sort((a, b) => {
             if (a.system.level === b.system.level) {
-                return a.name
-                    .toUpperCase()
-                    .localeCompare(b.name.toUpperCase(), undefined, {
-                        sensitivity: 'base'
-                    })
+                return new Intl.Collator().compare(a.name, b.name)
             }
             return a.system.level - b.system.level
         })
@@ -1062,7 +1004,7 @@ export default class ActionHandler extends CoreActionHandler {
 
         const utilityTypes = {
             deathSave: { name: this.i18n('DND5E.DeathSave') },
-            inspiration: { name: this.i18n('tokenActionHud.inspiration') }
+            inspiration: { name: this.i18n('DND5E.Inspiration') }
         }
 
         // Delete 'deathSave' for multiple tokens

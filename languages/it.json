@@ -1,8 +1,18 @@
 {
   "tokenActionHud": {
     "dnd5e": {
+      "1stLevelSpells": "1st Level Spells",
+      "2ndLevelSpells": "2nd Level Spells",
+      "3rdLevelSpells": "3rd Level Spells",
+      "4thLevelSpells": "4th Level Spells",
+      "5thLevelSpells": "5th Level Spells",
+      "6thLevelSpells": "6th Level Spells",
+      "7thLevelSpells": "7th Level Spells",
+      "8thLevelSpells": "8th Level Spells",
+      "9thLevelSpells": "9th Level Spells",
       "abilities": "Capacità",
       "bonusActions": "Azioni bonus",
+      "cantrips": "Cantrips",
       "checks": "Caratteristiche",
       "conditions": "Condizioni",
       "crewActions": "Azioni dell'equipaggio",
@@ -10,8 +20,11 @@
       "lairActions": "Azioni di Tana",
       "legendary": "Leggendarie",
       "legendaryActions": "Azioni Leggendarie",
+      "magicItems": "Oggetti Magici",
       "otherActions": "Altre azioni",
+      "passiveFeatures": "Passive Features",
       "rests": "Riposi",
+      "rollInitiative": "Tira Iniziativa",
       "skills": "Abilità",
       "settings": {
         "abbreviateSkills": {
@@ -25,10 +38,6 @@
         "showItemsWithoutActivationCosts": {
           "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
           "name": "Show Items without Activation costs"
-        },
-        "showPassiveFeats": {
-          "hint": "Mostra privilegi passivi",
-          "name": "Mostra privilegi passivi"
         },
         "showSlowActions": {
           "hint": "Mostra le azioni che richiedono più di un round",
