@@ -10,9 +10,9 @@ const namespace = 'token-action-hud-dnd5e'
  */
 export function getSetting (key, defaultValue = null) {
     let value = defaultValue ?? null
-    if (game.settings.settings.get(`${namespace}.${key}`)) {
+    try {
         value = game.settings.get(namespace, key)
-    } else {
+    } catch {
         Logger.debug(`Setting '${key}' not found`)
     }
     return value

@@ -943,15 +943,14 @@ export class ActionHandler extends CoreActionHandler {
      * @returns {object}
      */
     _sortSpellsByLevel (spells) {
-        const result = Object.values(spells)
-        result.sort((a, b) => {
+        const spellsArray = Object.keys(spells).map(key => spells[key])
+        spellsArray.sort((a, b) => {
             if (a.system.level === b.system.level) {
-                return new Intl.Collator().compare(a.name, b.name)
+                return a.name.localeCompare(b.name)
             }
             return a.system.level - b.system.level
         })
-
-        return result
+        return spellsArray
     }
 
     /**
