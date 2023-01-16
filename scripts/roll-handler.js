@@ -141,7 +141,7 @@ export class RollHandler extends CoreRollHandler {
 
         const magicItemActor = MagicItems.actor(actor.id)
 
-        magicItemActor.roll(itemId, magicEffectId)
+        magicItemActor.use(itemId, magicEffectId)
 
         Hooks.callAll('forceUpdateTokenActionHud')
     }
@@ -232,14 +232,15 @@ export class RollHandler extends CoreRollHandler {
         case 'toggleCombat':
             if (canvas.tokens.controlled.length === 0) break
             await canvas.tokens.controlled[0].toggleCombat()
-            Hooks.callAll('forceUpdateTokenActionHud')
             break
         case 'toggleVisibility':
             if (!token) break
             token.toggleVisibility()
-            Hooks.callAll('forceUpdateTokenActionHud')
             break
         }
+
+        // Update HUD
+        Hooks.callAll('forceUpdateTokenActionHud')
     }
 
     /**

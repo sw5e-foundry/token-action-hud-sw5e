@@ -16,10 +16,10 @@ export class SystemManager extends CoreSystemManager {
     }
 
     /** @override */
-    doGetActionHandler (character, categoryManager) {
-        const actionHandler = new ActionHandler(character, categoryManager)
+    doGetActionHandler (categoryManager) {
+        const actionHandler = new ActionHandler(categoryManager)
 
-        if (CoreSystemManager.isModuleActive('magicitems')) { actionHandler.addFurtherActionHandler(new MagicItemActionListExtender()) }
+        if (CoreSystemManager.isModuleActive('magicitems')) { actionHandler.addFurtherActionHandler(new MagicItemActionListExtender(actionHandler)) }
 
         return actionHandler
     }
@@ -60,247 +60,314 @@ export class SystemManager extends CoreSystemManager {
     /** @override */
     async doRegisterDefaultFlags () {
         const defaults = {
-            categories: {
-                inventory: {
+            categories: [
+                {
+                    nestId: 'inventory',
                     id: 'inventory',
                     name: this.i18n('DND5E.Inventory'),
-                    subcategories: {
-                        inventory_weapons: {
+                    subcategories: [
+                        {
+                            nestId: 'inventory_weapons',
                             id: 'weapons',
                             name: this.i18n('DND5E.ItemTypeWeaponPl'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        inventory_equipment: {
+                        {
+                            nestId: 'inventory_equipment',
                             id: 'equipment',
                             name: this.i18n('DND5E.ItemTypeEquipmentPl'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        inventory_consumables: {
+                        {
+                            nestId: 'inventory_consumables',
                             id: 'consumables',
                             name: this.i18n('DND5E.ItemTypeConsumablePl'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        inventory_tools: {
+                        {
+                            nestId: 'inventory_tools',
                             id: 'tools',
                             name: this.i18n('DND5E.ItemTypeToolPl'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        inventory_containers: {
+                        {
+                            nestId: 'inventory_containers',
                             id: 'containers',
                             name: this.i18n('DND5E.ItemTypeContainerPl'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        inventory_loot: {
+                        {
+                            nestId: 'inventory_loot',
                             id: 'loot',
                             name: this.i18n('DND5E.ItemTypeLootPl'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 },
-                features: {
+                {
+                    nestId: 'features',
                     id: 'features',
                     name: this.i18n('DND5E.Features'),
-                    subcategories: {
-                        'features_active-features': {
+                    subcategories: [
+                        {
+                            nestId: 'features_active-features',
                             id: 'active-features',
                             name: this.i18n('tokenActionHud.dnd5e.activeFeatures'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'features_passive-features': {
+                        {
                             id: 'passive-features',
+                            nestId: 'features_passive-features',
                             name: this.i18n('tokenActionHud.dnd5e.passiveFeatures'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 },
-                spells: {
+                {
+                    nestId: 'spells',
                     id: 'spells',
                     name: this.i18n('DND5E.ItemTypeSpellPl'),
-                    subcategories: {
-                        'spells_at-will-spells': {
+                    subcategories: [
+                        {
+                            nestId: 'spells_at-will-spells',
                             id: 'at-will-spells',
                             name: this.i18n('tokenActionHud.dnd5e.atWillSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_innate-spells': {
+                        {
+                            nestId: 'spells_innate-spells',
                             id: 'innate-spells',
                             name: this.i18n('tokenActionHud.dnd5e.innateSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_pact-spells': {
+                        {
+                            nestId: 'spells_pact-spells',
                             id: 'pact-spells',
                             name: this.i18n('tokenActionHud.dnd5e.pactSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        spells_cantrips: {
+                        {
+                            nestId: 'spells_cantrips',
                             id: 'cantrips',
                             name: this.i18n('tokenActionHud.dnd5e.cantrips'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_1st-level-spells': {
+                        {
+                            nestId: 'spells_1st-level-spells',
                             id: '1st-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.1stLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_2nd-level-spells': {
+                        {
+                            nestId: 'spells_2nd-level-spells',
                             id: '2nd-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.2ndLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_3rd-level-spells': {
+                        {
+                            nestId: 'spells_3rd-level-spells',
                             id: '3rd-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.3rdLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_4th-level-spells': {
+                        {
+                            nestId: 'spells_4th-level-spells',
                             id: '4th-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.4thLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_5th-level-spells': {
+                        {
+                            nestId: 'spells_5th-level-spells',
                             id: '5th-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.5thLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_6th-level-spells': {
+                        {
+                            nestId: 'spells_6th-level-spells',
                             id: '6th-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.6thLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_7th-level-spells': {
+                        {
+                            nestId: 'spells_7th-level-spells',
                             id: '7th-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.7thLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_8th-level-spells': {
+                        {
+                            nestId: 'spells_8th-level-spells',
                             id: '8th-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.8thLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'spells_9th-level-spells': {
+                        {
+                            nestId: 'spells_9th-level-spells',
                             id: '9th-level-spells',
                             name: this.i18n('tokenActionHud.dnd5e.9thLevelSpells'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 },
-                attributes: {
+                {
+                    nestId: 'attributes',
                     id: 'attributes',
                     name: this.i18n('DND5E.Attributes'),
-                    subcategories: {
-                        attributes_abilities: {
+                    subcategories: [
+                        {
+                            nestId: 'attributes_abilities',
                             id: 'abilities',
                             name: this.i18n('tokenActionHud.dnd5e.abilities'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        attributes_skills: {
+                        {
+                            nestId: 'attributes_skills',
                             id: 'skills',
                             name: this.i18n('tokenActionHud.dnd5e.skills'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 },
-                effects: {
+                {
+                    nestId: 'effects',
                     id: 'effects',
                     name: this.i18n('DND5E.Effects'),
-                    subcategories: {
-                        'effects_temporary-effects': {
+                    subcategories: [
+                        {
+                            nestId: 'effects_temporary-effects',
                             id: 'temporary-effects',
                             name: this.i18n('DND5E.EffectTemporary'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        'effects_passive-effects': {
+                        {
+                            nestId: 'effects_passive-effects',
                             id: 'passive-effects',
                             name: this.i18n('DND5E.EffectPassive'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 },
-                conditions: {
+                {
+                    nestId: 'conditions',
                     id: 'conditions',
                     name: this.i18n('tokenActionHud.dnd5e.conditions'),
-                    subcategories: {
-                        conditions_conditions: {
+                    subcategories: [
+                        {
+                            nestId: 'conditions_conditions',
                             id: 'conditions',
                             name: this.i18n('tokenActionHud.dnd5e.conditions'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 },
-                utility: {
+                {
+                    nestId: 'utility',
                     id: 'utility',
                     name: this.i18n('tokenActionHud.utility'),
-                    subcategories: {
-                        utility_combat: {
+                    subcategories: [
+                        {
+                            nestId: 'utility_combat',
                             id: 'combat',
                             name: this.i18n('tokenActionHud.combat'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        utility_token: {
+                        {
+                            nestId: 'utility_token',
                             id: 'token',
                             name: this.i18n('tokenActionHud.token'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        utility_rests: {
+                        {
+                            nestId: 'utility_rests',
                             id: 'rests',
                             name: this.i18n('tokenActionHud.dnd5e.rests'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         },
-                        utility_utility: {
+                        {
+                            nestId: 'utility_utility',
                             id: 'utility',
                             name: this.i18n('tokenActionHud.utility'),
-                            type: 'system'
+                            type: 'system',
+                            hasDerivedSubcategories: false
                         }
-                    }
+                    ]
                 }
-            },
+            ],
             subcategories: [
-                { id: 'abilities', name: this.i18n('tokenActionHud.dnd5e.abilities'), type: 'system' },
-                { id: 'checks', name: this.i18n('tokenActionHud.dnd5e.checks'), type: 'system' },
-                { id: 'combat', name: this.i18n('tokenActionHud.combat'), type: 'system' },
-                { id: 'conditions', name: this.i18n('tokenActionHud.dnd5e.conditions'), type: 'system' },
-                { id: 'rests', name: this.i18n('tokenActionHud.dnd5e.rests'), type: 'system' },
-                { id: 'saves', name: this.i18n('DND5E.ClassSaves'), type: 'system' },
-                { id: 'skills', name: this.i18n('tokenActionHud.dnd5e.skills'), type: 'system' },
-                { id: 'token', name: this.i18n('tokenActionHud.token'), type: 'system' },
-                { id: 'utility', name: this.i18n('tokenActionHud.utility'), type: 'system' },
-                { id: 'actions', name: this.i18n('DND5E.ActionPl'), type: 'system' },
-                { id: 'bonus-actions', name: this.i18n('tokenActionHud.dnd5e.bonusActions'), type: 'system' },
-                { id: 'crew-actions', name: this.i18n('tokenActionHud.dnd5e.crewActions'), type: 'system' },
-                { id: 'lair-actions', name: this.i18n('tokenActionHud.dnd5e.lairActions'), type: 'system' },
-                { id: 'legendary-actions', name: this.i18n('tokenActionHud.dnd5e.legendaryActions'), type: 'system' },
-                { id: 'other-actions', name: this.i18n('tokenActionHud.dnd5e.otherActions'), type: 'system' },
-                { id: 'reactions', name: this.i18n('DND5E.ReactionPl'), type: 'system' },
-                { id: 'consumables', name: this.i18n('DND5E.ItemTypeConsumablePl'), type: 'system' },
-                { id: 'containers', name: this.i18n('DND5E.ItemTypeContainerPl'), type: 'system' },
-                { id: 'temporary-effects', name: this.i18n('DND5E.EffectTemporary'), type: 'system' },
-                { id: 'passive-effects', name: this.i18n('DND5E.EffectPassive'), type: 'system' },
-                { id: 'equipment', name: this.i18n('DND5E.ItemTypeEquipmentPl'), type: 'system' },
-                { id: 'loot', name: this.i18n('DND5E.ItemTypeLootPl'), type: 'system' },
-                { id: 'tools', name: this.i18n('DND5E.ItemTypeToolPl'), type: 'system' },
-                { id: 'weapons', name: this.i18n('DND5E.ItemTypeWeaponPl'), type: 'system' },
-                { id: 'equipped', name: this.i18n('DND5E.Equipped'), type: 'system' },
-                { id: 'unequipped', name: this.i18n('DND5E.Unequipped'), type: 'system' },
-                { id: 'active-features', name: this.i18n('tokenActionHud.dnd5e.activeFeatures'), type: 'system' },
-                { id: 'passive-features', name: this.i18n('tokenActionHud.dnd5e.passiveFeatures'), type: 'system' },
-                { id: 'at-will-spells', name: this.i18n('tokenActionHud.dnd5e.atWillSpells'), type: 'system' },
-                { id: 'cantrips', name: this.i18n('tokenActionHud.dnd5e.cantrips'), type: 'system' },
-                { id: 'innate-spells', name: this.i18n('tokenActionHud.dnd5e.innateSpells'), type: 'system' },
-                { id: 'pact-spells', name: this.i18n('tokenActionHud.dnd5e.pactSpells'), type: 'system' },
-                { id: '1st-level-spells', name: this.i18n('tokenActionHud.dnd5e.1stLevelSpells'), type: 'system' },
-                { id: '2nd-level-spells', name: this.i18n('tokenActionHud.dnd5e.2ndLevelSpells'), type: 'system' },
-                { id: '3rd-level-spells', name: this.i18n('tokenActionHud.dnd5e.3rdLevelSpells'), type: 'system' },
-                { id: '4th-level-spells', name: this.i18n('tokenActionHud.dnd5e.4thLevelSpells'), type: 'system' },
-                { id: '5th-level-spells', name: this.i18n('tokenActionHud.dnd5e.5thLevelSpells'), type: 'system' },
-                { id: '6th-level-spells', name: this.i18n('tokenActionHud.dnd5e.6thLevelSpells'), type: 'system' },
-                { id: '7th-level-spells', name: this.i18n('tokenActionHud.dnd5e.7thLevelSpells'), type: 'system' },
-                { id: '8th-level-spells', name: this.i18n('tokenActionHud.dnd5e.8thLevelSpells'), type: 'system' },
-                { id: '9th-level-spells', name: this.i18n('tokenActionHud.dnd5e.9thLevelSpells'), type: 'system' }
+                { id: 'abilities', name: this.i18n('tokenActionHud.dnd5e.abilities'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'checks', name: this.i18n('tokenActionHud.dnd5e.checks'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'combat', name: this.i18n('tokenActionHud.combat'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'conditions', name: this.i18n('tokenActionHud.dnd5e.conditions'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'rests', name: this.i18n('tokenActionHud.dnd5e.rests'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'saves', name: this.i18n('DND5E.ClassSaves'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'skills', name: this.i18n('tokenActionHud.dnd5e.skills'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'token', name: this.i18n('tokenActionHud.token'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'utility', name: this.i18n('tokenActionHud.utility'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'actions', name: this.i18n('DND5E.ActionPl'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'bonus-actions', name: this.i18n('tokenActionHud.dnd5e.bonusActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'crew-actions', name: this.i18n('tokenActionHud.dnd5e.crewActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'lair-actions', name: this.i18n('tokenActionHud.dnd5e.lairActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'legendary-actions', name: this.i18n('tokenActionHud.dnd5e.legendaryActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'other-actions', name: this.i18n('tokenActionHud.dnd5e.otherActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'reactions', name: this.i18n('DND5E.ReactionPl'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'consumables', name: this.i18n('DND5E.ItemTypeConsumablePl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'containers', name: this.i18n('DND5E.ItemTypeContainerPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'temporary-effects', name: this.i18n('DND5E.EffectTemporary'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'passive-effects', name: this.i18n('DND5E.EffectPassive'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'equipment', name: this.i18n('DND5E.ItemTypeEquipmentPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'loot', name: this.i18n('DND5E.ItemTypeLootPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'tools', name: this.i18n('DND5E.ItemTypeToolPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'weapons', name: this.i18n('DND5E.ItemTypeWeaponPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'equipped', name: this.i18n('DND5E.Equipped'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'unequipped', name: this.i18n('DND5E.Unequipped'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'active-features', name: this.i18n('tokenActionHud.dnd5e.activeFeatures'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'passive-features', name: this.i18n('tokenActionHud.dnd5e.passiveFeatures'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'at-will-spells', name: this.i18n('tokenActionHud.dnd5e.atWillSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'cantrips', name: this.i18n('tokenActionHud.dnd5e.cantrips'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'innate-spells', name: this.i18n('tokenActionHud.dnd5e.innateSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'pact-spells', name: this.i18n('tokenActionHud.dnd5e.pactSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '1st-level-spells', name: this.i18n('tokenActionHud.dnd5e.1stLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '2nd-level-spells', name: this.i18n('tokenActionHud.dnd5e.2ndLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '3rd-level-spells', name: this.i18n('tokenActionHud.dnd5e.3rdLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '4th-level-spells', name: this.i18n('tokenActionHud.dnd5e.4thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '5th-level-spells', name: this.i18n('tokenActionHud.dnd5e.5thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '6th-level-spells', name: this.i18n('tokenActionHud.dnd5e.6thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '7th-level-spells', name: this.i18n('tokenActionHud.dnd5e.7thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '8th-level-spells', name: this.i18n('tokenActionHud.dnd5e.8thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: '9th-level-spells', name: this.i18n('tokenActionHud.dnd5e.9thLevelSpells'), type: 'system', hasDerivedSubcategories: false }
             ]
         }
         // If the 'Magic Items' module is active, then add a subcategory for it
         if (game.modules.get('magicitems')?.active) {
-            defaults.subcategories.push({ id: 'magic-items', name: this.i18n('tokenActionHud.dnd5e.magicItems'), type: 'system' })
+            defaults.subcategories.push({ id: 'magic-items', name: this.i18n('tokenActionHud.dnd5e.magicItems'), type: 'system', hasDerivedSubcategories: true })
             defaults.subcategories.sort((a, b) => a.id.localeCompare(b.id))
         }
         await game.user.setFlag(this.namespace, 'default', defaults)
