@@ -119,7 +119,7 @@ export class ActionHandler extends CoreActionHandler {
                 subcategoryId === 'weapons' ||
                 subcategoryId === 'unequipped'
             )
-            return this._buildCharacterActions()
+            this._buildCharacterActions()
         }
         if (this.actorType === 'vehicle') {
             this.inventorySubcategoryIds = this.subcategoryIds.filter((subcategoryId) =>
@@ -128,10 +128,10 @@ export class ActionHandler extends CoreActionHandler {
                 subcategoryId === 'tools' ||
                 subcategoryId === 'weapons'
             )
-            return this._buildVehicleActions()
+            this._buildVehicleActions()
         }
         if (!this.actor) {
-            return this._buildMultipleTokenActions()
+            this._buildMultipleTokenActions()
         }
     }
 
@@ -229,7 +229,7 @@ export class ActionHandler extends CoreActionHandler {
         this.addActionsToActionList(actions, subcategoryData)
     }
 
-    buildActivations (items, subcategoryData, actionType = 'item') {
+    async buildActivations (items, subcategoryData, actionType = 'item') {
         // Create map of items according to activation type
         const activationItems = new Map()
 
@@ -261,21 +261,20 @@ export class ActionHandler extends CoreActionHandler {
             // Skip if no items exist
             if (!activationItems.has(activationType)) continue
 
-            // Add to subcategory data
-            subcategoryData.id = `${subcategoryId}+${subcategoryData.id}`
-            subcategoryData.type = 'system-derived'
+            // Clone and add to subcategory data
+            const subcategoryDataClone = { ...subcategoryData, id: `${subcategoryId}+${subcategoryData.id}`, type: 'system-derived' }
 
-            /// Create parent subcategory data
+            // Create parent subcategory data
             const parentSubcategoryData = { id: subcategoryId, type: 'system' }
 
             // Add subcategory to action list
-            this.addSubcategoryToActionList(parentSubcategoryData, subcategoryData)
+            await this.addSubcategoryToActionList(parentSubcategoryData, subcategoryDataClone)
 
             // Add spell slot info to subcategory
             this.addSubcategoryInfo(subcategoryData)
 
             // Build actions
-            this._buildActions(activationItems.get(activationType), subcategoryData, actionType)
+            this._buildActions(activationItems.get(activationType), subcategoryDataClone, actionType)
         }
     }
 
@@ -761,8 +760,10 @@ export class ActionHandler extends CoreActionHandler {
         for (const [key, value] of systemSpells) {
             const hasValue = value.value > 0
             const hasMax = value.max > 0
+            const hasLevel = value.level > 0
             if (key === 'pact') {
-                if (!pactSlotAvailable && hasValue && hasMax) pactSlotAvailable = true
+                if (!pactSlotAvailable && hasValue && hasMax && hasLevel) pactSlotAvailable = true
+                if (!hasLevel) pactSlotAvailable = false
                 value.slotAvailable = pactSlotAvailable
                 pactSlot = [key, value]
             }

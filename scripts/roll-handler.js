@@ -141,7 +141,8 @@ export class RollHandler extends CoreRollHandler {
 
         const magicItemActor = MagicItems.actor(actor.id)
 
-        magicItemActor.use(itemId, magicEffectId)
+        // magicitems module 3.0.0 does not support Item5e#use
+        magicItemActor.roll(itemId, magicEffectId)
 
         Hooks.callAll('forceUpdateTokenActionHud')
     }

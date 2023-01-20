@@ -4,6 +4,7 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
     constructor (actionHandler) {
         super(actionHandler.categoryManager)
         this.actionHandler = actionHandler
+        this.categoryManager = actionHandler.categoryManager
     }
 
     /**
@@ -46,8 +47,7 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
             }
 
             // Add subcategory to action list
-            const subcategory = this.actionHandler.initializeSubcategory(subcategoryData)
-            this.actionHandler.addSubcategoryToActionList(parentSubcategoryData, subcategory)
+            this.actionHandler.addSubcategoryToActionList(parentSubcategoryData, subcategoryData)
 
             const actions = magicItem.ownedEntries.map((entry) => {
                 const effect = entry.item
@@ -93,15 +93,11 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
      * @returns {boolean}
      */
     _isItemAttuned (magicItem) {
-        const itemData = magicItem.item.system
+        const attunement = magicItem.item.system.attunment
+        const attunementRequired = CONFIG.DND5E.attunementTypes?.REQUIRED ?? 1
 
-        if (itemData.attunement) {
-            const attuned = CONFIG.DND5E.attunementTypes?.ATTUNED ?? 2
-            return itemData.attunement === attuned
-        }
+        if (attunement === attunementRequired) return false
 
-        if (itemData.attuned) return itemData.attuned
-
-        return false
+        return true
     }
 }
