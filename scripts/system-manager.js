@@ -69,42 +69,42 @@ export class SystemManager extends CoreSystemManager {
                         {
                             nestId: 'inventory_weapons',
                             id: 'weapons',
-                            name: this.i18n('DND5E.ItemTypeWeaponPl'),
+                            name: this.i18n('ITEM.TypeWeaponPl'),
                             type: 'system',
                             hasDerivedSubcategories: false
                         },
                         {
                             nestId: 'inventory_equipment',
                             id: 'equipment',
-                            name: this.i18n('DND5E.ItemTypeEquipmentPl'),
+                            name: this.i18n('ITEM.TypeEquipmentPl'),
                             type: 'system',
                             hasDerivedSubcategories: false
                         },
                         {
                             nestId: 'inventory_consumables',
                             id: 'consumables',
-                            name: this.i18n('DND5E.ItemTypeConsumablePl'),
+                            name: this.i18n('ITEM.TypeConsumablePl'),
                             type: 'system',
                             hasDerivedSubcategories: false
                         },
                         {
                             nestId: 'inventory_tools',
                             id: 'tools',
-                            name: this.i18n('DND5E.ItemTypeToolPl'),
+                            name: this.i18n('ITEM.TypeToolPl'),
                             type: 'system',
                             hasDerivedSubcategories: false
                         },
                         {
                             nestId: 'inventory_containers',
                             id: 'containers',
-                            name: this.i18n('DND5E.ItemTypeContainerPl'),
+                            name: this.i18n('ITEM.TypeContainerPl'),
                             type: 'system',
                             hasDerivedSubcategories: false
                         },
                         {
                             nestId: 'inventory_loot',
                             id: 'loot',
-                            name: this.i18n('DND5E.ItemTypeLootPl'),
+                            name: this.i18n('ITEM.TypeLootPl'),
                             type: 'system',
                             hasDerivedSubcategories: false
                         }
@@ -134,7 +134,7 @@ export class SystemManager extends CoreSystemManager {
                 {
                     nestId: 'spells',
                     id: 'spells',
-                    name: this.i18n('DND5E.ItemTypeSpellPl'),
+                    name: this.i18n('ITEM.TypeSpellPl'),
                     subcategories: [
                         {
                             nestId: 'spells_at-will-spells',
@@ -322,38 +322,6 @@ export class SystemManager extends CoreSystemManager {
                 }
             ],
             subcategories: [
-                { id: 'abilities', name: this.i18n('tokenActionHud.dnd5e.abilities'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'checks', name: this.i18n('tokenActionHud.dnd5e.checks'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'combat', name: this.i18n('tokenActionHud.combat'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'conditions', name: this.i18n('tokenActionHud.dnd5e.conditions'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'rests', name: this.i18n('tokenActionHud.dnd5e.rests'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'saves', name: this.i18n('DND5E.ClassSaves'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'skills', name: this.i18n('tokenActionHud.dnd5e.skills'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'token', name: this.i18n('tokenActionHud.token'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'utility', name: this.i18n('tokenActionHud.utility'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'actions', name: this.i18n('DND5E.ActionPl'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'bonus-actions', name: this.i18n('tokenActionHud.dnd5e.bonusActions'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'crew-actions', name: this.i18n('tokenActionHud.dnd5e.crewActions'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'lair-actions', name: this.i18n('tokenActionHud.dnd5e.lairActions'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'legendary-actions', name: this.i18n('tokenActionHud.dnd5e.legendaryActions'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'other-actions', name: this.i18n('tokenActionHud.dnd5e.otherActions'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'reactions', name: this.i18n('DND5E.ReactionPl'), type: 'system', hasDerivedSubcategories: true },
-                { id: 'consumables', name: this.i18n('DND5E.ItemTypeConsumablePl'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'containers', name: this.i18n('DND5E.ItemTypeContainerPl'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'temporary-effects', name: this.i18n('DND5E.EffectTemporary'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'passive-effects', name: this.i18n('DND5E.EffectPassive'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'equipment', name: this.i18n('DND5E.ItemTypeEquipmentPl'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'loot', name: this.i18n('DND5E.ItemTypeLootPl'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'tools', name: this.i18n('DND5E.ItemTypeToolPl'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'weapons', name: this.i18n('DND5E.ItemTypeWeaponPl'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'equipped', name: this.i18n('DND5E.Equipped'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'unequipped', name: this.i18n('DND5E.Unequipped'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'active-features', name: this.i18n('tokenActionHud.dnd5e.activeFeatures'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'passive-features', name: this.i18n('tokenActionHud.dnd5e.passiveFeatures'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'at-will-spells', name: this.i18n('tokenActionHud.dnd5e.atWillSpells'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'cantrips', name: this.i18n('tokenActionHud.dnd5e.cantrips'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'innate-spells', name: this.i18n('tokenActionHud.dnd5e.innateSpells'), type: 'system', hasDerivedSubcategories: false },
-                { id: 'pact-spells', name: this.i18n('tokenActionHud.dnd5e.pactSpells'), type: 'system', hasDerivedSubcategories: false },
                 { id: '1st-level-spells', name: this.i18n('tokenActionHud.dnd5e.1stLevelSpells'), type: 'system', hasDerivedSubcategories: false },
                 { id: '2nd-level-spells', name: this.i18n('tokenActionHud.dnd5e.2ndLevelSpells'), type: 'system', hasDerivedSubcategories: false },
                 { id: '3rd-level-spells', name: this.i18n('tokenActionHud.dnd5e.3rdLevelSpells'), type: 'system', hasDerivedSubcategories: false },
@@ -362,7 +330,39 @@ export class SystemManager extends CoreSystemManager {
                 { id: '6th-level-spells', name: this.i18n('tokenActionHud.dnd5e.6thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
                 { id: '7th-level-spells', name: this.i18n('tokenActionHud.dnd5e.7thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
                 { id: '8th-level-spells', name: this.i18n('tokenActionHud.dnd5e.8thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
-                { id: '9th-level-spells', name: this.i18n('tokenActionHud.dnd5e.9thLevelSpells'), type: 'system', hasDerivedSubcategories: false }
+                { id: '9th-level-spells', name: this.i18n('tokenActionHud.dnd5e.9thLevelSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'abilities', name: this.i18n('tokenActionHud.dnd5e.abilities'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'actions', name: this.i18n('DND5E.ActionPl'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'active-features', name: this.i18n('tokenActionHud.dnd5e.activeFeatures'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'at-will-spells', name: this.i18n('tokenActionHud.dnd5e.atWillSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'bonus-actions', name: this.i18n('tokenActionHud.dnd5e.bonusActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'cantrips', name: this.i18n('tokenActionHud.dnd5e.cantrips'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'checks', name: this.i18n('tokenActionHud.dnd5e.checks'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'combat', name: this.i18n('tokenActionHud.combat'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'conditions', name: this.i18n('tokenActionHud.dnd5e.conditions'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'consumables', name: this.i18n('ITEM.TypeConsumablePl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'containers', name: this.i18n('ITEM.TypeContainerPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'crew-actions', name: this.i18n('tokenActionHud.dnd5e.crewActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'equipment', name: this.i18n('ITEM.TypeEquipmentPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'equipped', name: this.i18n('DND5E.Equipped'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'innate-spells', name: this.i18n('tokenActionHud.dnd5e.innateSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'lair-actions', name: this.i18n('tokenActionHud.dnd5e.lairActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'legendary-actions', name: this.i18n('tokenActionHud.dnd5e.legendaryActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'loot', name: this.i18n('ITEM.TypeLootPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'other-actions', name: this.i18n('tokenActionHud.dnd5e.otherActions'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'pact-spells', name: this.i18n('tokenActionHud.dnd5e.pactSpells'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'passive-effects', name: this.i18n('DND5E.EffectPassive'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'passive-features', name: this.i18n('tokenActionHud.dnd5e.passiveFeatures'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'reactions', name: this.i18n('DND5E.ReactionPl'), type: 'system', hasDerivedSubcategories: true },
+                { id: 'rests', name: this.i18n('tokenActionHud.dnd5e.rests'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'saves', name: this.i18n('DND5E.ClassSaves'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'skills', name: this.i18n('tokenActionHud.dnd5e.skills'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'temporary-effects', name: this.i18n('DND5E.EffectTemporary'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'token', name: this.i18n('tokenActionHud.token'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'tools', name: this.i18n('ITEM.TypeToolPl'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'unequipped', name: this.i18n('DND5E.Unequipped'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'utility', name: this.i18n('tokenActionHud.utility'), type: 'system', hasDerivedSubcategories: false },
+                { id: 'weapons', name: this.i18n('ITEM.TypeWeaponPl'), type: 'system', hasDerivedSubcategories: false }
             ]
         }
         // If the 'Magic Items' module is active, then add a subcategory for it

@@ -553,12 +553,12 @@ export class ActionHandler extends CoreActionHandler {
         const subcategoryNameMappings = {
             equipped: this.i18n('DND5E.Equipped'),
             unequipped: this.i18n('DND5E.Unequipped'),
-            consumables: this.i18n('DND5E.ItemTypeConsumablePl'),
-            containers: this.i18n('DND5E.ItemTypeContainerPl'),
-            equipment: this.i18n('DND5E.ItemTypeEquipmentPl'),
-            loot: this.i18n('DND5E.ItemTypeLootPl'),
-            tools: this.i18n('DND5E.ItemTypeToolPl'),
-            weapons: this.i18n('DND5E.ItemTypeWeaponPl')
+            consumables: this.i18n('ITEM.TypeConsumablePl'),
+            containers: this.i18n('ITEM.TypeContainerPl'),
+            equipment: this.i18n('ITEM.TypeEquipmentPl'),
+            loot: this.i18n('ITEM.TypeLootPl'),
+            tools: this.i18n('ITEM.TypeToolPl'),
+            weapons: this.i18n('ITEM.TypeWeaponPl')
         }
 
         // Loop through inventory subcateogry ids
