@@ -1,14 +1,19 @@
 import { CoreActionListExtender } from './config.js'
 
 export class MagicItemActionListExtender extends CoreActionListExtender {
+    constructor (actionHandler) {
+        super(actionHandler.categoryManager)
+        this.actionHandler = actionHandler
+        this.categoryManager = actionHandler.categoryManager
+    }
+
     /**
      * Extend the action list
-     * @param {object} actionList The action list
      * @param {object} character The actor and/or token
      */
-    extendActionList (actionList, character) {
-        const actorId = character?.actor?.id
-        const tokenId = character?.token?.id
+    extendActionList (character) {
+        const actorId = this.actionHandler.actorId
+        const tokenId = this.actionHandler.tokenId
         if (!actorId) return
 
         const actor = MagicItems.actor(actorId)
@@ -20,7 +25,11 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
         if (magicItems.length === 0) return
 
         const parentSubcategoryId = 'magic-items'
-        const subcategoryList = []
+        const parentSubcategoryType = 'system'
+        const parentSubcategoryData = {
+            id: parentSubcategoryId,
+            type: parentSubcategoryType
+        }
 
         magicItems.forEach((magicItem) => {
             if (magicItem.attuned && !this._isItemAttuned(magicItem)) return
@@ -28,8 +37,17 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
 
             const subcategoryId = `magic-items_${magicItem.id}`
             const subcategoryName = magicItem.name
-            const subcategory = this.initializeEmptySubcategory(subcategoryId, subcategoryId, subcategoryName, 'system')
-            subcategory.info1 = `${magicItem.uses}/${magicItem.charges}`
+            const subcategoryType = 'system-derived'
+            const subcategoryInfo1 = `${magicItem.uses}/${magicItem.charges}`
+            const subcategoryData = {
+                id: subcategoryId,
+                name: subcategoryName,
+                type: subcategoryType,
+                info1: subcategoryInfo1
+            }
+
+            // Add subcategory to action list
+            this.actionHandler.addSubcategoryToActionList(parentSubcategoryData, subcategoryData)
 
             const actions = magicItem.ownedEntries.map((entry) => {
                 const effect = entry.item
@@ -41,26 +59,23 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
                     tokenId,
                     `${magicItem.id}>${id}`
                 ].join('|')
-                const img = this.getImage(effect)
+                const img = this.actionHandler.getImage(effect)
                 const info1 = effect.consumption
-                let info2 = ''
-                if (effect.baseLevel) {
-                    info2 = `${this.i18n('DND5E.AbbreviationLevel')} ${effect.baseLevel}`
-                }
+                const info2 = (effect.baseLevel) ? `${this.i18n('DND5E.AbbreviationLevel')} ${effect.baseLevel}` : ''
                 return {
                     id,
                     name,
                     encodedValue,
                     img,
                     info1,
-                    info2
+                    info2,
+                    selected: true
                 }
             })
 
-            this.addToSubcategoryList(subcategoryList, subcategoryId, subcategory, actions)
+            // Add actions to action list
+            this.actionHandler.addActionsToActionList(actions, subcategoryData)
         })
-
-        this.addSubcategoriesToActionList(actionList, subcategoryList, parentSubcategoryId)
     }
 
     /**
@@ -78,15 +93,11 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
      * @returns {boolean}
      */
     _isItemAttuned (magicItem) {
-        const itemData = magicItem.item.system
+        const attunement = magicItem.item.system.attunment
+        const attunementRequired = CONFIG.DND5E.attunementTypes?.REQUIRED ?? 1
 
-        if (itemData.attunement) {
-            const attuned = CONFIG.DND5E.attunementTypes?.ATTUNED ?? 2
-            return itemData.attunement === attuned
-        }
+        if (attunement === attunementRequired) return false
 
-        if (itemData.attuned) return itemData.attuned
-
-        return false
+        return true
     }
 }
