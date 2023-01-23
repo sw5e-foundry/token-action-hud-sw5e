@@ -56,10 +56,12 @@ export class ActionHandler extends CoreActionHandler {
         this.tokenId = this.token?.id ?? 'multi'
 
         // Set items variable
-        let items = this.actor.items
-        items = this._discardSlowItems(items)
-        items = this.sortItemsByName(items)
-        this.items = items
+        if (this.actorId !== 'multi') {
+            let items = this.actor.items
+            items = this._discardSlowItems(items)
+            items = this.sortItemsByName(items)
+            this.items = items
+        }
 
         // Set settings variables
         this.abbreviateSkills = getSetting('abbreviateSkills')
@@ -947,9 +949,9 @@ export class ActionHandler extends CoreActionHandler {
         } else {
             info = this._getItemInfo(entity)
         }
-        const info1 = info.info1
-        const info2 = info.info2
-        const info3 = info.info3
+        const info1 = info?.info1
+        const info2 = info?.info2
+        const info3 = info?.info3
         return {
             id,
             name,
@@ -1147,11 +1149,11 @@ export class ActionHandler extends CoreActionHandler {
         // Initialize map
         const filteredItems = new Map()
 
-        // Iterate through items and set items with non-slow activation types into the new map
-        for (const [key, value] of items) {
+        // Loop items and set those with fast activation types into the new map
+        for (const [key, value] of items.entries()) {
             const activation = value.system.activation
             const activationType = value.system.activation?.type
-            if (activation && !slowActivationTypes.includes(activationType)) filteredItems.set([key, value])
+            if (activation && !slowActivationTypes.includes(activationType)) filteredItems.set(key, value)
         }
 
         return filteredItems

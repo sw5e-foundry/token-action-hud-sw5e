@@ -10,17 +10,14 @@ import { CoreSystemManager, CoreCategoryManager } from './config.js'
 
 export class SystemManager extends CoreSystemManager {
     /** @override */
-    doGetCategoryManager (user) {
-        const categoryManager = new CoreCategoryManager(user)
-        return categoryManager
+    doGetCategoryManager () {
+        return new CoreCategoryManager()
     }
 
     /** @override */
     doGetActionHandler (categoryManager) {
         const actionHandler = new ActionHandler(categoryManager)
-
         if (CoreSystemManager.isModuleActive('magicitems')) { actionHandler.addFurtherActionHandler(new MagicItemActionListExtender(actionHandler)) }
-
         return actionHandler
     }
 

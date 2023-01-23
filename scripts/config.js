@@ -25,5 +25,4 @@ export const CoreCategoryManager = await import(coreCategoryManagerFile).then(mo
 export const CorePreRollHandler = await import(corePreRollHandlerFile).then(module => module.PreRollHandler)
 export const CoreRollHandler = await import(coreRollHandlerFile).then(module => module.RollHandler)
 export const CoreSystemManager = await import(coreSystemManagerFile).then(module => module.SystemManager)
-export const Logger = await import(coreUtilsFile).then(module => module.Logger)
- */
+export const Logger = await import(coreUtilsFile).then(module => module.Logger) */
