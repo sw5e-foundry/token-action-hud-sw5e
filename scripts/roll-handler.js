@@ -1,5 +1,5 @@
 // Core Module Imports
-import { CoreRollHandler } from './config.js'
+import { CoreRollHandler, CoreUtils } from './config.js'
 
 export class RollHandler extends CoreRollHandler {
     /**
@@ -94,7 +94,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     _rollAbility (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
         actor.rollAbility(actionId, { event })
     }
 
@@ -107,7 +107,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     _rollAbilitySave (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
         actor.rollAbilitySave(actionId, { event })
     }
 
@@ -120,7 +120,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     _rollAbilityTest (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
         actor.rollAbilityTest(actionId, { event })
     }
 
@@ -133,7 +133,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     _rollMagicItem (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
         const actionParts = actionId.split('>')
 
         const itemId = actionParts[0]
@@ -156,7 +156,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     _rollSkill (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
         actor.rollSkill(actionId, { event })
     }
 
@@ -170,8 +170,8 @@ export class RollHandler extends CoreRollHandler {
      * @returns {object}
      */
     _useItem (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
-        const item = super.getItem(actor, actionId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
+        const item = CoreUtils.getItem(actor, actionId)
 
         if (this._needsRecharge(item)) {
             item.rollRecharge()
@@ -203,8 +203,8 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     async _performUtilityMacro (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
-        const token = super.getToken(tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
+        const token = CoreUtils.getToken(tokenId)
 
         switch (actionId) {
         case 'deathSave':
@@ -251,7 +251,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} tokenId
      */
     async _rollInitiative (actorId, tokenId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
 
         await actor.rollInitiative({ createCombatants: true })
 
@@ -267,7 +267,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {object} effect
      */
     async _toggleCondition (event, tokenId, actionId, effect = null) {
-        const token = super.getToken(tokenId)
+        const token = CoreUtils.getToken(tokenId)
         const isRightClick = this.isRightClick(event)
         if (game.dfreds && effect?.flags?.isConvenient) {
             const effectLabel = effect.label
@@ -302,7 +302,7 @@ export class RollHandler extends CoreRollHandler {
      * @param {string} actionId
      */
     async _toggleEffect (event, actorId, tokenId, actionId) {
-        const actor = super.getActor(actorId, tokenId)
+        const actor = CoreUtils.getActor(actorId, tokenId)
         const effects = 'find' in actor.effects.entries ? actor.effects.entries : actor.effects
         const effect = effects.find((e) => e.id === actionId)
 
