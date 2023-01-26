@@ -111,6 +111,29 @@ export class ActionHandler extends CoreActionHandler {
             subcategoryId === 'pact-spells'
         )
 
+        // Add subcategory ids for activation types
+        if (this.activationSubcategoryIds.length > 0) {
+            this.featureSubcategoryIds = [
+                'active-features',
+                'passive-features'
+            ]
+            this.spellSubcategoryIds = [
+                'cantrips',
+                '1st-level-spells',
+                '2nd-level-spells',
+                '3rd-level-spells',
+                '4th-level-spells',
+                '5th-level-spells',
+                '6th-level-spells',
+                '7th-level-spells',
+                '8th-level-spells',
+                '9th-level-spells',
+                'at-will-spells',
+                'innate-spells',
+                'pact-spells'
+            ]
+        }
+
         if (this.actorType === 'character' || this.actorType === 'npc') {
             this.inventorySubcategoryIds = subcategoryIds.filter((subcategoryId) =>
                 subcategoryId === 'equipped' ||
@@ -122,6 +145,19 @@ export class ActionHandler extends CoreActionHandler {
                 subcategoryId === 'weapons' ||
                 subcategoryId === 'unequipped'
             )
+
+            // Add subcategory ids for activation types
+            if (this.activationSubcategoryIds.length > 0) {
+                this.inventorySubcategoryIds = [
+                    'consumables',
+                    'containers',
+                    'equipment',
+                    'loot',
+                    'tools',
+                    'weapons'
+                ]
+            }
+
             this._buildCharacterActions()
         }
         if (this.actorType === 'vehicle') {
@@ -131,6 +167,17 @@ export class ActionHandler extends CoreActionHandler {
                 subcategoryId === 'tools' ||
                 subcategoryId === 'weapons'
             )
+
+            // Add subcategory ids for activation types
+            if (this.activationSubcategoryIds.length > 0) {
+                this.inventorySubcategoryIds = [
+                    'consumables',
+                    'equipment',
+                    'tools',
+                    'weapons'
+                ]
+            }
+
             this._buildVehicleActions()
         }
         if (!this.actor) {
@@ -139,7 +186,7 @@ export class ActionHandler extends CoreActionHandler {
     }
 
     /**
-     * Build Character Actions
+     * Build Character Actionss
      * @private
      * @returns {object}
      */
