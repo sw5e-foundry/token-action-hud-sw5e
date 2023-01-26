@@ -1,8 +1,9 @@
 // System Module Imports
+import { ACTIVATION_TYPE_ICON, PREPARED_ICON, PROFICIENCY_LEVEL_ICON } from './constants.js'
 import { getSetting } from './utils.js'
 
 // Core Module Imports
-import { CoreActionHandler, Logger } from './config.js'
+import { CoreActionHandler, CoreUtils, Logger } from './config.js'
 
 export class ActionHandler extends CoreActionHandler {
     // Initialize actor and token variables
@@ -292,8 +293,8 @@ export class ActionHandler extends CoreActionHandler {
 
         // Set combat types
         const combatTypes = {
-            initiative: { id: 'initiative', name: this.i18n('tokenActionHud.dnd5e.rollInitiative') },
-            endTurn: { id: 'endTurn', name: this.i18n('tokenActionHud.endTurn') }
+            initiative: { id: 'initiative', name: CoreUtils.i18n('tokenActionHud.dnd5e.rollInitiative') },
+            endTurn: { id: 'endTurn', name: CoreUtils.i18n('tokenActionHud.endTurn') }
         }
 
         // Delete endTurn for multiple tokens
@@ -304,7 +305,7 @@ export class ActionHandler extends CoreActionHandler {
             const id = combatType[1].id
             const name = combatType[1].name
             const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
-            let info1 = ''
+            const info1 = {}
             let cssClass = ''
             if (combatType[0] === 'initiative' && game.combat) {
                 const tokenIds = canvas.tokens.controlled.map((token) => token.id)
@@ -313,7 +314,8 @@ export class ActionHandler extends CoreActionHandler {
                 // Get initiative for single token
                 if (combatants.length === 1) {
                     const currentInitiative = combatants[0].initiative
-                    info1 = currentInitiative
+                    info1.class = 'tah-spotlight'
+                    info1.text = currentInitiative
                 }
 
                 const active = combatants.length > 0 && (combatants.every((combatant) => combatant?.initiative)) ? ' active' : ''
@@ -356,7 +358,7 @@ export class ActionHandler extends CoreActionHandler {
         // Get actions
         const actions = conditions.map((condition) => {
             const id = condition.id
-            const name = this.i18n(condition.label)
+            const name = CoreUtils.i18n(condition.label)
             const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
             const active = this.actors.every((actor) => {
                 const effects = actor.effects
@@ -464,7 +466,7 @@ export class ActionHandler extends CoreActionHandler {
         if (this.featureSubcategoryIds.includes('active-features')) {
             const subcategoryData = {
                 id: 'active-features',
-                name: this.i18n('tokenActionHud.dnd5e.activeFeatures'),
+                name: CoreUtils.i18n('tokenActionHud.dnd5e.activeFeatures'),
                 type: 'system'
             }
 
@@ -479,7 +481,7 @@ export class ActionHandler extends CoreActionHandler {
         if (this.featureSubcategoryIds.includes('passive-features')) {
             const subcategoryData = {
                 id: 'passive-features',
-                name: this.i18n('tokenActionHud.dnd5e.passiveFeatures'),
+                name: CoreUtils.i18n('tokenActionHud.dnd5e.passiveFeatures'),
                 type: 'system'
             }
 
@@ -553,14 +555,14 @@ export class ActionHandler extends CoreActionHandler {
 
         // Create subcategory name mappings
         const subcategoryNameMappings = {
-            equipped: this.i18n('DND5E.Equipped'),
-            unequipped: this.i18n('DND5E.Unequipped'),
-            consumables: this.i18n('ITEM.TypeConsumablePl'),
-            containers: this.i18n('ITEM.TypeContainerPl'),
-            equipment: this.i18n('ITEM.TypeEquipmentPl'),
-            loot: this.i18n('ITEM.TypeLootPl'),
-            tools: this.i18n('ITEM.TypeToolPl'),
-            weapons: this.i18n('ITEM.TypeWeaponPl')
+            equipped: CoreUtils.i18n('DND5E.Equipped'),
+            unequipped: CoreUtils.i18n('DND5E.Unequipped'),
+            consumables: CoreUtils.i18n('ITEM.TypeConsumablePl'),
+            containers: CoreUtils.i18n('ITEM.TypeContainerPl'),
+            equipment: CoreUtils.i18n('ITEM.TypeEquipmentPl'),
+            loot: CoreUtils.i18n('ITEM.TypeLootPl'),
+            tools: CoreUtils.i18n('ITEM.TypeToolPl'),
+            weapons: CoreUtils.i18n('ITEM.TypeWeaponPl')
         }
 
         // Loop through inventory subcateogry ids
@@ -599,8 +601,8 @@ export class ActionHandler extends CoreActionHandler {
 
         // Set rest types
         const restTypes = {
-            shortRest: { name: this.i18n('DND5E.ShortRest') },
-            longRest: { name: this.i18n('DND5E.LongRest') }
+            shortRest: { name: CoreUtils.i18n('DND5E.ShortRest') },
+            longRest: { name: CoreUtils.i18n('DND5E.LongRest') }
         }
 
         // Get actions
@@ -663,7 +665,7 @@ export class ActionHandler extends CoreActionHandler {
             .filter((skill) => !!skill)
 
         // Create subcategory data
-        const subcategoryData = { id: 'skills', type: 'system'}
+        const subcategoryData = { id: 'skills', type: 'system' }
 
         // Add actions to action list
         this.addActionsToActionList(actions, subcategoryData)
@@ -788,19 +790,19 @@ export class ActionHandler extends CoreActionHandler {
         }
 
         const subcategoryMappings = {
-            '1st-level-spells': { spellMode: 1, name: this.i18n('tokenActionHud.dnd5e.1stLevelSpells') },
-            '2nd-level-spells': { spellMode: 2, name: this.i18n('tokenActionHud.dnd5e.2ndLevelSpells') },
-            '3rd-level-spells': { spellMode: 3, name: this.i18n('tokenActionHud.dnd5e.3rdLevelSpells') },
-            '4th-level-spells': { spellMode: 4, name: this.i18n('tokenActionHud.dnd5e.4thLevelSpells') },
-            '5th-level-spells': { spellMode: 5, name: this.i18n('tokenActionHud.dnd5e.5thLevelSpells') },
-            '6th-level-spells': { spellMode: 6, name: this.i18n('tokenActionHud.dnd5e.6thLevelSpells') },
-            '7th-level-spells': { spellMode: 7, name: this.i18n('tokenActionHud.dnd5e.7thLevelSpells') },
-            '8th-level-spells': { spellMode: 8, name: this.i18n('tokenActionHud.dnd5e.8thLevelSpells') },
-            '9th-level-spells': { spellMode: 9, name: this.i18n('tokenActionHud.dnd5e.9thLevelSpells') },
-            'at-will-spells': { spellMode: 'atwill', name: this.i18n('tokenActionHud.dnd5e.atWillSpells') },
-            cantrips: { spellMode: 0, name: this.i18n('tokenActionHud.dnd5e.cantrips') },
-            'innate-spells': { spellMode: 'innate', name: this.i18n('tokenActionHud.dnd5e.innateSpells') },
-            'pact-spells': { spellMode: 'pact', name: this.i18n('tokenActionHud.dnd5e.pactSpells') }
+            '1st-level-spells': { spellMode: 1, name: CoreUtils.i18n('tokenActionHud.dnd5e.1stLevelSpells') },
+            '2nd-level-spells': { spellMode: 2, name: CoreUtils.i18n('tokenActionHud.dnd5e.2ndLevelSpells') },
+            '3rd-level-spells': { spellMode: 3, name: CoreUtils.i18n('tokenActionHud.dnd5e.3rdLevelSpells') },
+            '4th-level-spells': { spellMode: 4, name: CoreUtils.i18n('tokenActionHud.dnd5e.4thLevelSpells') },
+            '5th-level-spells': { spellMode: 5, name: CoreUtils.i18n('tokenActionHud.dnd5e.5thLevelSpells') },
+            '6th-level-spells': { spellMode: 6, name: CoreUtils.i18n('tokenActionHud.dnd5e.6thLevelSpells') },
+            '7th-level-spells': { spellMode: 7, name: CoreUtils.i18n('tokenActionHud.dnd5e.7thLevelSpells') },
+            '8th-level-spells': { spellMode: 8, name: CoreUtils.i18n('tokenActionHud.dnd5e.8thLevelSpells') },
+            '9th-level-spells': { spellMode: 9, name: CoreUtils.i18n('tokenActionHud.dnd5e.9thLevelSpells') },
+            'at-will-spells': { spellMode: 'atwill', name: CoreUtils.i18n('tokenActionHud.dnd5e.atWillSpells') },
+            cantrips: { spellMode: 0, name: CoreUtils.i18n('tokenActionHud.dnd5e.cantrips') },
+            'innate-spells': { spellMode: 'innate', name: CoreUtils.i18n('tokenActionHud.dnd5e.innateSpells') },
+            'pact-spells': { spellMode: 'pact', name: CoreUtils.i18n('tokenActionHud.dnd5e.pactSpells') }
         }
 
         const spellSlotModes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'pact']
@@ -820,9 +822,9 @@ export class ActionHandler extends CoreActionHandler {
             // Skip if spells require spell slots and none are available
             if (!slotsAvailable && spellSlotModes.includes(spellMode)) continue
 
-            // Create subcategory data
+            // Create subcategory data=
             const subcategoryInfo = {}
-            subcategoryInfo.info1 = (max > 0) ? `${slots}/${max}` : ''
+            subcategoryInfo.info1 = { class: 'tah-spotlight', text: (max >= 0) ? `${slots}/${max}` : '' }
             const subcategoryData = {
                 id: subcategoryId,
                 name: subcategoryName,
@@ -858,8 +860,8 @@ export class ActionHandler extends CoreActionHandler {
 
         // Set utility types
         const utilityTypes = {
-            deathSave: { name: this.i18n('DND5E.DeathSave') },
-            inspiration: { name: this.i18n('DND5E.Inspiration') }
+            deathSave: { name: CoreUtils.i18n('DND5E.DeathSave') },
+            inspiration: { name: CoreUtils.i18n('DND5E.Inspiration') }
         }
 
         // Delete 'deathSave' for multiple tokens
@@ -931,7 +933,7 @@ export class ActionHandler extends CoreActionHandler {
             !entity?.system?.recharge?.charged &&
             entity?.system?.recharge?.value
         ) {
-            name += ` (${this.i18n('DND5E.Recharge')})`
+            name += ` (${CoreUtils.i18n('DND5E.Recharge')})`
         }
         let cssClass = ''
         if (Object.hasOwn(entity, 'disabled')) {
@@ -1036,10 +1038,14 @@ export class ActionHandler extends CoreActionHandler {
      * @returns {object}
      */
     _getItemInfo (item) {
+        const quantityData = this._getQuantityData(item)
+        const usesData = this._getUsesData(item)
+        const consumeData = this._getConsumeData(item)
+
         return {
-            info1: this._getQuantityData(item) ?? '',
-            info2: this._getUsesData(item) ?? '',
-            info3: this._getConsumeData(item) ?? ''
+            info1: { text: quantityData },
+            info2: { text: usesData },
+            info3: { text: consumeData }
         }
     }
 
@@ -1050,15 +1056,34 @@ export class ActionHandler extends CoreActionHandler {
     _getSpellInfo (spell) {
         const components = spell.system.components
 
-        let info1 = ''
-        let info2 = ''
-        let info3 = ''
+        const componentsArray = []
+        const info1 = {}
+        const info2 = {}
+        const info3 = {}
 
-        if (components?.vocal) info1 += this.i18n('DND5E.ComponentVerbal').charAt(0).toUpperCase()
-        if (components?.somatic) info1 += this.i18n('DND5E.ComponentSomatic').charAt(0).toUpperCase()
-        if (components?.material) info1 += this.i18n('DND5E.ComponentMaterial').charAt(0).toUpperCase()
-        if (components?.concentration) info2 += this.i18n('DND5E.Concentration').charAt(0).toUpperCase()
-        if (components?.ritual) info3 += this.i18n('DND5E.Ritual').charAt(0).toUpperCase()
+        // Components
+        if (components?.vocal) componentsArray.push(CoreUtils.i18n('DND5E.ComponentVerbal'))
+        if (components?.somatic) componentsArray.push(CoreUtils.i18n('DND5E.ComponentSomatic'))
+        if (components?.material) componentsArray.push(CoreUtils.i18n('DND5E.ComponentMaterial'))
+
+        if (componentsArray.length) {
+            info1.title = componentsArray.join(', ')
+            info1.text = componentsArray.map(component => component.charAt(0).toUpperCase()).join('')
+        }
+
+        // Concentration
+        if (components?.concentration) {
+            const title = CoreUtils.i18n('DND5E.Concentration')
+            info2.title = title
+            info2.text = title.charAt(0).toUpperCase()
+        }
+
+        // Ritual
+        if (components?.ritual) {
+            const title = CoreUtils.i18n('DND5E.Ritual')
+            info3.title = title
+            info3.text = title.charAt(0).toUpperCase()
+        }
 
         return { info1, info2, info3 }
     }
@@ -1165,33 +1190,20 @@ export class ActionHandler extends CoreActionHandler {
      * @returns {string}
      */
     _getProficiencyIcon (level) {
-        const icons = {
-            0: '',
-            0.5: '<i class="fas fa-adjust"></i>',
-            1: '<i class="fas fa-check"></i>',
-            2: '<i class="fas fa-check-double"></i>'
-        }
-        return icons[level]
+        const title = CONFIG.DND5E.proficiencyLevels[level] ?? ''
+        const icon = PROFICIENCY_LEVEL_ICON[level]
+        if (icon) return `<i class="${icon}" title="${title}"></i>`
     }
 
     /**
      * Get icon for the activation type
-     * @param {object} action
+     * @param {object} activationType
      * @returns {string}
      */
-    _getActivationTypeIcon (action) {
-        const img = {
-            bonus: '<i class="fas fa-plus"></i>',
-            crew: '<i class="fas fa-users"></i>',
-            day: '<i class="fas fa-hourglass-end"></i>',
-            hour: '<i class="fas fa-hourglass-half"></i>',
-            lair: '<i class="fas fa-home"></i>',
-            minute: '<i class="fas fa-hourglass-start"></i>',
-            legendary: '<i class="fas fa-dragon"></i>',
-            reaction: '<i class="fas fa-bolt"></i>',
-            special: '<i class="fas fa-star"></i>'
-        }
-        return img[action]
+    _getActivationTypeIcon (activationType) {
+        const title = CONFIG.DND5E.abilityActivationTypes[activationType] ?? ''
+        const icon = ACTIVATION_TYPE_ICON[activationType]
+        if (icon) return `<i class="${icon}" title="${title}"></i>`
     }
 
     /**
@@ -1203,8 +1215,10 @@ export class ActionHandler extends CoreActionHandler {
         const level = spell.system.level
         const preparationMode = spell.system.preparation.mode
         const prepared = spell.system.preparation.prepared
+        const icon = (prepared) ? PREPARED_ICON : `${PREPARED_ICON} tah-icon-disabled`
+        const title = (prepared) ? CoreUtils.i18n('DND5E.SpellPrepared') : CoreUtils.i18n('DND5E.SpellUnprepared')
 
-        // Return true if spell is prepared, the preparation mode is 'prepared and it is not a cantrip
-        if (prepared && preparationMode === 'prepared' && level !== 0) return '<i class="fas fa-sun"></i>'
+        // Return icon if the preparation mode is 'prepared' and the spell is not a cantrip
+        return (preparationMode === 'prepared' && level !== 0) ? `<i class="${icon}" title="${title}"></i>` : ''
     }
 }

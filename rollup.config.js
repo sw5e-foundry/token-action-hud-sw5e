@@ -8,7 +8,10 @@ export default [
                 'scripts/*.js',
                 'scripts/*/*.js'
             ],
-            exclude: ['scripts/token-action-hud-dnd5e.min.js']
+            exclude: [
+                'scripts/constants.js',
+                'scripts/defaults.js',
+                'scripts/token-action-hud-dnd5e.min.js']
         },
         output: {
             format: 'esm',
