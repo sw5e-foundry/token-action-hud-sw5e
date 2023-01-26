@@ -82,7 +82,13 @@
     "systems": [
       {
         "id": "dnd5e",
-        "type": "system"
+        "type": "system",
+        "compatibility": [
+          {
+            "minimum": "2.1.0",
+            "verified": "2.1.4"
+          }
+        ]
       }
     ],
     "requires": [
@@ -91,9 +97,9 @@
         "type": "module",
         "compatibility": [
           {
-            "minimum": "1.0.0",
+            "minimum": "1.0.1",
             "maximum": "1.0",
-            "verified": "1.0.0"
+            "verified": "1.0.1"
           }
         ]
       }
