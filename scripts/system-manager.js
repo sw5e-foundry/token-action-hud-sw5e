@@ -26,7 +26,7 @@ export class SystemManager extends CoreSystemManager {
     getAvailableRollHandlers () {
         let coreTitle = 'Core D&D5e'
 
-        if (CoreUtils.isModuleActive('midi-qol')) { coreTitle += ` [supports ${Utils.getModuleTitle('midi-qol')}]` }
+        if (CoreUtils.isModuleActive('midi-qol')) { coreTitle += ` [supports ${CoreUtils.getModuleTitle('midi-qol')}]` }
 
         const choices = { core: coreTitle }
         CoreSystemManager.addHandler(choices, 'obsidian')
