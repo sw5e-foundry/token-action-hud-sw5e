@@ -60,7 +60,7 @@ export class SystemManager extends CoreSystemManager {
         const defaults = DEFAULTS
         // If the 'Magic Items' module is active, then add a subcategory for it
         if (game.modules.get('magicitems')?.active) {
-            defaults.subcategories.push({ id: 'magic-items', name: this.i18n('tokenActionHud.dnd5e.magicItems'), type: 'system', hasDerivedSubcategories: true })
+            defaults.subcategories.push({ id: 'magic-items', name: CoreUtils.i18n('tokenActionHud.dnd5e.magicItems'), type: 'system', hasDerivedSubcategories: true })
             defaults.subcategories.sort((a, b) => a.id.localeCompare(b.id))
         }
         await CoreUtils.setUserFlag('default', defaults)

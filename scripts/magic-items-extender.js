@@ -1,4 +1,4 @@
-import { CoreActionListExtender } from './config.js'
+import { CoreActionListExtender, CoreUtils } from './config.js'
 
 export class MagicItemActionListExtender extends CoreActionListExtender {
     constructor (actionHandler) {
@@ -61,7 +61,7 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
                 ].join('|')
                 const img = this.actionHandler.getImage(effect)
                 const info1 = effect.consumption
-                const info2 = (effect.baseLevel) ? `${this.i18n('DND5E.AbbreviationLevel')} ${effect.baseLevel}` : ''
+                const info2 = (effect.baseLevel) ? `${CoreUtils.i18n('DND5E.AbbreviationLevel')} ${effect.baseLevel}` : ''
                 return {
                     id,
                     name,
