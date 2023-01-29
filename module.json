@@ -16,7 +16,7 @@
   ],
   "url": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e",
   "flags": {},
-  "version": "1.0.0",
+  "version": "1.1.0",
   "compatibility": {
     "minimum": "10",
     "verified": "10.291"
@@ -97,9 +97,9 @@
         "type": "module",
         "compatibility": [
           {
-            "minimum": "1.0.1",
-            "maximum": "1.0",
-            "verified": "1.0.1"
+            "minimum": "1.1.0",
+            "maximum": "1.1",
+            "verified": "1.1.0"
           }
         ]
       }
@@ -110,7 +110,7 @@
     }
   },
   "socket": false,
-  "manifest": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e/releases/download/1.0.0/module.zip",
+  "manifest": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e/releases/download/1.1.0/module.zip",
   "download": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e/releases/latest/download/module.zip",
   "readme": "https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e#readme",
   "protected": false,
