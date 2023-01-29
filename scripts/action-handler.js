@@ -988,7 +988,7 @@ export class ActionHandler extends CoreActionHandler {
             cssClass = `toggle${active}`
         }
         const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
-        const img = this.getImage(entity)
+        const img = CoreUtils.getImage(entity)
         const icon1 = this._getActivationTypeIcon(entity?.system?.activation?.type)
         let icon2 = null
         let info = null

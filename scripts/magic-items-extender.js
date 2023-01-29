@@ -59,7 +59,7 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
                     tokenId,
                     `${magicItem.id}>${id}`
                 ].join('|')
-                const img = this.actionHandler.getImage(effect)
+                const img = CoreUtils.getImage(effect)
                 const info1 = effect.consumption
                 const info2 = (effect.baseLevel) ? `${CoreUtils.i18n('DND5E.AbbreviationLevel')} ${effect.baseLevel}` : ''
                 return {
