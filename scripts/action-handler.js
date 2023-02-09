@@ -1,6 +1,6 @@
 // System Module Imports
 import { ACTIVATION_TYPE_ICON, PREPARED_ICON, PROFICIENCY_LEVEL_ICON } from './constants.js'
-import { getSetting } from './utils.js'
+import { Utils } from './utils.js'
 
 // Core Module Imports
 import { CoreActionHandler, CoreUtils, Logger } from './config.js'
@@ -65,12 +65,12 @@ export class ActionHandler extends CoreActionHandler {
         }
 
         // Set settings variables
-        this.abbreviateSkills = getSetting('abbreviateSkills')
-        this.displaySpellInfo = getSetting('displaySpellInfo')
-        this.showItemsWithoutActivationCosts = getSetting('showItemsWithoutActivationCosts')
-        this.showUnchargedItems = getSetting('showUnchargedItems')
-        this.showUnequippedItems = getSetting('showUnequippedItems')
-        this.showUnpreparedSpells = getSetting('showUnpreparedSpells')
+        this.abbreviateSkills = Utils.getSetting('abbreviateSkills')
+        this.displaySpellInfo = Utils.getSetting('displaySpellInfo')
+        this.showItemsWithoutActivationCosts = Utils.getSetting('showItemsWithoutActivationCosts')
+        this.showUnchargedItems = Utils.getSetting('showUnchargedItems')
+        this.showUnequippedItems = Utils.getSetting('showUnequippedItems')
+        this.showUnpreparedSpells = Utils.getSetting('showUnpreparedSpells')
 
         // Set subcategory variables
         this.subcategoryIds = subcategoryIds
@@ -92,7 +92,27 @@ export class ActionHandler extends CoreActionHandler {
 
         this.featureSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
             subcategoryId === 'active-features' ||
-            subcategoryId === 'passive-features'
+            subcategoryId === 'passive-features' ||
+            subcategoryId === 'background-features' ||
+            subcategoryId === 'class-features' ||
+            subcategoryId === 'feats' ||
+            subcategoryId === 'monster-features' ||
+            subcategoryId === 'race-features' ||
+            subcategoryId === 'artificer-infusions' ||
+            subcategoryId === 'channel-divinity' ||
+            subcategoryId === 'defensive-tactics' ||
+            subcategoryId === 'eldritch-invocations' ||
+            subcategoryId === 'elemental-disciplines' ||
+            subcategoryId === 'fighting-styles' ||
+            subcategoryId === 'hunters-prey' ||
+            subcategoryId === 'ki-abilities' ||
+            subcategoryId === 'maneuvers' ||
+            subcategoryId === 'metamagic-options' ||
+            subcategoryId === 'multiattacks' ||
+            subcategoryId === 'pact-boons' ||
+            subcategoryId === 'psionic-powers' ||
+            subcategoryId === 'runes' ||
+            subcategoryId === 'superior-hunters-defense'
         )
 
         this.spellSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
@@ -416,7 +436,7 @@ export class ActionHandler extends CoreActionHandler {
                 ? ' active'
                 : ''
             const cssClass = `toggle${active}`
-            const img = condition.icon
+            const img = CoreUtils.getImage(condition)
             return {
                 id,
                 name,
@@ -499,44 +519,87 @@ export class ActionHandler extends CoreActionHandler {
         if (feats.size === 0) return
 
         // Map active and passive features to new maps
-        const activeFeatures = new Map()
-        const passiveFeatures = new Map()
+        const featuresMap = new Map()
+
+        const featureTypes = [
+            { type: 'background', subcategoryId: 'background-features' },
+            { type: 'class', subcategoryId: 'class-features' },
+            { type: 'monster', subcategoryId: 'monster-features' },
+            { type: 'race', subcategoryId: 'race-features' },
+            { type: 'feats', subcategoryId: 'feats' }
+        ]
+
+        const classFeatureTypes = [
+            { type: 'artificerInfusion', subcategoryId: 'artificer-infusions' },
+            { type: 'channelDivinity', subcategoryId: 'channel-divinity' },
+            { type: 'defensiveTactic', subcategoryId: 'defensive-tactics' },
+            { type: 'eldritchInvocation', subcategoryId: 'eldritch-invocations' },
+            { type: 'elementalDiscipline', subcategoryId: 'elemental-disciplines' },
+            { type: 'fightingStyle', subcategoryId: 'fighting-styles' },
+            { type: 'huntersPrey', subcategoryId: 'hunters-prey' },
+            { type: 'ki', subcategoryId: 'ki-abilities' },
+            { type: 'maneuver', subcategoryId: 'maneuvers' },
+            { type: 'metamagic', subcategoryId: 'metamagic-options' },
+            { type: 'multiattack', subcategoryId: 'multiattacks' },
+            { type: 'pact', subcategoryId: 'pact-boons' },
+            { type: 'psionicPower', subcategoryId: 'psionic-powers' },
+            { type: 'rune', subcategoryId: 'runes' },
+            { type: 'superiorHuntersDefense', subcategoryId: 'superior-hunters-defense' }
+        ]
 
         for (const [key, value] of feats) {
             const activationType = value.system.activation?.type
+            const type = value.system.type.value
+            const subType = value.system.type?.subtype
             const excludedActivationTypes = ['', 'lair', 'legendary']
-            if (activationType && !excludedActivationTypes.includes(activationType)) activeFeatures.set(key, value)
-            if (!activationType || activationType === '') passiveFeatures.set(key, value)
+            if (activationType && !excludedActivationTypes.includes(activationType)) {
+                if (!featuresMap.has('active-features')) featuresMap.set('active-features', new Map())
+                featuresMap.get('active-features').set(key, value)
+            }
+            if (!activationType || activationType === '') {
+                if (!featuresMap.has('passive-features')) featuresMap.set('passive-features', new Map())
+                featuresMap.get('passive-features').set(key, value)
+            }
+            for (const featureType of featureTypes) {
+                const subcategoryId = featureType.subcategoryId
+                if (featureType.type === type) {
+                    if (!featuresMap.has(subcategoryId)) featuresMap.set(subcategoryId, new Map())
+                    featuresMap.get(subcategoryId).set(key, value)
+                }
+            }
+            for (const featureType of classFeatureTypes) {
+                const subcategoryId = featureType.subcategoryId
+                if (subType && featureType.type === subType) {
+                    if (!featuresMap.has(subcategoryId)) featuresMap.set(subcategoryId, new Map())
+                    featuresMap.get(subcategoryId).set(key, value)
+                }
+            }
         }
 
-        // Build active features
-        if (this.featureSubcategoryIds.includes('active-features')) {
+        // Create subcategory name mappings
+        const subcategoryNameMappings = {
+            'active-features': CoreUtils.i18n('tokenActionHud.dnd5e.activeFeatures'),
+            'passive-features': CoreUtils.i18n('tokenActionHud.dnd5e.passiveFeatures')
+        }
+
+        // Loop through inventory subcateogry ids
+        for (const subcategoryId of this.featureSubcategoryIds) {
+            if (!featuresMap.has(subcategoryId)) continue
+
+            // Create subcategory data
             const subcategoryData = {
-                id: 'active-features',
-                name: CoreUtils.i18n('tokenActionHud.dnd5e.activeFeatures'),
+                id: subcategoryId,
+                name: subcategoryNameMappings[subcategoryId] ?? '',
                 type: 'system'
             }
 
-            // Build actions
-            this._buildActions(activeFeatures, subcategoryData, actionType)
-
-            // Build activations
-            if (this.activationSubcategoryIds) this.buildActivations(activeFeatures, subcategoryData, actionType)
-        }
-
-        // Build passive features
-        if (this.featureSubcategoryIds.includes('passive-features')) {
-            const subcategoryData = {
-                id: 'passive-features',
-                name: CoreUtils.i18n('tokenActionHud.dnd5e.passiveFeatures'),
-                type: 'system'
-            }
+            const features = featuresMap.get(subcategoryId)
 
             // Build actions
-            this._buildActions(passiveFeatures, subcategoryData, actionType)
+            this._buildActions(features, subcategoryData, actionType)
 
             // Build activations
-            if (this.activationSubcategoryIds) this.buildActivations(passiveFeatures, subcategoryData, actionType)
+            if (subcategoryNameMappings[subcategoryId]) this.buildActivations(features, subcategoryData, actionType)
         }
     }
 
@@ -1210,7 +1273,7 @@ export class ActionHandler extends CoreActionHandler {
      */
     _discardSlowItems (items) {
         // Get setting
-        const showSlowActions = getSetting('showSlowActions')
+        const showSlowActions = Utils.getSetting('showSlowActions')
 
         // Return all items
         if (showSlowActions) return items

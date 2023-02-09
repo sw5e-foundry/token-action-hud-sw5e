@@ -6,6 +6,13 @@ export const MODULE = {
 }
 
 /**
+ * Core module
+ */
+export const CORE_MODULE = {
+    ID: 'token-action-hud-core'
+}
+
+/**
  * Core module version required by the system module
  */
 export const REQUIRED_CORE_MODULE_VERSION = '1.1'

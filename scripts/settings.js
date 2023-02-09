@@ -1,7 +1,7 @@
-export function register (updateFunc) {
-    const appName = 'token-action-hud-dnd5e'
+import { MODULE } from './constants.js'
 
-    game.settings.register(appName, 'abbreviateSkills', {
+export function register (updateFunc) {
+    game.settings.register(MODULE.ID, 'abbreviateSkills', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.abbreviateSkills.name'
         ),
@@ -17,7 +17,7 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'showSlowActions', {
+    game.settings.register(MODULE.ID, 'showSlowActions', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.showSlowActions.name'
         ),
@@ -33,7 +33,7 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'displaySpellInfo', {
+    game.settings.register(MODULE.ID, 'displaySpellInfo', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.displaySpellInfo.name'
         ),
@@ -49,7 +49,7 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'showUnchargedItems', {
+    game.settings.register(MODULE.ID, 'showUnchargedItems', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.showUnchargedItems.name'
         ),
@@ -65,7 +65,7 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'showUnequippedItems', {
+    game.settings.register(MODULE.ID, 'showUnequippedItems', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.showUnequippedItems.name'
         ),
@@ -81,7 +81,7 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'showUnpreparedSpells', {
+    game.settings.register(MODULE.ID, 'showUnpreparedSpells', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.showUnpreparedSpells.name'
         ),
@@ -97,7 +97,7 @@ export function register (updateFunc) {
         }
     })
 
-    game.settings.register(appName, 'showItemsWithoutActivationCosts', {
+    game.settings.register(MODULE.ID, 'showItemsWithoutActivationCosts', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.showItemsWithoutActivationCosts.name'
         ),

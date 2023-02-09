@@ -63,6 +63,6 @@ export class SystemManager extends CoreSystemManager {
             defaults.subcategories.push({ id: 'magic-items', name: CoreUtils.i18n('tokenActionHud.dnd5e.magicItems'), type: 'system', hasDerivedSubcategories: true })
             defaults.subcategories.sort((a, b) => a.id.localeCompare(b.id))
         }
-        await CoreUtils.setUserFlag('default', defaults)
+        return defaults
     }
 }
