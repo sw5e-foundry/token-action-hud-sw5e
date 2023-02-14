@@ -51,10 +51,10 @@ export class RollHandler extends CoreRollHandler {
         case 'ability':
             this._rollAbility(event, actorId, tokenId, actionId)
             break
-        case 'abilityCheck':
+        case 'check':
             this._rollAbilityTest(event, actorId, tokenId, actionId)
             break
-        case 'abilitySave':
+        case 'save':
             this._rollAbilitySave(event, actorId, tokenId, actionId)
             break
         case 'condition':

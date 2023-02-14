@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTIVATION_TYPE_ICON, PREPARED_ICON, PROFICIENCY_LEVEL_ICON } from './constants.js'
+import { ACTIVATION_TYPE_ICON, ACTION_TYPE, PREPARED_ICON, PROFICIENCY_LEVEL_ICON, SUBCATEGORY } from './constants.js'
 import { Utils } from './utils.js'
 
 // Core Module Imports
@@ -212,8 +212,8 @@ export class ActionHandler extends CoreActionHandler {
      */
     async _buildCharacterActions () {
         this._buildAbilities('ability', 'abilities')
-        this._buildAbilities('abilityCheck', 'checks')
-        this._buildAbilities('abilitySave', 'saves')
+        this._buildAbilities('check', 'checks')
+        this._buildAbilities('save', 'saves')
         this._buildCombat()
         this._buildConditions()
         this._buildEffects()
@@ -232,8 +232,8 @@ export class ActionHandler extends CoreActionHandler {
      */
     async _buildVehicleActions () {
         this._buildAbilities('ability', 'abilities')
-        this._buildAbilities('abilityCheck', 'checks')
-        this._buildAbilities('abilitySave', 'saves')
+        this._buildAbilities('check', 'checks')
+        this._buildAbilities('save', 'saves')
         this._buildCombat()
         this._buildConditions()
         this._buildEffects()
@@ -249,8 +249,8 @@ export class ActionHandler extends CoreActionHandler {
      */
     async _buildMultipleTokenActions () {
         this._buildAbilities('ability', 'abilities')
-        this._buildAbilities('abilityCheck', 'checks')
-        this._buildAbilities('abilitySave', 'saves')
+        this._buildAbilities('check', 'checks')
+        this._buildAbilities('save', 'saves')
         this._buildCombat()
         this._buildConditions()
         this._buildRests()
@@ -265,9 +265,6 @@ export class ActionHandler extends CoreActionHandler {
      * @param {string} subcategoryId
      */
     _buildAbilities (actionType, subcategoryId) {
-        // Exit if no subcategory exists
-        if (!this.subcategoryIds.includes(subcategoryId)) return
-
         // Get abilities
         const abilities = (this.actorId === 'multi') ? game.dnd5e.config.abilities : this.actor.system.abilities
 
@@ -281,6 +278,9 @@ export class ActionHandler extends CoreActionHandler {
                 const id = ability[0]
                 const abbreviatedName = id.charAt(0).toUpperCase() + id.slice(1)
                 const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.abilities[id]
+                // Localise
+                const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+                const listName = `${actionTypeName}${game.dnd5e.config.abilities[id]}`
                 const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
                 const icon = (subcategoryId !== 'checks') ? this._getProficiencyIcon(abilities[id].proficient) : ''
                 return {
@@ -288,7 +288,7 @@ export class ActionHandler extends CoreActionHandler {
                     name,
                     encodedValue,
                     icon,
-                    selected: true
+                    listName
                 }
             })
 
@@ -353,9 +353,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildCombat () {
-        // Exit if no subcategory exists
-        if (!this.subcategoryIds.includes('combat')) return
-
         const actionType = 'utility'
 
         // Set combat types
@@ -371,6 +368,8 @@ export class ActionHandler extends CoreActionHandler {
         const actions = Object.entries(combatTypes).map((combatType) => {
             const id = combatType[1].id
             const name = combatType[1].name
+            const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+            const listName = `${actionTypeName}${name}`
             const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
             const info1 = {}
             let cssClass = ''
@@ -394,7 +393,7 @@ export class ActionHandler extends CoreActionHandler {
                 encodedValue,
                 info1,
                 cssClass,
-                selected: true
+                listName
             }
         })
 
@@ -410,8 +409,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildConditions () {
-        // Exit if the no subcategory or token exists
-        if (!this.subcategoryIds.includes('conditions')) return
         if (!this.token) return
 
         const actionType = 'condition'
@@ -426,6 +423,8 @@ export class ActionHandler extends CoreActionHandler {
         const actions = conditions.map((condition) => {
             const id = condition.id
             const name = CoreUtils.i18n(condition.label)
+            const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+            const listName = `${actionTypeName}${name}`
             const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
             const active = this.actors.every((actor) => {
                 const effects = actor.effects
@@ -443,7 +442,7 @@ export class ActionHandler extends CoreActionHandler {
                 encodedValue,
                 img,
                 cssClass,
-                selected: true
+                listName
             }
         })
 
@@ -459,9 +458,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildEffects () {
-        // Exit if no subcategories exist
-        if (!this.effectSubcategoryIds) return
-
         const actionType = 'effect'
 
         // Get effects
@@ -503,9 +499,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildFeatures () {
-        // Exit if no subcategories exist
-        if (!this.featureSubcategoryIds) return
-
         const actionType = 'feature'
 
         // Get feats
@@ -608,8 +601,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildInventory () {
-        // Exit if no subcategories exist
-        if (!this.inventorySubcategoryIds) return
         // Exit early if no items exist
         if (this.items.size === 0) return
 
@@ -701,9 +692,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildRests () {
-        // Exit if no subcategory exists
-        if (!this.subcategoryIds.includes('rests')) return
-
         // Exit if every actor is not the character type
         if (!this.actors.every(actor => actor.type === 'character')) return
 
@@ -720,12 +708,14 @@ export class ActionHandler extends CoreActionHandler {
             .map((restType) => {
                 const id = restType[0]
                 const name = restType[1].name
+                const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+                const listName = `${actionTypeName}${name}`
                 const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
                 return {
                     id,
                     name,
                     encodedValue,
-                    selected: true
+                    listName
                 }
             })
 
@@ -741,9 +731,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildSkills () {
-        // Exit if no subcategory exists
-        if (!this.subcategoryIds.includes('skills')) return
-
         const actionType = 'skill'
 
         // Get skills
@@ -759,13 +746,16 @@ export class ActionHandler extends CoreActionHandler {
                     const id = skill[0]
                     const abbreviatedName = id.charAt(0).toUpperCase() + id.slice(1)
                     const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.skills[id].label
+                    const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+                    const listName = `${actionTypeName}${game.dnd5e.config.skills[id].label}`
                     const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
                     const icon = this._getProficiencyIcon(skills[id].value)
                     return {
                         id,
                         name,
                         encodedValue,
-                        icon
+                        icon,
+                        listName
                     }
                 } catch (error) {
                     Logger.error(skill)
@@ -785,9 +775,6 @@ export class ActionHandler extends CoreActionHandler {
      * Build Spells
      */
     _buildSpells () {
-        // Exit if no subcategories exist
-        if (!this.spellSubcategoryIds) return
-
         const actionType = 'spell'
 
         const spellsMap = new Map()
@@ -960,9 +947,6 @@ export class ActionHandler extends CoreActionHandler {
      * @private
      */
     _buildUtility () {
-        // Exit if no subcategory exists
-        if (!this.subcategoryIds.includes('utility')) return
-
         // Exit if every actor is not the character type
         if (!this.actors.every((actor) => actor.type === 'character')) return
 
@@ -982,6 +966,8 @@ export class ActionHandler extends CoreActionHandler {
             .map((utilityType) => {
                 const id = utilityType[0]
                 const name = utilityType[1].name
+                const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+                const listName = `${actionTypeName}${name}`
                 const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
                 let cssClass = ''
                 if (utilityType[0] === 'inspiration') {
@@ -995,7 +981,7 @@ export class ActionHandler extends CoreActionHandler {
                     name,
                     encodedValue,
                     cssClass,
-                    selected: true
+                    listName
                 }
             })
 
@@ -1045,6 +1031,8 @@ export class ActionHandler extends CoreActionHandler {
         ) {
             name += ` (${CoreUtils.i18n('DND5E.Recharge')})`
         }
+        const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+        const listName = `${actionTypeName}${name}`
         let cssClass = ''
         if (Object.hasOwn(entity, 'disabled')) {
             const active = (!entity.disabled) ? ' active' : ''
@@ -1075,7 +1063,7 @@ export class ActionHandler extends CoreActionHandler {
             info1,
             info2,
             info3,
-            selected: true
+            listName
         }
     }
 
