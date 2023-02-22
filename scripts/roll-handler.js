@@ -20,7 +20,7 @@ export class RollHandler extends CoreRollHandler {
         const tokenId = payload[2]
         const actionId = payload[3]
 
-        if (tokenId === 'multi' && actionId !== 'toggleCombat') {
+        if (actorId === 'multi' && tokenId === 'multi' && actionId !== 'toggleCombat') {
             for (const token of canvas.tokens.controlled) {
                 const tokenActorId = token.actor?.id
                 const tokenTokenId = token.id
@@ -268,6 +268,7 @@ export class RollHandler extends CoreRollHandler {
      */
     async _toggleCondition (event, tokenId, actionId, effect = null) {
         const token = CoreUtils.getToken(tokenId)
+        if (!token) return
         const isRightClick = this.isRightClick(event)
         if (game.dfreds && effect?.flags?.isConvenient) {
             const effectLabel = effect.label
