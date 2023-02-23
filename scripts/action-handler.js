@@ -7,12 +7,9 @@ import { CoreActionHandler, CoreUtils, Logger } from './config.js'
 
 export class ActionHandler extends CoreActionHandler {
     // Initialize actor and token variables
-    actor = null
     actors = null
     actorId = null
     actorType = null
-    character = null
-    token = null
     tokenId = null
 
     // Initialize items variable
@@ -42,18 +39,14 @@ export class ActionHandler extends CoreActionHandler {
     /**
      * Build System Actions
      * @override
-     * @param {object} actionList
-     * @param {object} character
      * @param {array} subcategoryIds
      * @returns {object}
      */
-    async buildSystemActions (character, subcategoryIds) {
+    async buildSystemActions (subcategoryIds) {
         // Set actor and token variables
-        this.actor = character?.actor
         this.actorId = this.actor?.id ?? 'multi'
         this.actors = (this.actorId === 'multi') ? this._getActors() : [this.actor]
         this.actorType = this.actor?.type
-        this.token = character?.token
         this.tokenId = this.token?.id ?? 'multi'
 
         // Set items variable
@@ -281,7 +274,7 @@ export class ActionHandler extends CoreActionHandler {
                 // Localise
                 const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                 const listName = `${actionTypeName}${game.dnd5e.config.abilities[id]}`
-                const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+                const encodedValue = [actionType, id].join(this.delimiter)
                 const icon = (subcategoryId !== 'checks') ? this._getProficiencyIcon(abilities[id].proficient) : ''
                 return {
                     id,
@@ -370,7 +363,7 @@ export class ActionHandler extends CoreActionHandler {
             const name = combatType[1].name
             const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
             const listName = `${actionTypeName}${name}`
-            const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+            const encodedValue = [actionType, id].join(this.delimiter)
             const info1 = {}
             let cssClass = ''
             if (combatType[0] === 'initiative' && game.combat) {
@@ -425,7 +418,7 @@ export class ActionHandler extends CoreActionHandler {
             const name = CoreUtils.i18n(condition.label)
             const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
             const listName = `${actionTypeName}${name}`
-            const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+            const encodedValue = [actionType, id].join(this.delimiter)
             const active = this.actors.every((actor) => {
                 const effects = actor.effects
                 return effects
@@ -710,7 +703,7 @@ export class ActionHandler extends CoreActionHandler {
                 const name = restType[1].name
                 const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                 const listName = `${actionTypeName}${name}`
-                const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+                const encodedValue = [actionType, id].join(this.delimiter)
                 return {
                     id,
                     name,
@@ -748,7 +741,7 @@ export class ActionHandler extends CoreActionHandler {
                     const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.skills[id].label
                     const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                     const listName = `${actionTypeName}${game.dnd5e.config.skills[id].label}`
-                    const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+                    const encodedValue = [actionType, id].join(this.delimiter)
                     const icon = this._getProficiencyIcon(skills[id].value)
                     return {
                         id,
@@ -968,7 +961,7 @@ export class ActionHandler extends CoreActionHandler {
                 const name = utilityType[1].name
                 const actionTypeName = `${CoreUtils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                 const listName = `${actionTypeName}${name}`
-                const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+                const encodedValue = [actionType, id].join(this.delimiter)
                 let cssClass = ''
                 if (utilityType[0] === 'inspiration') {
                     const active = this.actors.every((actor) => actor.system.attributes?.inspiration)
@@ -1038,7 +1031,7 @@ export class ActionHandler extends CoreActionHandler {
             const active = (!entity.disabled) ? ' active' : ''
             cssClass = `toggle${active}`
         }
-        const encodedValue = [actionType, this.actorId, this.tokenId, id].join(this.delimiter)
+        const encodedValue = [actionType, id].join(this.delimiter)
         const img = CoreUtils.getImage(entity)
         const icon1 = this._getActivationTypeIcon(entity?.system?.activation?.type)
         let icon2 = null

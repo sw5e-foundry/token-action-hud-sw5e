@@ -5,18 +5,17 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
         super(actionHandler.categoryManager)
         this.actionHandler = actionHandler
         this.categoryManager = actionHandler.categoryManager
+        this.actor = null
     }
 
     /**
      * Extend the action list
-     * @param {object} character The actor and/or token
      */
-    extendActionList (character) {
-        const actorId = this.actionHandler.actorId
-        const tokenId = this.actionHandler.tokenId
-        if (!actorId) return
+    extendActionList () {
+        this.actor = this.actionHandler.actor
+        if (!this.actor) return
 
-        const actor = MagicItems.actor(actorId)
+        const actor = MagicItems.actor(this.actor.id)
 
         if (!actor) return
 
@@ -55,8 +54,6 @@ export class MagicItemActionListExtender extends CoreActionListExtender {
                 const name = effect.name
                 const encodedValue = [
                     'magicItem',
-                    actorId,
-                    tokenId,
                     `${magicItem.id}>${id}`
                 ].join('|')
                 const img = CoreUtils.getImage(effect)
