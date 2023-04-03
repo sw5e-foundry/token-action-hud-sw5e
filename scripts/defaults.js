@@ -1,21 +1,22 @@
 import { SUBCATEGORY } from './constants.js'
-import { CoreUtils } from './config.js'
-
 /**
  * Default categories and subcategories
  */
 export let DEFAULTS = null
 
-Hooks.on('i18nInit', async () => {
+Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     const subcategories = SUBCATEGORY
-    Object.values(subcategories).forEach(subcategory => { subcategory.name = CoreUtils.i18n(subcategory.name) })
+    Object.values(subcategories).forEach(subcategory => {
+        subcategory.name = coreModule.api.Utils.i18n(subcategory.name)
+        subcategory.listName = `Subcategory: ${coreModule.api.Utils.i18n(subcategory.name)}`
+    })
     const subcategoriesArray = Object.values(subcategories)
     DEFAULTS = {
         categories: [
             {
                 nestId: 'inventory',
                 id: 'inventory',
-                name: CoreUtils.i18n('DND5E.Inventory'),
+                name: coreModule.api.Utils.i18n('DND5E.Inventory'),
                 subcategories: [
                     { ...subcategories.weapons, nestId: 'inventory_weapons' },
                     { ...subcategories.equipment, nestId: 'inventory_equipment' },
@@ -28,7 +29,7 @@ Hooks.on('i18nInit', async () => {
             {
                 nestId: 'features',
                 id: 'features',
-                name: CoreUtils.i18n('DND5E.Features'),
+                name: coreModule.api.Utils.i18n('DND5E.Features'),
                 subcategories: [
                     { ...subcategories.activeFeatures, nestId: 'features_active-features' },
                     { ...subcategories.passiveFeatures, nestId: 'features_passive-features' }
@@ -37,7 +38,7 @@ Hooks.on('i18nInit', async () => {
             {
                 nestId: 'spells',
                 id: 'spells',
-                name: CoreUtils.i18n('ITEM.TypeSpellPl'),
+                name: coreModule.api.Utils.i18n('ITEM.TypeSpellPl'),
                 subcategories: [
                     { ...subcategories.atWillSpells, nestId: 'spells_at-will-spells' },
                     { ...subcategories.innateSpells, nestId: 'spells_innate-spells' },
@@ -57,7 +58,7 @@ Hooks.on('i18nInit', async () => {
             {
                 nestId: 'attributes',
                 id: 'attributes',
-                name: CoreUtils.i18n('DND5E.Attributes'),
+                name: coreModule.api.Utils.i18n('DND5E.Attributes'),
                 subcategories: [
                     { ...subcategories.abilities, nestId: 'attributes_abilities' },
                     { ...subcategories.skills, nestId: 'attributes_skills' }
@@ -66,7 +67,7 @@ Hooks.on('i18nInit', async () => {
             {
                 nestId: 'effects',
                 id: 'effects',
-                name: CoreUtils.i18n('DND5E.Effects'),
+                name: coreModule.api.Utils.i18n('DND5E.Effects'),
                 subcategories: [
                     { ...subcategories.temporaryEffects, nestId: 'effects_temporary-effects' },
                     { ...subcategories.passiveEffects, nestId: 'effects_passive-effects' }
@@ -75,7 +76,7 @@ Hooks.on('i18nInit', async () => {
             {
                 nestId: 'conditions',
                 id: 'conditions',
-                name: CoreUtils.i18n('tokenActionHud.dnd5e.conditions'),
+                name: coreModule.api.Utils.i18n('tokenActionHud.dnd5e.conditions'),
                 subcategories: [
                     { ...subcategories.conditions, nestId: 'conditions_conditions' }
                 ]
@@ -83,7 +84,7 @@ Hooks.on('i18nInit', async () => {
             {
                 nestId: 'utility',
                 id: 'utility',
-                name: CoreUtils.i18n('tokenActionHud.utility'),
+                name: coreModule.api.Utils.i18n('tokenActionHud.utility'),
                 subcategories: [
                     { ...subcategories.combat, nestId: 'utility_combat' },
                     { ...subcategories.token, nestId: 'utility_token' },
