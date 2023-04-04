@@ -268,14 +268,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const actions = Object.entries(abilities)
                 .filter((ability) => abilities[ability[0]].value !== 0)
                 .map((ability) => {
-                    const id = ability[0]
-                    const abbreviatedName = id.charAt(0).toUpperCase() + id.slice(1)
-                    const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.abilities[id]
+                    const abilityId = ability[0]
+                    const id = `${actionType}-${ability[0]}`
+                    const abbreviatedName = abilityId.charAt(0).toUpperCase() + abilityId.slice(1)
+                    const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.abilities[abilityId]
                     // Localise
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
-                    const listName = `${actionTypeName}${game.dnd5e.config.abilities[id]}`
-                    const encodedValue = [actionType, id].join(this.delimiter)
-                    const icon = (subcategoryId !== 'checks') ? this._getProficiencyIcon(abilities[id].proficient) : ''
+                    const listName = `${actionTypeName}${game.dnd5e.config.abilities[abilityId]}`
+                    const encodedValue = [actionType, abilityId].join(this.delimiter)
+                    const icon = (subcategoryId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
                     return {
                         id,
                         name,

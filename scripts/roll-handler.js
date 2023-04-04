@@ -151,7 +151,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      * @returns {object}
      */
         _useItem (event, actionId) {
-            const item = coreModule.api.Utilss.getItem(this.actor, actionId)
+            const item = coreModule.api.Utils.getItem(this.actor, actionId)
 
             if (this._needsRecharge(item)) {
                 item.rollRecharge()
