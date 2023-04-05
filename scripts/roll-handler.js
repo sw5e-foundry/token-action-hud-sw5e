@@ -18,65 +18,58 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const actionType = payload[0]
             const actionId = payload[1]
 
-            if (!this.actor && actionId !== 'toggleCombat') {
+            if (!this.actor) {
                 for (const token of canvas.tokens.controlled) {
-                    const tokenActorId = token.actor?.id
-                    const tokenTokenId = token.id
-                    await this._handleMacros(
-                        event,
-                        actionType,
-                        tokenActorId,
-                        tokenTokenId,
-                        actionId
-                    )
+                    const actor = token.actor
+                    await this._handleMacros(event, actionType, actor, token, actionId)
                 }
             } else {
-                await this._handleMacros(event, actionType, actionId)
+                await this._handleMacros(event, actionType, this.actor, this.token, actionId)
             }
         }
 
         /**
-     * Handle Macros
-     * @private
-     * @param {object} event
-     * @param {string} actionType
-     * @param {string} actorId
-     * @param {string} tokenId
-     * @param {string} actionId
-     */
-        async _handleMacros (event, actionType, actionId) {
+         * Handle Macros
+         * @private
+         * @param {object} event
+         * @param {string} actionType
+         * @param {object} actor
+         * @param {object} token
+         * @param {string} actionId
+         */
+        async _handleMacros (event, actionType, actor, token, actionId) {
             switch (actionType) {
             case 'ability':
-                this._rollAbility(event, actionId)
+                this._rollAbility(event, actor, actionId)
                 break
             case 'check':
-                this._rollAbilityTest(event, actionId)
+                this._rollAbilityTest(event, actor, actionId)
                 break
             case 'save':
-                this._rollAbilitySave(event, actionId)
+                this._rollAbilitySave(event, actor, actionId)
                 break
             case 'condition':
-                if (!this.token) return
-                await this._toggleCondition(event, actionId)
+                if (!token) return
+                await this._toggleCondition(event, token, actionId)
                 break
             case 'effect':
-                await this._toggleEffect(event, actionId)
+                await this._toggleEffect(event, actor, actionId)
                 break
             case 'feature':
             case 'item':
             case 'spell':
             case 'weapon':
-                if (this.isRenderItem()) this.doRenderItem(actionId)
-                else this._useItem(event, actionId)
+                if (this.isRenderItem()) this.doRenderItem(actor, actionId)
+                else this._useItem(event, actor, actionId)
                 break
             case 'magicItem':
-                this._rollMagicItem(event, actionId)
+                this._rollMagicItem(actor, actionId)
                 break
             case 'skill':
-                this._rollSkill(event, actionId)
+                this._rollSkill(event, actor, actionId)
                 break
             case 'utility':
-                await this._performUtilityMacro(event, actionId)
+                await this._performUtilityMacro(event, actor, token, actionId)
                 break
             default:
                 break
@@ -84,48 +77,51 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Roll Ability
-     * @private
-     * @param {object} event
-     * @param {string} actionId
-     */
-        _rollAbility (event, actionId) {
-            this.actor.rollAbility(actionId, { event })
+         * Roll Ability
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         */
+        _rollAbility (event, actor, actionId) {
+            actor.rollAbility(actionId, { event })
         }
 
         /**
-     * Roll Ability Save
-     * @private
-     * @param {object} event
-     * @param {string} actionId
-     */
-        _rollAbilitySave (event, actionId) {
-            this.actor.rollAbilitySave(actionId, { event })
+         * Roll Ability Save
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         */
+        _rollAbilitySave (event, actor, actionId) {
+            actor.rollAbilitySave(actionId, { event })
         }
 
         /**
-     * Roll Ability Test
-     * @private
-     * @param {object} event
-     * @param {string} actionId
-     */
-        _rollAbilityTest (event, actionId) {
-            this.actor.rollAbilityTest(actionId, { event })
+         * Roll Ability Test
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         */
+        _rollAbilityTest (event, actor, actionId) {
+            actor.rollAbilityTest(actionId, { event })
         }
 
         /**
-     * Roll Magic Item
-     * @private
-     * @param {object} event
-     * @param {string} actionId
-     */
-        _rollMagicItem (event, actionId) {
+         * Roll Magic Item
+         * @private
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         */
+        _rollMagicItem (actor, actionId) {
             const actionParts = actionId.split('>')
 
             const itemId = actionParts[0]
             const magicEffectId = actionParts[1]
 
-            const magicItemActor = MagicItems.actor(this.actor.id)
+            const magicItemActor = MagicItems.actor(actor.id)
 
             // magicitems module 3.0.0 does not support Item5e#use
             magicItemActor.roll(itemId, magicEffectId)
@@ -134,24 +130,26 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Roll Skill
-     * @private
-     * @param {object} event
-     * @param {string} actionId
-     */
-        _rollSkill (event, actionId) {
-            this.actor.rollSkill(actionId, { event })
+         * Roll Skill
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         */
+        _rollSkill (event, actor, actionId) {
+            actor.rollSkill(actionId, { event })
         }
 
         /**
-     * Use Item
-     * @private
-     * @param {object} event
-     * @param {string} actionId
-     * @returns {object}
-     */
-        _useItem (event, actionId) {
-            const item = coreModule.api.Utils.getItem(this.actor, actionId)
+         * Use Item
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         * @returns {object}        The item
+         */
+        _useItem (event, actor, actionId) {
+            const item = coreModule.api.Utils.getItem(actor, actionId)
 
             if (this._needsRecharge(item)) {
                 item.rollRecharge()
@@ -162,58 +160,50 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Needs Recharge
-     * @private
-     * @param {object} item
-     * @returns {boolean}
-     */
+         * Needs Recharge
+         * @private
+         * @param {object} item
+         * @returns {boolean}
+         */
         _needsRecharge (item) {
             return (
                 item.system.recharge &&
-            !item.system.recharge.charged &&
-            item.system.recharge.value
+                !item.system.recharge.charged &&
+                item.system.recharge.value
             )
         }
 
         /**
-     * Perform Utility Macro
-     * @param {object} event
-     * @param {string} actorId
-     * @param {string} tokenId
-     * @param {string} actionId
-     */
-        async _performUtilityMacro (event, actionId) {
+         * Perform Utility Macro
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {object} token    The token
+         * @param {string} actionId The action id
+         */
+        async _performUtilityMacro (event, actor, token, actionId) {
             switch (actionId) {
             case 'deathSave':
-                this.actor.rollDeathSave({ event })
+                actor.rollDeathSave({ event })
                 break
             case 'endTurn':
-                if (!this.token) break
-                if (game.combat?.current?.tokenId === this.token.id) {
+                if (!token) break
+                if (game.combat?.current?.tokenId === token.id) {
                     await game.combat?.nextTurn()
                 }
                 break
             case 'initiative':
-                await this._rollInitiative(this.actor.id)
+                await this._rollInitiative(actor)
                 break
             case 'inspiration': {
-                const update = !this.actor.system.attributes.inspiration
-                this.actor.update({ 'data.attributes.inspiration': update })
+                const update = !actor.system.attributes.inspiration
+                actor.update({ 'data.attributes.inspiration': update })
                 break
             }
             case 'longRest':
-                this.actor.longRest()
+                actor.longRest()
                 break
             case 'shortRest':
-                this.actor.shortRest()
-                break
-            case 'toggleCombat':
-                if (canvas.tokens.controlled.length === 0) break
-                await canvas.tokens.controlled[0].toggleCombat()
-                break
-            case 'toggleVisibility':
-                if (!this.token) break
-                this.token.toggleVisibility()
+                actor.shortRest()
                 break
             }
 
@@ -222,23 +212,26 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Roll Initiative
-     * @private
-     */
-        async _rollInitiative () {
-            await this.actor.rollInitiative({ createCombatants: true })
+         * Roll Initiative
+         * @param {object} actor The actor
+         * @private
+         */
+        async _rollInitiative (actor) {
+            await actor.rollInitiative({ createCombatants: true })
 
             Hooks.callAll('forceUpdateTokenActionHud')
         }
 
         /**
-     * Toggle Condition
-     * @private
-     * @param {object} event
-     * @param {object} effect
-     */
-        async _toggleCondition (event, actionId, effect = null) {
-            if (!this.token) return
+         * Toggle Condition
+         * @private
+         * @param {object} event    The event
+         * @param {object} token    The token
+         * @param {string} actionId The action id
+         * @param {object} effect   The effect
+         */
+        async _toggleCondition (event, token, actionId, effect = null) {
+            if (!token) return
             const isRightClick = this.isRightClick(event)
             if (game.dfreds && effect?.flags?.isConvenient) {
                 const effectLabel = effect.label
@@ -248,31 +241,32 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if (!condition) return
 
                 isRightClick
-                    ? await this.token.toggleEffect(condition, { overlay: true })
-                    : await this.token.toggleEffect(condition)
+                    ? await token.toggleEffect(condition, { overlay: true })
+                    : await token.toggleEffect(condition)
             }
 
             Hooks.callAll('forceUpdateTokenActionHud')
         }
 
         /**
-     * Get Condition
-     * @private
-     * @param {string} actionId
-     * @returns {object}
-     */
+         * Get Condition
+         * @private
+         * @param {string} actionId
+         * @returns {object}
+         */
         findCondition (actionId) {
             return CONFIG.statusEffects.find((effect) => effect.id === actionId)
         }
 
         /**
-     * Toggle Effect
-     * @param {object} event
-     * @param {string} actionId
-     */
-        async _toggleEffect (event, actionId) {
-            const effects = 'find' in this.actor.effects.entries ? this.actor.effects.entries : this.actor.effects
-            const effect = effects.find((e) => e.id === actionId)
+         * Toggle Effect
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         */
+        async _toggleEffect (event, actor, actionId) {
+            const effects = 'find' in actor.effects.entries ? actor.effects.entries : actor.effects
+            const effect = effects.find(effect => effect.id === actionId)
 
             if (!effect) return
 

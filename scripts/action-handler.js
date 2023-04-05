@@ -8,9 +8,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     ActionHandler = class ActionHandler extends coreModule.api.ActionHandler {
     // Initialize actor and token variables
         actors = null
-        actorId = null
+        tokens = null
         actorType = null
-        tokenId = null
 
         // Initialize items variable
         items = null
@@ -24,9 +23,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         showUnpreparedSpells = null
 
         // Initialize subcategoryIds variables
-        subcategoryIds = null
         activationSubcategoryIds = null
-        effectSubcategoryIds = null
         featureSubcategoryIds = null
         inventorySubcategoryIds = null
         spellSubcategoryIds = null
@@ -37,20 +34,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         spellActions = null
 
         /**
-     * Build System Actions
-     * @override
-     * @param {array} subcategoryIds
-     * @returns {object}
-     */
+         * Build System Actions
+         * @override
+         * @param {array} subcategoryIds
+         * @returns {object}
+         */
         async buildSystemActions (subcategoryIds) {
         // Set actor and token variables
-            this.actorId = this.actor?.id ?? 'multi'
-            this.actors = (this.actorId === 'multi') ? this._getActors() : [this.actor]
+            this.actors = (!this.actor) ? this._getActors() : [this.actor]
+            this.tokens = (!this.token) ? this._getTokens() : [this.token]
             this.actorType = this.actor?.type
-            this.tokenId = this.token?.id ?? 'multi'
 
             // Set items variable
-            if (this.actorId !== 'multi') {
+            if (this.actor) {
                 let items = this.actor.items
                 items = this._discardSlowItems(items)
                 items = this.sortItemsByName(items)
@@ -65,131 +61,78 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.showUnequippedItems = Utils.getSetting('showUnequippedItems')
             this.showUnpreparedSpells = Utils.getSetting('showUnpreparedSpells')
 
-            // Set subcategory variables
-            this.subcategoryIds = subcategoryIds
+            this.activationSubcategoryIds = [
+                'actions',
+                'bonus-actions',
+                'crew-actions',
+                'lair-actions',
+                'legendary-actions',
+                'reactions',
+                'other-actions'
+            ]
 
-            this.activationSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
-                subcategoryId === 'actions' ||
-            subcategoryId === 'bonus-actions' ||
-            subcategoryId === 'crew-actions' ||
-            subcategoryId === 'lair-actions' ||
-            subcategoryId === 'legendary-actions' ||
-            subcategoryId === 'reactions' ||
-            subcategoryId === 'other-actions'
-            )
+            this.featureSubcategoryIds = [
+                'active-features',
+                'passive-features',
+                'background-features',
+                'class-features',
+                'feats',
+                'monster-features',
+                'race-features',
+                'artificer-infusions',
+                'channel-divinity',
+                'defensive-tactics',
+                'eldritch-invocations',
+                'elemental-disciplines',
+                'fighting-styles',
+                'hunters-prey',
+                'ki-abilities',
+                'maneuvers',
+                'metamagic-options',
+                'multiattacks',
+                'pact-boons',
+                'psionic-powers',
+                'runes',
+                'superior-hunters-defense'
+            ]
 
-            this.effectSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
-                subcategoryId === 'passive-effects' ||
-            subcategoryId === 'temporary-effects'
-            )
-
-            this.featureSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
-                subcategoryId === 'active-features' ||
-            subcategoryId === 'passive-features' ||
-            subcategoryId === 'background-features' ||
-            subcategoryId === 'class-features' ||
-            subcategoryId === 'feats' ||
-            subcategoryId === 'monster-features' ||
-            subcategoryId === 'race-features' ||
-            subcategoryId === 'artificer-infusions' ||
-            subcategoryId === 'channel-divinity' ||
-            subcategoryId === 'defensive-tactics' ||
-            subcategoryId === 'eldritch-invocations' ||
-            subcategoryId === 'elemental-disciplines' ||
-            subcategoryId === 'fighting-styles' ||
-            subcategoryId === 'hunters-prey' ||
-            subcategoryId === 'ki-abilities' ||
-            subcategoryId === 'maneuvers' ||
-            subcategoryId === 'metamagic-options' ||
-            subcategoryId === 'multiattacks' ||
-            subcategoryId === 'pact-boons' ||
-            subcategoryId === 'psionic-powers' ||
-            subcategoryId === 'runes' ||
-            subcategoryId === 'superior-hunters-defense'
-            )
-
-            this.spellSubcategoryIds = subcategoryIds.filter((subcategoryId) =>
-                subcategoryId === 'cantrips' ||
-            subcategoryId === '1st-level-spells' ||
-            subcategoryId === '2nd-level-spells' ||
-            subcategoryId === '3rd-level-spells' ||
-            subcategoryId === '4th-level-spells' ||
-            subcategoryId === '5th-level-spells' ||
-            subcategoryId === '6th-level-spells' ||
-            subcategoryId === '7th-level-spells' ||
-            subcategoryId === '8th-level-spells' ||
-            subcategoryId === '9th-level-spells' ||
-            subcategoryId === 'at-will-spells' ||
-            subcategoryId === 'innate-spells' ||
-            subcategoryId === 'pact-spells'
-            )
-
-            // Add subcategory ids for activation types
-            if (this.activationSubcategoryIds.length > 0) {
-                this.featureSubcategoryIds = [
-                    'active-features',
-                    'passive-features'
-                ]
-                this.spellSubcategoryIds = [
-                    'cantrips',
-                    '1st-level-spells',
-                    '2nd-level-spells',
-                    '3rd-level-spells',
-                    '4th-level-spells',
-                    '5th-level-spells',
-                    '6th-level-spells',
-                    '7th-level-spells',
-                    '8th-level-spells',
-                    '9th-level-spells',
-                    'at-will-spells',
-                    'innate-spells',
-                    'pact-spells'
-                ]
-            }
+            this.spellSubcategoryIds = [
+                'cantrips',
+                '1st-level-spells',
+                '2nd-level-spells',
+                '3rd-level-spells',
+                '4th-level-spells',
+                '5th-level-spells',
+                '6th-level-spells',
+                '7th-level-spells',
+                '8th-level-spells',
+                '9th-level-spells',
+                'at-will-spells',
+                'innate-spells',
+                'pact-spells'
+            ]
 
             if (this.actorType === 'character' || this.actorType === 'npc') {
-                this.inventorySubcategoryIds = subcategoryIds.filter((subcategoryId) =>
-                    subcategoryId === 'equipped' ||
-                subcategoryId === 'consumables' ||
-                subcategoryId === 'containers' ||
-                subcategoryId === 'equipment' ||
-                subcategoryId === 'loot' ||
-                subcategoryId === 'tools' ||
-                subcategoryId === 'weapons' ||
-                subcategoryId === 'unequipped'
-                )
-
-                // Add subcategory ids for activation types
-                if (this.activationSubcategoryIds.length > 0) {
-                    this.inventorySubcategoryIds = [
-                        'consumables',
-                        'containers',
-                        'equipment',
-                        'loot',
-                        'tools',
-                        'weapons'
-                    ]
-                }
+                this.inventorySubcategoryIds = [
+                    'equipped',
+                    'consumables',
+                    'containers',
+                    'equipment',
+                    'loot',
+                    'tools',
+                    'weapons',
+                    'unequipped'
+                ]
 
                 this._buildCharacterActions()
             }
             if (this.actorType === 'vehicle') {
-                this.inventorySubcategoryIds = this.subcategoryIds.filter((subcategoryId) =>
-                    subcategoryId === 'consumables' ||
-                subcategoryId === 'equipment' ||
-                subcategoryId === 'tools' ||
-                subcategoryId === 'weapons'
-                )
-
-                // Add subcategory ids for activation types
-                if (this.activationSubcategoryIds.length > 0) {
-                    this.inventorySubcategoryIds = [
-                        'consumables',
-                        'equipment',
-                        'tools',
-                        'weapons'
-                    ]
-                }
+                this.inventorySubcategoryIds = [
+                    'consumables',
+                    'equipment',
+                    'tools',
+                    'weapons'
+                ]
 
                 this._buildVehicleActions()
             }
@@ -199,10 +142,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Character Actionss
-     * @private
-     * @returns {object}
-     */
+         * Build Character Actions
+         * @private
+         * @returns {object}
+         */
         async _buildCharacterActions () {
             this._buildAbilities('ability', 'abilities')
             this._buildAbilities('check', 'checks')
@@ -219,10 +162,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Vehicle  Actions
-     * @private
-     * @returns {object}
-     */
+         * Build Vehicle  Actions
+         * @private
+         * @returns {object}
+         */
         async _buildVehicleActions () {
             this._buildAbilities('ability', 'abilities')
             this._buildAbilities('check', 'checks')
@@ -236,10 +179,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Multiple Token Actions
-     * @private
-     * @returns {object}
-     */
+         * Build Multiple Token Actions
+         * @private
+         * @returns {object}
+         */
         async _buildMultipleTokenActions () {
             this._buildAbilities('ability', 'abilities')
             this._buildAbilities('check', 'checks')
@@ -252,14 +195,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Abilities
-     * @private
-     * @param {string} actionType
-     * @param {string} subcategoryId
-     */
+         * Build Abilities
+         * @private
+         * @param {string} actionType
+         * @param {string} subcategoryId
+         */
         _buildAbilities (actionType, subcategoryId) {
         // Get abilities
-            const abilities = (this.actorId === 'multi') ? game.dnd5e.config.abilities : this.actor.system.abilities
+            const abilities = (!this.actor) ? game.dnd5e.config.abilities : this.actor.system.abilities
 
             // Exit if no abilities exist
             if (abilities.length === 0) return
@@ -343,9 +286,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Combat
-     * @private
-     */
+         * Build Combat
+         * @private
+         */
         _buildCombat () {
             const actionType = 'utility'
 
@@ -356,7 +299,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             // Delete endTurn for multiple tokens
-            if (game.combat?.current?.tokenId !== this.tokenId) delete combatTypes.endTurn
+            if (game.combat?.current?.tokenId !== this.token?.id) delete combatTypes.endTurn
 
             // Get actions
             const actions = Object.entries(combatTypes).map((combatType) => {
@@ -399,11 +342,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Conditions
-     * @private
-     */
+         * Build Conditions
+         * @private
+         */
         _buildConditions () {
-            if (!this.token) return
+            if (!this.token && this.tokens.length === 0) return
 
             const actionType = 'condition'
 
@@ -448,9 +391,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Effects
-     * @private
-     */
+         * Build Effects
+         * @private
+         */
         _buildEffects () {
             const actionType = 'effect'
 
@@ -476,22 +419,16 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             // Build passive effects
-            if (this.effectSubcategoryIds.includes('passive-effects')) {
-                const subcategoryData = { id: 'passive-effects', type: 'system' }
-                this._buildActions(passiveEffects, subcategoryData, actionType)
-            }
+            this._buildActions(passiveEffects, { id: 'passive-effects', type: 'system' }, actionType)
 
             // Build temporary effects
-            if (this.effectSubcategoryIds.includes('temporary-effects')) {
-                const subcategoryData = { id: 'temporary-effects', type: 'system' }
-                this._buildActions(temporaryEffects, subcategoryData, actionType)
-            }
+            this._buildActions(temporaryEffects, { id: 'temporary-effects', type: 'system' }, actionType)
         }
 
         /**
-     * Build Features
-     * @private
-     */
+         * Build Features
+         * @private
+         */
         _buildFeatures () {
             const actionType = 'feature'
 
@@ -591,9 +528,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Inventory
-     * @private
-     */
+         * Build Inventory
+         * @private
+         */
         _buildInventory () {
         // Exit early if no items exist
             if (this.items.size === 0) return
@@ -682,9 +619,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Rests
-     * @private
-     */
+         * Build Rests
+         * @private
+         */
         _buildRests () {
         // Exit if every actor is not the character type
             if (!this.actors.every(actor => actor.type === 'character')) return
@@ -721,14 +658,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Skills
-     * @private
-     */
+         * Build Skills
+         * @private
+         */
         _buildSkills () {
             const actionType = 'skill'
 
             // Get skills
-            const skills = (this.actorId === 'multi') ? game.dnd5e.config.skills : this.actor.system.skills
+            const skills = (!this.actor) ? game.dnd5e.config.skills : this.actor.system.skills
 
             // Exit if there are no skills
             if (skills.length === 0) return
@@ -766,8 +703,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Spells
-     */
+         * Build Spells
+         */
         _buildSpells () {
             const actionType = 'spell'
 
@@ -937,9 +874,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Build Utility
-     * @private
-     */
+         * Build Utility
+         * @private
+         */
         _buildUtility () {
         // Exit if every actor is not the character type
             if (!this.actors.every((actor) => actor.type === 'character')) return
@@ -953,7 +890,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             // Delete 'deathSave' for multiple tokens
-            if (this.actorId === 'multi' || this.actor.system.attributes.hp.value > 0) delete utilityTypes.deathSave
+            if (!this.actor || this.actor.system.attributes.hp.value > 0) delete utilityTypes.deathSave
 
             // Get actions
             const actions = Object.entries(utilityTypes)
@@ -987,12 +924,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Actions
-     * @private
-     * @param {object} items
-     * @param {object} subcategoryData
-     * @param {string} actionType
-     */
+         * Get Actions
+         * @private
+         * @param {object} items
+         * @param {object} subcategoryData
+         * @param {string} actionType
+         */
         _buildActions (items, subcategoryData, actionType = 'item') {
         // Exit if there are no items
             if (items.size === 0) return
@@ -1009,12 +946,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Action
-     * @private
-     * @param {string} actionType
-     * @param {object} entity
-     * @returns {object}
-     */
+         * Get Action
+         * @private
+         * @param {string} actionType
+         * @param {object} entity
+         * @returns {object}
+         */
         _getAction (actionType, entity) {
             const id = entity.id ?? entity._id
             let name = entity?.name ?? entity?.label
@@ -1062,10 +999,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Is Active Item
-     * @param {object} item
-     * @returns {boolean}
-     */
+         * Is Active Item
+         * @param {object} item
+         * @returns {boolean}
+         */
         _isActiveItem (item) {
             if (this.showItemsWithoutActivationCosts) return true
             const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes).filter((at) => at !== 'none')
@@ -1076,11 +1013,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Is Equipped Item
-     * @private
-     * @param {object} item
-     * @returns {boolean}
-     */
+         * Is Equipped Item
+         * @private
+         * @param {object} item
+         * @returns {boolean}
+         */
         _isEquippedItem (item) {
             const type = item.type
             const excludedTypes = ['consumable', 'spell', 'feat']
@@ -1091,11 +1028,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Is Usable Item
-     * @private
-     * @param {object} item The item
-     * @returns {boolean}
-     */
+         * Is Usable Item
+         * @private
+         * @param {object} item The item
+         * @returns {boolean}
+         */
         _isUsableItem (item) {
             if (this.showUnchargedItems) return true
             const uses = item.system.uses
@@ -1104,10 +1041,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Is Usable Spell
-     * @param {object} spell  The spell
-     * @returns {boolean}
-     */
+         * Is Usable Spell
+         * @param {object} spell  The spell
+         * @returns {boolean}
+         */
         _isUsableSpell (spell) {
             if (this.actorType !== 'character' && this.showUnequippedItems) return true
             const prepared = spell.system.preparation.prepared
@@ -1124,11 +1061,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Item Info
-     * @private
-     * @param {object} item
-     * @returns {object}
-     */
+         * Get Item Info
+         * @private
+         * @param {object} item
+         * @returns {object}
+         */
         _getItemInfo (item) {
             const quantityData = this._getQuantityData(item)
             const usesData = this._getUsesData(item)
@@ -1142,9 +1079,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Add Spell Info
-     * @param {object} spell
-     */
+         * Add Spell Info
+         * @param {object} spell
+         */
         _getSpellInfo (spell) {
             const components = spell.system.components
 
@@ -1181,10 +1118,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Actors
-     * @private
-     * @returns {object}
-     */
+         * Get Actors
+         * @private
+         * @returns {object}
+         */
         _getActors () {
             const allowedTypes = ['character', 'npc']
             const actors = canvas.tokens.controlled.map((token) => token.actor)
@@ -1192,22 +1129,34 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Quantity
-     * @private
-     * @param {object} item
-     * @returns {string}
-     */
+         * Get Actors
+         * @private
+         * @returns {object}
+         */
+        _getTokens () {
+            const allowedTypes = ['character', 'npc']
+            const tokens = canvas.tokens.controlled
+            const actors = tokens.map((token) => token.actor)
+            if (actors.every((actor) => allowedTypes.includes(actor.type))) { return tokens }
+        }
+
+        /**
+         * Get Quantity
+         * @private
+         * @param {object} item
+         * @returns {string}
+         */
         _getQuantityData (item) {
             const quantity = item?.system?.quantity ?? 0
             return (quantity > 1) ? quantity : ''
         }
 
         /**
-     * Get Uses
-     * @private
-     * @param {object} item
-     * @returns {string}
-     */
+         * Get Uses
+         * @private
+         * @param {object} item
+         * @returns {string}
+         */
         _getUsesData (item) {
             const uses = item?.system?.uses
             if (!uses) return ''
@@ -1215,12 +1164,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Consume
-     * @private
-     * @param {object} item
-     * @param {object} actor
-     * @returns {string}
-     */
+         * Get Consume
+         * @private
+         * @param {object} item
+         * @param {object} actor
+         * @returns {string}
+         */
         _getConsumeData (item) {
         // Get consume target and type
             const consumeId = item?.system?.consume?.target
@@ -1248,11 +1197,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Discard Slow Items
-     * @private
-     * @param {object} items
-     * @returns {object}
-     */
+         * Discard Slow Items
+         * @private
+         * @param {object} items
+         * @returns {object}
+         */
         _discardSlowItems (items) {
         // Get setting
             const showSlowActions = Utils.getSetting('showSlowActions')
@@ -1277,10 +1226,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get Proficiency Icon
-     * @param {string} level
-     * @returns {string}
-     */
+         * Get Proficiency Icon
+         * @param {string} level
+         * @returns {string}
+         */
         _getProficiencyIcon (level) {
             const title = CONFIG.DND5E.proficiencyLevels[level] ?? ''
             const icon = PROFICIENCY_LEVEL_ICON[level]
@@ -1288,10 +1237,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get icon for the activation type
-     * @param {object} activationType
-     * @returns {string}
-     */
+         * Get icon for the activation type
+         * @param {object} activationType
+         * @returns {string}
+         */
         _getActivationTypeIcon (activationType) {
             const title = CONFIG.DND5E.abilityActivationTypes[activationType] ?? ''
             const icon = ACTIVATION_TYPE_ICON[activationType]
@@ -1299,10 +1248,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-     * Get icon for a prepared spell
-     * @param {boolean} prepararation
-     * @returns
-     */
+         * Get icon for a prepared spell
+         * @param {boolean} prepararation
+         * @returns
+         */
         _getPreparedIcon (spell) {
             const level = spell.system.level
             const preparationMode = spell.system.preparation.mode

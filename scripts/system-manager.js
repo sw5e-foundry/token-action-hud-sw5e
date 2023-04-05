@@ -3,8 +3,8 @@ import { ActionHandler } from './action-handler.js'
 import { MagicItemActionListExtender } from './magic-items-extender.js'
 import { RollHandler as Core } from './roll-handler.js'
 import { RollHandlerObsidian as Obsidian5e } from './roll-handler-obsidian.js'
-import * as systemSettings from './settings.js'
 import { DEFAULTS } from './defaults.js'
+import * as systemSettings from './settings.js'
 
 export let SystemManager = null
 

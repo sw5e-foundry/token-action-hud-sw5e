@@ -1,4 +1,5 @@
 import { SUBCATEGORY } from './constants.js'
+
 /**
  * Default categories and subcategories
  */
