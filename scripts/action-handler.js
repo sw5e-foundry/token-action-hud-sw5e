@@ -1124,7 +1124,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         _getActors () {
             const allowedTypes = ['character', 'npc']
-            const actors = canvas.tokens.controlled.map((token) => token.actor)
+            const actors = canvas.tokens.controlled.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) { return actors }
         }
 
@@ -1136,7 +1136,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _getTokens () {
             const allowedTypes = ['character', 'npc']
             const tokens = canvas.tokens.controlled
-            const actors = tokens.map((token) => token.actor)
+            const actors = tokens.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) { return tokens }
         }
 

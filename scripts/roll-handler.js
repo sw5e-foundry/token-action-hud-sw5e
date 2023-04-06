@@ -84,6 +84,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} actionId The action id
          */
         _rollAbility (event, actor, actionId) {
+            if (!actor) return
             actor.rollAbility(actionId, { event })
         }
 
@@ -95,6 +96,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} actionId The action id
          */
         _rollAbilitySave (event, actor, actionId) {
+            if (!actor) return
             actor.rollAbilitySave(actionId, { event })
         }
 
@@ -106,6 +108,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} actionId The action id
          */
         _rollAbilityTest (event, actor, actionId) {
+            if (!actor) return
             actor.rollAbilityTest(actionId, { event })
         }
 
@@ -137,6 +140,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} actionId The action id
          */
         _rollSkill (event, actor, actionId) {
+            if (!actor) return
             actor.rollSkill(actionId, { event })
         }
 
@@ -217,6 +221,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         async _rollInitiative (actor) {
+            if (!actor) return
             await actor.rollInitiative({ createCombatants: true })
 
             Hooks.callAll('forceUpdateTokenActionHud')
