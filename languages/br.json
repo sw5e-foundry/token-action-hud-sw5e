@@ -18,8 +18,10 @@
       "bonusActions": "Ações de bônus",
       "cantrips": "Truques",
       "channelDivinity": "Channel Divinity",
+      "check": "Check",
       "checks": "Testes",
       "classFeatures": "Class Features",
+      "condition": "Condition",
       "conditions": "Condições",
       "crewActions": "Ações da tripulação",
       "defensiveTactics": "Defensive Tactics",
@@ -29,6 +31,7 @@
       "fightingStyles": "Fighting Styles",
       "huntersPrey": "Hunter's Prey",
       "innateSpells": "Innate Spells",
+      "item": "Item",
       "kiAbilities": "Ki Abilities",
       "lair": "Covil",
       "lairActions": "Ações de covil",
@@ -50,6 +53,7 @@
       "runes": "Runes",
       "saves": "Salvaguarda",
       "superiorHuntersDefense": "Superior Hunter's Defense",
+      "skill": "Skill",
       "skills": "Pericias",
       "settings": {
         "abbreviateSkills": {
