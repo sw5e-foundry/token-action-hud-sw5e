@@ -346,7 +346,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         _buildConditions () {
-            if (!this.token && this.tokens.length === 0) return
+            if (this.tokens?.length === 0) return
 
             const actionType = 'condition'
 
@@ -623,7 +623,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         _buildRests () {
-        // Exit if every actor is not the character type
+            // Exit if every actor is not the character type
+            if (this.actors.length === 0) return
             if (!this.actors.every(actor => actor.type === 'character')) return
 
             const actionType = 'utility'
@@ -878,7 +879,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         _buildUtility () {
-        // Exit if every actor is not the character type
+            // Exit if every actor is not the character type
+            if (this.actors.length === 0) return
             if (!this.actors.every((actor) => actor.type === 'character')) return
 
             const actionType = 'utility'
@@ -1125,7 +1127,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _getActors () {
             const allowedTypes = ['character', 'npc']
             const actors = canvas.tokens.controlled.filter(token => token.actor).map((token) => token.actor)
-            if (actors.every((actor) => allowedTypes.includes(actor.type))) { return actors }
+            if (actors.every((actor) => allowedTypes.includes(actor.type))) {
+                return actors
+            } else {
+                return []
+            }
         }
 
         /**
@@ -1137,7 +1143,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const allowedTypes = ['character', 'npc']
             const tokens = canvas.tokens.controlled
             const actors = tokens.filter(token => token.actor).map((token) => token.actor)
-            if (actors.every((actor) => allowedTypes.includes(actor.type))) { return tokens }
+            if (actors.every((actor) => allowedTypes.includes(actor.type))) {
+                return tokens
+            } else {
+                return []
+            }
         }
 
         /**

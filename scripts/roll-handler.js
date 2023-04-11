@@ -85,6 +85,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         _rollAbility (event, actor, actionId) {
             if (!actor) return
+            if (!actor.system?.abilities) return
             actor.rollAbility(actionId, { event })
         }
 
@@ -97,6 +98,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         _rollAbilitySave (event, actor, actionId) {
             if (!actor) return
+            if (!actor.system?.abilities) return
             actor.rollAbilitySave(actionId, { event })
         }
 
@@ -109,6 +111,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         _rollAbilityTest (event, actor, actionId) {
             if (!actor) return
+            if (!actor.system?.abilities) return
             actor.rollAbilityTest(actionId, { event })
         }
 
@@ -141,6 +144,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         _rollSkill (event, actor, actionId) {
             if (!actor) return
+            if (!actor.system?.skills) return
             actor.rollSkill(actionId, { event })
         }
 
