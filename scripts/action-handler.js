@@ -219,12 +219,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                     const listName = `${actionTypeName}${game.dnd5e.config.abilities[abilityId]}`
                     const encodedValue = [actionType, abilityId].join(this.delimiter)
-                    const icon = (groupId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
+                    const icon1 = (groupId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
                     return {
                         id,
                         name,
                         encodedValue,
-                        icon,
+                        icon1,
                         listName
                     }
                 })
@@ -681,12 +681,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                         const listName = `${actionTypeName}${game.dnd5e.config.skills[id].label}`
                         const encodedValue = [actionType, id].join(this.delimiter)
-                        const icon = this._getProficiencyIcon(skills[id].value)
+                        const icon1 = this._getProficiencyIcon(skills[id].value)
+                        const mod = skills[id].mod
+                        const info1 = (this.actor) ? { text: (mod || mod === 0) ? `${(mod >= 0) ? '+' : ''}${mod}` : '' } : ''
                         return {
                             id,
                             name,
                             encodedValue,
-                            icon,
+                            icon1,
+                            info1,
                             listName
                         }
                     } catch (error) {
