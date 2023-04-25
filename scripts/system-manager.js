@@ -58,19 +58,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         /** @override */
         async doRegisterDefaultFlags () {
             const defaults = DEFAULTS
-            // If the 'Magic Items' module is active, then add a subcategory for it
+            // If the 'Magic Items' module is active, then add a group for it
             if (game.modules.get('magicitems')?.active) {
                 const name = coreModule.api.Utils.i18n('tokenActionHud.dnd5e.magicItems')
-                defaults.subcategories.push(
+                defaults.groups.push(
                     {
                         id: 'magic-items',
                         name,
-                        listName: `Subcategory: ${name}`,
-                        type: 'system',
-                        hasDerivedSubcategories: true
+                        listName: `Group: ${name}`,
+                        type: 'system'
                     }
                 )
-                defaults.subcategories.sort((a, b) => a.id.localeCompare(b.id))
+                defaults.groups.sort((a, b) => a.id.localeCompare(b.id))
             }
             return defaults
         }
