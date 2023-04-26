@@ -1,0 +1,82 @@
+{
+  "tokenActionHud": {
+    "sw5e": {
+      "1stLevelPowers": "1st Level Powers",
+      "2ndLevelPowers": "2nd Level Powers",
+      "3rdLevelPowers": "3rd Level Powers",
+      "4thLevelPowers": "4th Level Powers",
+      "5thLevelPowers": "5th Level Powers",
+      "6thLevelPowers": "6th Level Powers",
+      "7thLevelPowers": "7th Level Powers",
+      "8thLevelPowers": "8th Level Powers",
+      "9thLevelPowers": "9th Level Powers",
+      "abilities": "Abilities",
+      "activeFeatures": "Active Features",
+      "atWillPowers": "At-Will Powers",
+      "backgroundFeatures": "Background Features",
+      "bonusActions": "Bonus Actions",
+      "check": "Check",
+      "checks": "Checks",
+      "classFeatures": "Class Features",
+      "condition": "Condition",
+      "conditions": "Conditions",
+      "crewActions": "Crew Actions",
+      "deathSave": "Death Save",
+      "defensiveTactics": "Defensive Tactics",
+      "destructionSave": "Destruction Save",
+      "feats": "Feats",
+      "fightingStyles": "Fighting Styles",
+      "innatePowers": "Innate Powers",
+      "item": "Item",
+      "lair": "Lair",
+      "lairActions": "Lair Actions",
+      "legendary": "Legendary",
+      "legendaryActions": "Legendary Actions",
+      "naturalPowers": "Natural Powers",
+      "magicItems": "Magic Items",
+      "maneuvers": "Maneuvers",
+      "metamagicOptions": "Metamagic Options",
+      "monsterFeatures": "Monster Features",
+      "multiattacks": "Multiattacks",
+      "otherActions": "Other Actions",
+      "passiveFeatures": "Passive Features",
+      "speciesFeatures": "Species Features",
+      "rests": "Rests",
+      "repairs": "Repairs",
+      "rollInitiative": "Roll Initiative",
+      "runes": "Runes",
+      "skill": "Skill",
+      "skills": "Skills",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "Display skill and ability names as a three-character abbreviation",
+          "name": "Abbreviate Skill and Ability Names"
+        },
+        "displayPowerInfo": {
+          "hint": "Display power component information, concentration, and ritual status next to the power's name",
+          "name": "Display Power Information"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "Show items without an activation cost",
+          "name": "Show Items without Activation Costs"
+        },
+        "showSlowActions": {
+          "hint": "Show actions that take longer than one round",
+          "name": "Show Slow Actions"
+        },
+        "showUnchargedItems": {
+          "hint": "Show items with no charges remaining",
+          "name": "Show Uncharged Items"
+        },
+        "showUnequippedItems": {
+          "hint": "Show unequipped items",
+          "name": "Show Unequipped Items"
+        },
+        "showUnpreparedPowers": {
+          "hint": "Show unprepared powers",
+          "name": "Show Unprepared Powers"
+        }
+      }
+    }
+  }
+}
