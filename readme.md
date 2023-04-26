@@ -1,4 +1,4 @@
-# Token Action HUD D&D 5e
+# Token Action HUD SW5e
 
 Token Action HUD is a repositionable HUD of actions for a selected token.
 
@@ -14,12 +14,7 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 # Installation
 
 ## Method 1
-1. On Foundry VTT's **Configuration and Setup** screen, go to **Add-on Modules**
-2. Click **Install Module**
-3. Search for **Token Action HUD SW5e** 
-4. Click **Install** next to the module listing
 
-## Method 2
 1. On Foundry VTT's **Configuration and Setup** screen, go to **Add-on Modules**
 2. Click **Install Module**
 3. In the Manifest URL field, paste: `https://github.com/sw5e-foundry/token-action-hud-sw5e/releases/latest/download/module.json`
