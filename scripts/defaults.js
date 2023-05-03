@@ -1,99 +1,99 @@
-import { SUBCATEGORY } from './constants.js'
+import { GROUP } from './constants.js'
 
 /**
- * Default categories and subcategories
+ * Default categories and groups
  */
 export let DEFAULTS = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
-    const subcategories = SUBCATEGORY
-    Object.values(subcategories).forEach(subcategory => {
-        subcategory.name = coreModule.api.Utils.i18n(subcategory.name)
-        subcategory.listName = `Subcategory: ${coreModule.api.Utils.i18n(subcategory.name)}`
+    const groups = GROUP
+    Object.values(groups).forEach(group => {
+        group.name = coreModule.api.Utils.i18n(group.name)
+        group.listName = `Group: ${coreModule.api.Utils.i18n(group.name)}`
     })
-    const subcategoriesArray = Object.values(subcategories)
+    const groupsArray = Object.values(groups)
     DEFAULTS = {
-        categories: [
+        layout: [
             {
                 nestId: 'inventory',
                 id: 'inventory',
                 name: coreModule.api.Utils.i18n('DND5E.Inventory'),
-                subcategories: [
-                    { ...subcategories.weapons, nestId: 'inventory_weapons' },
-                    { ...subcategories.equipment, nestId: 'inventory_equipment' },
-                    { ...subcategories.consumables, nestId: 'inventory_consumables' },
-                    { ...subcategories.tools, nestId: 'inventory_tools' },
-                    { ...subcategories.containers, nestId: 'inventory_containers' },
-                    { ...subcategories.loot, nestId: 'inventory_loot' }
+                groups: [
+                    { ...groups.weapons, nestId: 'inventory_weapons' },
+                    { ...groups.equipment, nestId: 'inventory_equipment' },
+                    { ...groups.consumables, nestId: 'inventory_consumables' },
+                    { ...groups.tools, nestId: 'inventory_tools' },
+                    { ...groups.containers, nestId: 'inventory_containers' },
+                    { ...groups.loot, nestId: 'inventory_loot' }
                 ]
             },
             {
                 nestId: 'features',
                 id: 'features',
                 name: coreModule.api.Utils.i18n('DND5E.Features'),
-                subcategories: [
-                    { ...subcategories.activeFeatures, nestId: 'features_active-features' },
-                    { ...subcategories.passiveFeatures, nestId: 'features_passive-features' }
+                groups: [
+                    { ...groups.activeFeatures, nestId: 'features_active-features' },
+                    { ...groups.passiveFeatures, nestId: 'features_passive-features' }
                 ]
             },
             {
                 nestId: 'spells',
                 id: 'spells',
                 name: coreModule.api.Utils.i18n('ITEM.TypeSpellPl'),
-                subcategories: [
-                    { ...subcategories.atWillSpells, nestId: 'spells_at-will-spells' },
-                    { ...subcategories.innateSpells, nestId: 'spells_innate-spells' },
-                    { ...subcategories.pactSpells, nestId: 'spells_pact-spells' },
-                    { ...subcategories.cantrips, nestId: 'spells_cantrips' },
-                    { ...subcategories._1stLevelSpells, nestId: 'spells_1st-level-spells' },
-                    { ...subcategories._2ndLevelSpells, nestId: 'spells_2nd-level-spells' },
-                    { ...subcategories._3rdLevelSpells, nestId: 'spells_3rd-level-spells' },
-                    { ...subcategories._4thLevelSpells, nestId: 'spells_4th-level-spells' },
-                    { ...subcategories._5thLevelSpells, nestId: 'spells_5th-level-spells' },
-                    { ...subcategories._6thLevelSpells, nestId: 'spells_6th-level-spells' },
-                    { ...subcategories._7thLevelSpells, nestId: 'spells_7th-level-spells' },
-                    { ...subcategories._8thLevelSpells, nestId: 'spells_8th-level-spells' },
-                    { ...subcategories._9thLevelSpells, nestId: 'spells_9th-level-spells' }
+                groups: [
+                    { ...groups.atWillSpells, nestId: 'spells_at-will-spells' },
+                    { ...groups.innateSpells, nestId: 'spells_innate-spells' },
+                    { ...groups.pactSpells, nestId: 'spells_pact-spells' },
+                    { ...groups.cantrips, nestId: 'spells_cantrips' },
+                    { ...groups._1stLevelSpells, nestId: 'spells_1st-level-spells' },
+                    { ...groups._2ndLevelSpells, nestId: 'spells_2nd-level-spells' },
+                    { ...groups._3rdLevelSpells, nestId: 'spells_3rd-level-spells' },
+                    { ...groups._4thLevelSpells, nestId: 'spells_4th-level-spells' },
+                    { ...groups._5thLevelSpells, nestId: 'spells_5th-level-spells' },
+                    { ...groups._6thLevelSpells, nestId: 'spells_6th-level-spells' },
+                    { ...groups._7thLevelSpells, nestId: 'spells_7th-level-spells' },
+                    { ...groups._8thLevelSpells, nestId: 'spells_8th-level-spells' },
+                    { ...groups._9thLevelSpells, nestId: 'spells_9th-level-spells' }
                 ]
             },
             {
                 nestId: 'attributes',
                 id: 'attributes',
                 name: coreModule.api.Utils.i18n('DND5E.Attributes'),
-                subcategories: [
-                    { ...subcategories.abilities, nestId: 'attributes_abilities' },
-                    { ...subcategories.skills, nestId: 'attributes_skills' }
+                groups: [
+                    { ...groups.abilities, nestId: 'attributes_abilities' },
+                    { ...groups.skills, nestId: 'attributes_skills' }
                 ]
             },
             {
                 nestId: 'effects',
                 id: 'effects',
                 name: coreModule.api.Utils.i18n('DND5E.Effects'),
-                subcategories: [
-                    { ...subcategories.temporaryEffects, nestId: 'effects_temporary-effects' },
-                    { ...subcategories.passiveEffects, nestId: 'effects_passive-effects' }
+                groups: [
+                    { ...groups.temporaryEffects, nestId: 'effects_temporary-effects' },
+                    { ...groups.passiveEffects, nestId: 'effects_passive-effects' }
                 ]
             },
             {
                 nestId: 'conditions',
                 id: 'conditions',
                 name: coreModule.api.Utils.i18n('tokenActionHud.dnd5e.conditions'),
-                subcategories: [
-                    { ...subcategories.conditions, nestId: 'conditions_conditions' }
+                groups: [
+                    { ...groups.conditions, nestId: 'conditions_conditions' }
                 ]
             },
             {
                 nestId: 'utility',
                 id: 'utility',
                 name: coreModule.api.Utils.i18n('tokenActionHud.utility'),
-                subcategories: [
-                    { ...subcategories.combat, nestId: 'utility_combat' },
-                    { ...subcategories.token, nestId: 'utility_token' },
-                    { ...subcategories.rests, nestId: 'utility_rests' },
-                    { ...subcategories.utility, nestId: 'utility_utility' }
+                groups: [
+                    { ...groups.combat, nestId: 'utility_combat' },
+                    { ...groups.token, nestId: 'utility_token' },
+                    { ...groups.rests, nestId: 'utility_rests' },
+                    { ...groups.utility, nestId: 'utility_utility' }
                 ]
             }
         ],
-        subcategories: subcategoriesArray
+        groups: groupsArray
     }
 })
