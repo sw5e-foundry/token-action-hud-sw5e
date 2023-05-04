@@ -193,9 +193,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             case 'deathSave':
                 actor.rollDeathSave({ event })
                 break
-            case 'destructionSave':
-                actor.rollDestructionSave({ event })
-                break
             case 'endTurn':
                 if (!token) break
                 if (game.combat?.current?.tokenId === token.id) {
@@ -215,15 +212,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 break
             case 'shortRest':
                 actor.shortRest()
-                break
-            case "rechargeRepair":
-                actor.rechargeRepair()
-                break
-            case "refittingRepair":
-                actor.refittingRepair()
-                break
-            case "regenRepair":
-                actor.regenRepair()
                 break
             }
 

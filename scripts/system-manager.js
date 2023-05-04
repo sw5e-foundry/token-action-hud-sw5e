@@ -24,7 +24,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         getAvailableRollHandlers () {
-            let coreTitle = 'Core SW5e'
+            let coreTitle = 'Core D&D5e'
 
             if (coreModule.api.Utils.isModuleActive('midi-qol')) { coreTitle += ` [supports ${coreModule.api.Utils.getModuleTitle('midi-qol')}]` }
 

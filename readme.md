@@ -1,4 +1,4 @@
-# Token Action HUD SW5e
+# Token Action HUD D&D 5e
 
 Token Action HUD is a repositionable HUD of actions for a selected token.
 
@@ -14,10 +14,15 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 # Installation
 
 ## Method 1
-
 1. On Foundry VTT's **Configuration and Setup** screen, go to **Add-on Modules**
 2. Click **Install Module**
-3. In the Manifest URL field, paste: `https://github.com/sw5e-foundry/token-action-hud-sw5e/releases/latest/download/module.json`
+3. Search for **Token Action HUD D&D 5e** 
+4. Click **Install** next to the module listing
+
+## Method 2
+1. On Foundry VTT's **Configuration and Setup** screen, go to **Add-on Modules**
+2. Click **Install Module**
+3. In the Manifest URL field, paste: `https://github.com/Larkinabout/fvtt-token-action-hud-sw5e/releases/latest/download/module.json`
 4. Click **Install** next to the pasted Manifest URL
 
 ## Required Modules
@@ -29,14 +34,14 @@ Token Action HUD uses either the [Color Picker](https://foundryvtt.com/packages/
 
 # Support
 
-For questions, feature requests or bug reports, please open an issue [here](https://github.com/sw5e-foundry/token-action-hud-sw5e/issues).
+For questions, feature requests or bug reports, please open an issue [here](https://github.com/Larkinabout/fvtt-token-action-hud-core/issues).
 
 Pull requests are welcome. Please include a reason for the request or create an issue before starting one.
 
 # Acknowledgements
 
 First and foremost, thank you to the Community Helpers on Foundry's Discord who provide tireless support for people seeking help with the HUD.
-Enormous thanks also goes to the following people for their help in getting the HUD to its current state: Larkinabout, Drental, Kekilla, Rainer, Xacus, Giddy, and anyone who has provided advice to any and all of my problems on Discord, as well as all the other developers who make FoundryVTT a joy to use.
+Enormous thanks also goes to the following people for their help in getting the HUD to its current state: Drental, Kekilla, Rainer, Xacus, Giddy, and anyone who has provided advice to any and all of my problems on Discord, as well as all the other developers who make FoundryVTT a joy to use.
 
 # License
 

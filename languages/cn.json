@@ -1,0 +1,89 @@
+{
+  "tokenActionHud": {
+    "sw5e": {
+      "1stLevelPowers": "1st Level Powers",
+      "2ndLevelPowers": "2nd Level Powers",
+      "3rdLevelPowers": "3rd Level Powers",
+      "4thLevelPowers": "4th Level Powers",
+      "5thLevelPowers": "5th Level Powers",
+      "6thLevelPowers": "6th Level Powers",
+      "7thLevelPowers": "7th Level Powers",
+      "8thLevelPowers": "8th Level Powers",
+      "9thLevelPowers": "9th Level Powers",
+      "abilities": "属性",
+      "activeFeatures": "Active Features",
+      "artificerInfusions": "Artificer Infusions",
+      "atWillPowers": "At-Will Powers",
+      "backgroundFeatures": "Background Features",
+      "bonusActions": "獎勵行動",
+      "cantrips": "Cantrips",
+      "channelDivinity": "Channel Divinity",
+      "check": "Check",
+      "checks": "检定",
+      "classFeatures": "Class Features",
+      "condition": "Condition",
+      "conditions": "状态",
+      "crewActions": "船員行動",
+      "defensiveTactics": "Defensive Tactics",
+      "eldritchInvocations": "Eldritch Invocations",
+      "elementalDisciplines": "Elemental Disciplines",
+      "feats": "Feats",
+      "fightingStyles": "Fighting Styles",
+      "huntersPrey": "Hunter's Prey",
+      "innatePowers": "Innate Powers",
+      "item": "Item",
+      "kiAbilities": "Ki Abilities",
+      "lair": "巢穴",
+      "lairActions": "巢穴行動",
+      "legendary": "传奇",
+      "legendaryActions": "傳奇動作",
+      "magicItems": "魔法物品",
+      "maneuvers": "Maneuvers",
+      "metamagicOptions": "Metamagic Options",
+      "monsterFeatures": "Monster Features",
+      "multiattacks": "Multiattacks",
+      "otherActions": "其他行為",
+      "pactBoons": "Pact Boons",
+      "pactPowers": "Pact Powers",
+      "passiveFeatures": "Passive Features",
+      "psionicPowers": "Psionic Powers",
+      "speciesFeatures": "Species Features",
+      "rests": "休息",
+      "rollInitiative": "先攻掷骰",
+      "runes": "Runes",
+      "skill": "Skill",
+      "skills": "技能",
+      "superiorHuntersDefense": "Superior Hunter's Defense",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "启用后，技能和属性都会用其三字母缩写。",
+          "name": "缩写技能和属性名"
+        },
+        "displayPowerInfo": {
+          "hint": "启用后，法术构材信息、专注、仪式状态会在法术名旁标记出来。",
+          "name": "显示法术信息"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showSlowActions": {
+          "hint": "顯示超過一輪的動作",
+          "name": "顯示緩慢的動作"
+        },
+        "showUnchargedItems": {
+          "hint": "启用后，HUD上会显示没有剩余充能的物品。",
+          "name": "显示空物品（包含物品和法术）"
+        },
+        "showUnequippedItems": {
+          "hint": "启用后，NPC的所有物品都会显示，而不仅仅是已装备的物品。",
+          "name": "显示所有NPC物品"
+        },
+        "showUnpreparedPowers": {
+          "hint": "禁用后，戏法、天生、契约和随意使用的法术需要在法术详情页设置为‘准备’状态才能显示在HUD上。",
+          "name": "显示所有未准备法术"
+        }
+      }
+    }
+  }
+}

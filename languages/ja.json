@@ -1,0 +1,89 @@
+{
+  "tokenActionHud": {
+    "sw5e": {
+      "1stLevelPowers": "1st Level Powers",
+      "2ndLevelPowers": "2nd Level Powers",
+      "3rdLevelPowers": "3rd Level Powers",
+      "4thLevelPowers": "4th Level Powers",
+      "5thLevelPowers": "5th Level Powers",
+      "6thLevelPowers": "6th Level Powers",
+      "7thLevelPowers": "7th Level Powers",
+      "8thLevelPowers": "8th Level Powers",
+      "9thLevelPowers": "9th Level Powers",
+      "abilities": "能力値",
+      "activeFeatures": "Active Features",
+      "artificerInfusions": "Artificer Infusions",
+      "atWillPowers": "At-Will Powers",
+      "backgroundFeatures": "Background Features",
+      "bonusActions": "ボーナス･アクション",
+      "cantrips": "Cantrips",
+      "channelDivinity": "Channel Divinity",
+      "check": "Check",
+      "checks": "判定",
+      "classFeatures": "Class Features",
+      "condition": "Condition",
+      "conditions": "状態",
+      "crewActions": "乗組員の行動",
+      "defensiveTactics": "Defensive Tactics",
+      "eldritchInvocations": "Eldritch Invocations",
+      "elementalDisciplines": "Elemental Disciplines",
+      "feats": "Feats",
+      "fightingStyles": "Fighting Styles",
+      "huntersPrey": "Hunter's Prey",
+      "innatePowers": "Innate Powers",
+      "item": "Item",
+      "kiAbilities": "Ki Abilities",
+      "lair": "住処",
+      "lairActions": "住処アクション",
+      "legendary": "伝説",
+      "legendaryActions": "伝説的アクション",
+      "magicItems": "魔法アイテム",
+      "maneuvers": "Maneuvers",
+      "metamagicOptions": "Metamagic Options",
+      "monsterFeatures": "Monster Features",
+      "multiattacks": "Multiattacks",
+      "otherActions": "その他のアクション",
+      "pactBoons": "Pact Boons",
+      "pactPowers": "Pact Powers",
+      "passiveFeatures": "Passive Features",
+      "psionicPowers": "Psionic Powers",
+      "speciesFeatures": "Species Features",
+      "rests": "休憩",
+      "rollInitiative": "イニシアチブロール",
+      "runes": "Runes",
+      "skill": "Skill",
+      "skills": "技能",
+      "superiorHuntersDefense": "Superior Hunter's Defense",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "技能や能力名をすべて３文字に省略します",
+          "name": "特技や能力名を省略する"
+        },
+        "displayPowerInfo": {
+          "hint": "呪文の構成要素、集中、儀式などの追加の情報が名前の隣に表示されます。",
+          "name": "呪文の情報を表示する。"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "有効にすると、有効化の情報がないアイテムを所持品リストに追加します。",
+          "name": "有効化コストのないアイテムの表示"
+        },
+        "showSlowActions": {
+          "hint": "1ラウンド以上かかるアクションを表示",
+          "name": "遅いアクションを表示"
+        },
+        "showUnchargedItems": {
+          "hint": "ホットバーにチャージや使用回数が空のものも表示します。",
+          "name": "空のアイテムを表示する（呪文含む）"
+        },
+        "showUnequippedItems": {
+          "hint": "NPCの装備済みのアイテムだけではなく、他の所持しているだけのアイテムも表示します。",
+          "name": "NPCのすべてのアイテムを表示する"
+        },
+        "showUnpreparedPowers": {
+          "hint": "これがオフになっていると初級呪文、生得、契約等の呪文はすべて手動で「準備状態」にしないと表示されなくなります。",
+          "name": "すべての非準備呪文も表示する"
+        }
+      }
+    }
+  }
+}

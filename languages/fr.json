@@ -1,0 +1,89 @@
+{
+  "tokenActionHud": {
+    "sw5e": {
+      "1stLevelPowers": "1st Level Powers",
+      "2ndLevelPowers": "2nd Level Powers",
+      "3rdLevelPowers": "3rd Level Powers",
+      "4thLevelPowers": "4th Level Powers",
+      "5thLevelPowers": "5th Level Powers",
+      "6thLevelPowers": "6th Level Powers",
+      "7thLevelPowers": "7th Level Powers",
+      "8thLevelPowers": "8th Level Powers",
+      "9thLevelPowers": "9th Level Powers",
+      "abilities": "Abilités",
+      "activeFeatures": "Active Features",
+      "artificerInfusions": "Artificer Infusions",
+      "atWillPowers": "At-Will Powers",
+      "backgroundFeatures": "Background Features",
+      "bonusActions": "Actions bonus",
+      "cantrips": "Cantrips",
+      "channelDivinity": "Channel Divinity",
+      "check": "Check",
+      "checks": "Tests",
+      "classFeatures": "Class Features",
+      "condition": "Condition",
+      "conditions": "Conditions",
+      "crewActions": "Actions de l'équipage",
+      "defensiveTactics": "Defensive Tactics",
+      "eldritchInvocations": "Eldritch Invocations",
+      "elementalDisciplines": "Elemental Disciplines",
+      "feats": "Feats",
+      "fightingStyles": "Fighting Styles",
+      "huntersPrey": "Hunter's Prey",
+      "innatePowers": "Innate Powers",
+      "item": "Item",
+      "kiAbilities": "Ki Abilities",
+      "lair": "Antre",
+      "lairActions": "Actions de antre",
+      "legendary": "Légendaire",
+      "legendaryActions": "Actions légendaires",
+      "magicItems": "Objets magiques",
+      "maneuvers": "Maneuvers",
+      "metamagicOptions": "Metamagic Options",
+      "monsterFeatures": "Monster Features",
+      "multiattacks": "Multiattacks",
+      "otherActions": "D'autres actions",
+      "pactBoons": "Pact Boons",
+      "pactPowers": "Pact Powers",
+      "passiveFeatures": "Passive Features",
+      "psionicPowers": "Psionic Powers",
+      "speciesFeatures": "Species Features",
+      "rests": "Repos",
+      "rollInitiative": "Lancer l'initiative",
+      "runes": "Runes",
+      "skill": "Skill",
+      "skills": "Compétences",
+      "superiorHuntersDefense": "Superior Hunter's Defense",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "Si activée les caractéristiques et les compétences utiliserons une abréviation de 3 caractères.",
+          "name": "Abréger les noms des caractéristiques et des compétences"
+        },
+        "displayPowerInfo": {
+          "hint": "Si activée, les informations sur les composantes de sort, la concentration et les rituels seront affichées à côté du nom du sort.",
+          "name": "Afficher les informations des sorts"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showSlowActions": {
+          "hint": "Afficher les actions qui prennent plus d'un tour",
+          "name": "Afficher les actions lentes"
+        },
+        "showUnchargedItems": {
+          "hint": "Si activée, les objets seront affichés dans le HUD même s'ils n'ont plus de charges.",
+          "name": "Afficher les objets vides (y compris les objets et les sorts)"
+        },
+        "showUnequippedItems": {
+          "hint": "Si activée, tous les objets seront affichés pour les PNJ, et pas seulement les objets équipés.",
+          "name": "Afficher tous les objets des PNJs"
+        },
+        "showUnpreparedPowers": {
+          "hint": "Si désactivée, les sorts tels que les tours de magie, innés, de pacte et à volonté doivent être préparés dans le détail du sort pour être affiché dans le HUD.",
+          "name": "Afficher tous les sorts non préparés"
+        }
+      }
+    }
+  }
+}

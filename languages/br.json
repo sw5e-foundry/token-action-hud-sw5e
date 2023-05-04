@@ -1,0 +1,90 @@
+{
+  "tokenActionHud": {
+    "sw5e": {
+      "1stLevelPowers": "1st Level Powers",
+      "2ndLevelPowers": "2nd Level Powers",
+      "3rdLevelPowers": "3rd Level Powers",
+      "4thLevelPowers": "4th Level Powers",
+      "5thLevelPowers": "5th Level Powers",
+      "6thLevelPowers": "6th Level Powers",
+      "7thLevelPowers": "7th Level Powers",
+      "8thLevelPowers": "8th Level Powers",
+      "9thLevelPowers": "9th Level Powers",
+      "abilities": "Atributos",
+      "activeFeatures": "Active Features",
+      "artificerInfusions": "Artificer Infusions",
+      "atWillPowers": "At-Will Powers",
+      "backgroundFeatures": "Background Features",
+      "bonusActions": "Ações de bônus",
+      "cantrips": "Truques",
+      "channelDivinity": "Channel Divinity",
+      "check": "Check",
+      "checks": "Testes",
+      "classFeatures": "Class Features",
+      "condition": "Condition",
+      "conditions": "Condições",
+      "crewActions": "Ações da tripulação",
+      "defensiveTactics": "Defensive Tactics",
+      "eldritchInvocations": "Eldritch Invocations",
+      "elementalDisciplines": "Elemental Disciplines",
+      "feats": "Feats",
+      "fightingStyles": "Fighting Styles",
+      "huntersPrey": "Hunter's Prey",
+      "innatePowers": "Innate Powers",
+      "item": "Item",
+      "kiAbilities": "Ki Abilities",
+      "lair": "Covil",
+      "lairActions": "Ações de covil",
+      "legendary": "Lendária",
+      "legendaryActions": "Ações Lendárias",
+      "magicItems": "Itens Mágicos",
+      "maneuvers": "Maneuvers",
+      "metamagicOptions": "Metamagic Options",
+      "monsterFeatures": "Monster Features",
+      "multiattacks": "Multiattacks",
+      "otherActions": "Outras ações",
+      "pactBoons": "Pact Boons",
+      "pactPowers": "Pact Powers",
+      "passiveFeatures": "Passive Features",
+      "psionicPowers": "Psionic Powers",
+      "speciesFeatures": "Species Features",
+      "rests": "Descansos",
+      "rollInitiative": "Rolar Iniciativa",
+      "runes": "Runes",
+      "saves": "Salvaguarda",
+      "superiorHuntersDefense": "Superior Hunter's Defense",
+      "skill": "Skill",
+      "skills": "Pericias",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "Habilidades e atributos usarão uma abreviação de três caracteres.",
+          "name": "Abrevie nomes de habilidades e atributos"
+        },
+        "displayPowerInfo": {
+          "hint": "As informações do componente de magia, a concentração e o estatus ritual serão anotados ao lado do nome do feitiço.",
+          "name": "Exibir informação de magias"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
+          "name": "Show Items without Activation costs"
+        },
+        "showSlowActions": {
+          "hint": "Mostrar ações que levam mais de uma rodada",
+          "name": "Mostrar ações lentas"
+        },
+        "showUnchargedItems": {
+          "hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
+          "name": "Show empty items (includes items and powers)"
+        },
+        "showUnequippedItems": {
+          "hint": "Todos os itens dos NPCs serão exibidos, não apenas itens equipados.",
+          "name": "Exibir todos os itens de NPCs"
+        },
+        "showUnpreparedPowers": {
+          "hint": "Se desativado, magias como cantrips, magias inatas, pactos e à vontade precisam ser 'preparadas' através dos detalhes da magia que serão mostrados no HUD. ",
+          "name": "Exibe todas as magias não preparadas"
+        }
+      }
+    }
+  }
+}

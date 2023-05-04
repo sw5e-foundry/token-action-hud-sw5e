@@ -79,17 +79,25 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 'feats',
                 'monster-features',
                 'species-features',
+                'artificer-infusions',
+                'channel-divinity',
                 'defensive-tactics',
+                'eldritch-invocations',
+                'elemental-disciplines',
                 'fighting-styles',
+                'hunters-prey',
+                'ki-abilities',
                 'maneuvers',
                 'metamagic-options',
                 'multiattacks',
+                'pact-boons',
+                'psionic-powers',
                 'runes',
+                'superior-hunters-defense'
             ]
 
             this.powerSubcategoryIds = [
-                'at-will-powers',
-                'innate-powers',
+                'cantrips',
                 '1st-level-powers',
                 '2nd-level-powers',
                 '3rd-level-powers',
@@ -98,10 +106,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 '6th-level-powers',
                 '7th-level-powers',
                 '8th-level-powers',
-                '9th-level-powers'
+                '9th-level-powers',
+                'at-will-powers',
+                'innate-powers',
+                'pact-powers'
             ]
 
-            if (["character", "npc"].includes(this.actorType)) {
+            if (this.actorType === 'character' || this.actorType === 'npc') {
                 this.inventorySubcategoryIds = [
                     'equipped',
                     'consumables',
@@ -115,22 +126,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
                 this._buildCharacterActions()
             }
-
-            if (this.actorType === 'starship') {
-                this.inventorySubcategoryIds = [
-                    'equipped',
-                    'consumables',
-                    'containers',
-                    'equipment',
-                    'loot',
-                    'tools',
-                    'weapons',
-                    'unequipped'
-                ]
-
-                this._buildStarshipActions()
-            }
-
             if (this.actorType === 'vehicle') {
                 this.inventorySubcategoryIds = [
                     'consumables',
@@ -161,33 +156,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this._buildFeatures()
             this._buildInventory()
             this._buildRests()
-            this._buildRepairs()
             this._buildSkills()
             this._buildPowers()
             this._buildUtility()
         }
 
         /**
-         * Build Starship Actions
-         * @private
-         * @returns {object}
-         */
-        async _buildStarshipActions () {
-            this._buildAbilities('ability', 'abilities')
-            this._buildAbilities('check', 'checks')
-            this._buildAbilities('save', 'saves')
-            this._buildCombat()
-            this._buildConditions()
-            this._buildEffects()
-            this._buildFeatures()
-            this._buildInventory()
-            this._buildRepairs()
-            this._buildStarshipSkills()
-            this._buildStarshipUtility()
-        }
-
-        /**
-         * Build Vehicle Actions
+         * Build Vehicle  Actions
          * @private
          * @returns {object}
          */
@@ -215,9 +190,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this._buildCombat()
             this._buildConditions()
             this._buildRests()
-            this._buildRepairs()
             this._buildSkills()
-            this._buildStarshipSkills()
             this._buildUtility()
         }
 
@@ -474,21 +447,28 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const featureTypes = [
                 { type: 'background', subcategoryId: 'background-features' },
-                { type: 'classfeature', subcategoryId: 'class-features' },
-                { type: 'deploymentfeature', subcategoryId: 'deployment-features' },
-                { type: 'starshipfeature', subcategoryId: 'starship-features' },
+                { type: 'class', subcategoryId: 'class-features' },
                 { type: 'monster', subcategoryId: 'monster-features' },
                 { type: 'species', subcategoryId: 'species-features' },
                 { type: 'feats', subcategoryId: 'feats' }
             ]
 
             const classFeatureTypes = [
+                { type: 'artificerInfusion', subcategoryId: 'artificer-infusions' },
+                { type: 'channelDivinity', subcategoryId: 'channel-divinity' },
                 { type: 'defensiveTactic', subcategoryId: 'defensive-tactics' },
+                { type: 'eldritchInvocation', subcategoryId: 'eldritch-invocations' },
+                { type: 'elementalDiscipline', subcategoryId: 'elemental-disciplines' },
                 { type: 'fightingStyle', subcategoryId: 'fighting-styles' },
+                { type: 'huntersPrey', subcategoryId: 'hunters-prey' },
+                { type: 'ki', subcategoryId: 'ki-abilities' },
                 { type: 'maneuver', subcategoryId: 'maneuvers' },
                 { type: 'metamagic', subcategoryId: 'metamagic-options' },
                 { type: 'multiattack', subcategoryId: 'multiattacks' },
-                { type: 'rune', subcategoryId: 'runes' }
+                { type: 'pact', subcategoryId: 'pact-boons' },
+                { type: 'psionicPower', subcategoryId: 'psionic-powers' },
+                { type: 'rune', subcategoryId: 'runes' },
+                { type: 'superiorHuntersDefense', subcategoryId: 'superior-hunters-defense' }
             ]
 
             for (const [key, value] of feats) {
@@ -679,55 +659,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Repairs
-         * @private
-         */
-        _buildRepairs () {
-            // Exit if every actor is not the starship type
-            if (this.actors.length === 0) return
-            if (!this.actors.every(actor => actor.type === 'starship')) return
-
-            const actionType = 'utility'
-
-            // Set repair types
-            const repairTypes = {
-                rechargeRepair: { name: coreModule.api.Utils.i18n('SW5E.RechargeRepair') },
-                refittingRepair: { name: coreModule.api.Utils.i18n('SW5E.RefittingRepair') },
-                regenRepair: { name: coreModule.api.Utils.i18n('SW5E.RegenRepair') },
-            }
-
-            // Get actions
-            const actions = Object.entries(repairTypes)
-                .map((repairType) => {
-                    const id = repairType[0]
-                    const name = repairType[1].name
-                    const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
-                    const listName = `${actionTypeName}${name}`
-                    const encodedValue = [actionType, id].join(this.delimiter)
-                    return {
-                        id,
-                        name,
-                        encodedValue,
-                        listName
-                    }
-                })
-
-            // Create subcategory data
-            const subcategoryData = { id: 'repairs', type: 'system' }
-
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
-        }
-
-        /**
          * Build Skills
          * @private
          */
         _buildSkills () {
-            // Exit if there are any starships selected
-            if (this.actors.length === 0) return
-            if (!this.actors.every((actor) => actor.type !== 'starship')) return
-
             const actionType = 'skill'
 
             // Get skills
@@ -769,62 +704,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Skills
-         * @private
-         */
-        _buildSkills () {
-            // Exit if every actor is not the starship type
-            if (this.actors.length === 0) return
-            if (!this.actors.every((actor) => actor.type === 'starship')) return
-
-            const actionType = 'skill'
-
-            // Get skills
-            const skills = (!this.actor) ? game.sw5e.config.starshipSkills : this.actor.system.skills
-
-            // Exit if there are no skills
-            if (skills.length === 0) return
-
-            // Get actions
-            const actions = Object.entries(skills)
-                .map((skill) => {
-                    try {
-                        const id = skill[0]
-                        const abbreviatedName = id.charAt(0).toUpperCase() + id.slice(1)
-                        const name = this.abbreviateSkills ? abbreviatedName : game.sw5e.config.starshipSkills[id].label
-                        const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
-                        const listName = `${actionTypeName}${game.sw5e.config.starshipSkills[id].label}`
-                        const encodedValue = [actionType, id].join(this.delimiter)
-                        const icon = this._getProficiencyIcon(skills[id].value)
-                        return {
-                            id,
-                            name,
-                            encodedValue,
-                            icon,
-                            listName
-                        }
-                    } catch (error) {
-                        coreModule.api.Logger.error(skill)
-                        return null
-                    }
-                })
-                .filter((skill) => !!skill)
-
-            // Create subcategory data
-            const subcategoryData = { id: 'skills', type: 'system' }
-
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
-        }
-
-        /**
          * Build Powers
          */
         _buildPowers () {
-            // Exit if there are any starships selected
-            if (this.actors.length === 0) return
-            if (!this.actors.every((actor) => actor.type !== 'starship')) return
-
             const actionType = 'power'
 
             const powersMap = new Map()
@@ -846,9 +728,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                             if (!powersMap.has('innate-powers')) powersMap.set('innate-powers', new Map())
                             powersMap.get('innate-powers').set(key, value)
                             break
+                        case 'pact':
+                            if (!powersMap.has('pact-powers')) powersMap.set('pact-powers', new Map())
+                            powersMap.get('pact-powers').set(key, value)
+                            break
                         default:
                         { const level = value.system.level
                             switch (level) {
+                            case 0:
+                                if (!powersMap.has('cantrips')) powersMap.set('cantrips', new Map())
+                                powersMap.get('cantrips').set(key, value)
+                                break
                             case 1:
                                 if (!powersMap.has('1st-level-powers')) powersMap.set('1st-level-powers', new Map())
                                 powersMap.get('1st-level-powers').set(key, value)
@@ -896,11 +786,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const systemPowers = Object.entries(this.actor.system.powers).reverse()
 
             // Set power slot availability
+            let pactSlot = null
             const powerSlots = []
             let powerSlotAvailable = this.showUnchargedItems
+            let pactSlotAvailable = this.showUnchargedItems
             for (const [key, value] of systemPowers) {
                 const hasValue = value.value > 0
                 const hasMax = value.max > 0
+                const hasLevel = value.level > 0
+                if (key === 'pact') {
+                    if (!pactSlotAvailable && hasValue && hasMax && hasLevel) pactSlotAvailable = true
+                    if (!hasLevel) pactSlotAvailable = false
+                    value.slotAvailable = pactSlotAvailable
+                    pactSlot = [key, value]
+                }
                 if (key.startsWith('power') && key !== 'power0') {
                     if (!powerSlotAvailable && hasValue && hasMax) powerSlotAvailable = true
                     value.slotAvailable = powerSlotAvailable
@@ -913,9 +812,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             }
 
+            // Set equivalent power slot where pact slot is available
+            if (pactSlot[1].slotAvailable) {
+                const pactPowerEquivalent = powerSlots.findIndex(power => power[0] === 'power' + pactSlot[1].level)
+                powerSlots[pactPowerEquivalent][1].slotsAvailable = true
+            }
+
             const subcategoryMappings = {
-                'at-will-powers': { powerMode: 'atwill', name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.atWillPowers') },
-                'innate-powers': { powerMode: 'innate', name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.innatePowers') },
                 '1st-level-powers': { powerMode: 1, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.1stLevelPowers') },
                 '2nd-level-powers': { powerMode: 2, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.2ndLevelPowers') },
                 '3rd-level-powers': { powerMode: 3, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.3rdLevelPowers') },
@@ -924,10 +827,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 '6th-level-powers': { powerMode: 6, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.6thLevelPowers') },
                 '7th-level-powers': { powerMode: 7, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.7thLevelPowers') },
                 '8th-level-powers': { powerMode: 8, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.8thLevelPowers') },
-                '9th-level-powers': { powerMode: 9, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.9thLevelPowers') }
+                '9th-level-powers': { powerMode: 9, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.9thLevelPowers') },
+                'at-will-powers': { powerMode: 'atwill', name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.atWillPowers') },
+                cantrips: { powerMode: 0, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.cantrips') },
+                'innate-powers': { powerMode: 'innate', name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.innatePowers') },
+                'pact-powers': { powerMode: 'pact', name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.pactPowers') }
             }
 
-            const powerSlotModes = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+            const powerSlotModes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'pact']
 
             for (const subcategoryId of this.powerSubcategoryIds) {
                 const powerMode = subcategoryMappings[subcategoryId].powerMode
@@ -936,7 +843,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 // Skip if no powers exist
                 if (!powersMap.has(subcategoryId)) continue
 
-                const levelInfo = powerSlots.find(powerSlot => powerSlot[0] === `power${powerMode}`)?.[1]
+                const levelInfo = (powerMode === 'pact') ? pactSlot[1] : powerSlots.find(powerSlot => powerSlot[0] === `power${powerMode}`)?.[1]
                 const slots = levelInfo?.value
                 const max = levelInfo?.max
                 const slotsAvailable = levelInfo?.slotAvailable
@@ -1002,46 +909,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                             : ''
                         cssClass = `toggle${active}`
                     }
-                    return {
-                        id,
-                        name,
-                        encodedValue,
-                        cssClass,
-                        listName
-                    }
-                })
-
-            // Crreate subcategory data
-            const subcategoryData = { id: 'utility', type: 'system' }
-
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
-        }
-
-        /**
-         * Build Starship Utility
-         * @private
-         */
-        _buildStarshipUtility () {
-            // Exit if starship is not destroyed
-            if (this.actor.system.attributes.hp.value > 0) return
-
-            const actionType = 'utility'
-
-            // Set utility types
-            const utilityTypes = {
-                destructionSave: { name: coreModule.api.Utils.i18n('SW5E.DestructionSave') }
-            }
-
-            // Get actions
-            const actions = Object.entries(utilityTypes)
-                .map((utilityType) => {
-                    const id = utilityType[0]
-                    const name = utilityType[1].name
-                    const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
-                    const listName = `${actionTypeName}${name}`
-                    const encodedValue = [actionType, id].join(this.delimiter)
-                    let cssClass = ''
                     return {
                         id,
                         name,
@@ -1258,7 +1125,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @returns {object}
          */
         _getActors () {
-            const allowedTypes = ['character', 'npc', 'starship']
+            const allowedTypes = ['character', 'npc']
             const actors = canvas.tokens.controlled.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
                 return actors
@@ -1273,7 +1140,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @returns {object}
          */
         _getTokens () {
-            const allowedTypes = ['character', 'npc', 'starship']
+            const allowedTypes = ['character', 'npc']
             const tokens = canvas.tokens.controlled
             const actors = tokens.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {

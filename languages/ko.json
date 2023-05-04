@@ -1,0 +1,89 @@
+{
+  "tokenActionHud": {
+    "sw5e": {
+      "1stLevelPowers": "1st Level Powers",
+      "2ndLevelPowers": "2nd Level Powers",
+      "3rdLevelPowers": "3rd Level Powers",
+      "4thLevelPowers": "4th Level Powers",
+      "5thLevelPowers": "5th Level Powers",
+      "6thLevelPowers": "6th Level Powers",
+      "7thLevelPowers": "7th Level Powers",
+      "8thLevelPowers": "8th Level Powers",
+      "9thLevelPowers": "9th Level Powers",
+      "abilities": "능력치",
+      "activeFeatures": "Active Features",
+      "artificerInfusions": "Artificer Infusions",
+      "atWillPowers": "At-Will Powers",
+      "backgroundFeatures": "Background Features",
+      "bonusActions": "보너스 액션",
+      "cantrips": "Cantrips",
+      "channelDivinity": "Channel Divinity",
+      "check": "Check",
+      "checks": "판정",
+      "classFeatures": "Class Features",
+      "condition": "Condition",
+      "conditions": "상태",
+      "crewActions": "승무원 조치",
+      "defensiveTactics": "Defensive Tactics",
+      "eldritchInvocations": "Eldritch Invocations",
+      "elementalDisciplines": "Elemental Disciplines",
+      "feats": "Feats",
+      "fightingStyles": "Fighting Styles",
+      "huntersPrey": "Hunter's Prey",
+      "innatePowers": "Innate Powers",
+      "item": "Item",
+      "kiAbilities": "Ki Abilities",
+      "lair": "소굴",
+      "lairActions": "소굴 액션",
+      "legendary": "전설적",
+      "legendaryActions": "전설적 액션",
+      "magicItems": "매직 아이템",
+      "maneuvers": "Maneuvers",
+      "metamagicOptions": "Metamagic Options",
+      "monsterFeatures": "Monster Features",
+      "multiattacks": "Multiattacks",
+      "otherActions": "다른 행동",
+      "pactBoons": "Pact Boons",
+      "pactPowers": "Pact Powers",
+      "passiveFeatures": "Passive Features",
+      "psionicPowers": "Psionic Powers",
+      "speciesFeatures": "Species Features",
+      "rests": "휴식",
+      "rollInitiative": "우선권 굴림",
+      "runes": "Runes",
+      "skill": "Skill",
+      "skills": "기술",
+      "superiorHuntersDefense": "Superior Hunter's Defense",
+      "settings": {
+        "abbreviateSkills": {
+          "hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
+          "name": "기술 및 능력치 이름을 줄임"
+        },
+        "displayPowerInfo": {
+          "hint": "활성화할 경우 주문 구성요소 정보, 집중, 의식 상태가 주문 이름 옆에 표시된다.",
+          "name": "주문 정보 표시"
+        },
+        "showItemsWithoutActivationCosts": {
+          "hint": "Show items without an activation cost",
+          "name": "Show Items without Activation Costs"
+        },
+        "showSlowActions": {
+          "hint": "한 라운드보다 오래 걸리는 작업 표시",
+          "name": "느린 동작 표시"
+        },
+        "showUnchargedItems": {
+          "hint": "활성화할 경우 남은 충전량이 없더라도 HUD에 항목이 표시된다.",
+          "name": "빈 항목 표시 (아이템과 주문 포함)"
+        },
+        "showUnequippedItems": {
+          "hint": "활성화할 경우 NPC가 장비한 아이템 뿐만이 아닌, 모든 아이템이 표시된다.",
+          "name": "모든 NPC 아이템 표시"
+        },
+        "showUnpreparedPowers": {
+          "hint": "비활성화할 경우 캔트립(소마법), 선천적, 계약, 의지(At-will) 주문들은 주문 상세 정보에서 '준비'하여야 HUD에 표시된다.",
+          "name": "모든 준비 불가능한 주문들 표시"
+        }
+      }
+    }
+  }
+}

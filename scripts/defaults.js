@@ -43,6 +43,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 subcategories: [
                     { ...subcategories.atWillPowers, nestId: 'powers_at-will-powers' },
                     { ...subcategories.innatePowers, nestId: 'powers_innate-powers' },
+                    { ...subcategories.pactPowers, nestId: 'powers_pact-powers' },
+                    { ...subcategories.cantrips, nestId: 'powers_cantrips' },
                     { ...subcategories._1stLevelPowers, nestId: 'powers_1st-level-powers' },
                     { ...subcategories._2ndLevelPowers, nestId: 'powers_2nd-level-powers' },
                     { ...subcategories._3rdLevelPowers, nestId: 'powers_3rd-level-powers' },
@@ -88,7 +90,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     { ...subcategories.combat, nestId: 'utility_combat' },
                     { ...subcategories.token, nestId: 'utility_token' },
                     { ...subcategories.rests, nestId: 'utility_rests' },
-                    { ...subcategories.repairs, nestId: 'utility_repairs' },
                     { ...subcategories.utility, nestId: 'utility_utility' }
                 ]
             }

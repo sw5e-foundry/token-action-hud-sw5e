@@ -1,11 +1,17 @@
 {
   "id": "token-action-hud-sw5e",
-  "title": "Token Action HUD SW5e",
+  "title": "Token Action HUD D&D 5e",
   "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
   "authors": [
     {
-      "name": "SW5e Foundry Team",
-      "url": "https://github.com/sw5e-foundry"
+      "name": "Larkinabout",
+      "url": "https://github.com/Larkinabout"
+    },
+    {
+      "name": "Drental"
+    },
+    {
+      "name": "^ and stick"
     }
   ],
   "url": "This is auto replaced",
@@ -27,6 +33,51 @@
       "lang": "en",
       "name": "English",
       "path": "languages/en.json"
+    },
+    {
+      "lang": "ko",
+      "name": "Korean",
+      "path": "languages/ko.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "languages/br.json"
+    },
+    {
+      "lang": "es",
+      "name": "Spanish",
+      "path": "languages/es.json"
+    },
+    {
+      "lang": "fr",
+      "name": "French",
+      "path": "languages/fr.json"
+    },
+    {
+      "lang": "pl",
+      "name": "Polish",
+      "path": "languages/pl.json"
+    },
+    {
+      "lang": "ja",
+      "name": "日本語",
+      "path": "languages/ja.json"
+    },
+    {
+      "lang": "cn",
+      "name": "中文",
+      "path": "languages/cn.json"
+    },
+    {
+      "lang": "it",
+      "name": "italiano",
+      "path": "languages/it.json"
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "languages/de.json"
     }
   ],
   "packs": [],
