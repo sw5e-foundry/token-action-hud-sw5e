@@ -24,30 +24,30 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             if (magicItems.length === 0) return
 
-            const parentSubcategoryId = 'magic-items'
-            const parentSubcategoryType = 'system'
-            const parentSubcategoryData = {
-                id: parentSubcategoryId,
-                type: parentSubcategoryType
+            const parentGroupId = 'magic-items'
+            const parentGroupType = 'system'
+            const parentGroupData = {
+                id: parentGroupId,
+                type: parentGroupType
             }
 
             magicItems.forEach((magicItem) => {
                 if (magicItem.attuned && !this._isItemAttuned(magicItem)) return
                 if (magicItem.equipped && !this._isItemEquipped(magicItem)) return
 
-                const subcategoryId = `magic-items_${magicItem.id}`
-                const subcategoryName = magicItem.name
-                const subcategoryType = 'system-derived'
-                const subcategoryInfo1 = `${magicItem.uses}/${magicItem.charges}`
-                const subcategoryData = {
-                    id: subcategoryId,
-                    name: subcategoryName,
-                    type: subcategoryType,
-                    info1: subcategoryInfo1
+                const groupId = `magic-items_${magicItem.id}`
+                const groupName = magicItem.name
+                const groupType = 'system-derived'
+                const groupInfo1 = `${magicItem.uses}/${magicItem.charges}`
+                const groupData = {
+                    id: groupId,
+                    name: groupName,
+                    type: groupType,
+                    info1: groupInfo1
                 }
 
-                // Add subcategory to action list
-                this.actionHandler.addSubcategoryToActionList(parentSubcategoryData, subcategoryData)
+                // Add group to HUD
+                this.actionHandler.addGroup(groupData, parentGroupData)
 
                 const actions = magicItem.ownedEntries.map((entry) => {
                     const effect = entry.item
@@ -71,8 +71,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     }
                 })
 
-                // Add actions to action list
-                this.actionHandler.addActionsToActionList(actions, subcategoryData)
+                // Add actions to HUD
+                this.actionHandler.addActions(actions, groupData)
             })
         }
 

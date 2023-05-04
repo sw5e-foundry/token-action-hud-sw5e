@@ -16,7 +16,7 @@
     "verified": "10.291"
   },
   "esmodules": [
-    "./scripts/token-action-hud-sw5e.min.js"
+    "./scripts/init.js"
   ],
   "scripts": [
   ],
@@ -49,9 +49,9 @@
         "type": "module",
         "compatibility": [
           {
-            "minimum": "1.3.0",
-            "maximum": "1.3",
-            "verified": "1.3.0"
+            "minimum": "1.4.0",
+            "maximum": "1.4",
+            "verified": "1.4.0"
           }
         ]
       }
@@ -64,7 +64,7 @@
   "socket": false,
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
-  "readme": "https://github.com/Larkinabout/fvtt-token-action-hud-sw5e#readme",
+  "readme": "https://github.com/sw5e-foundry/token-action-hud-sw5e#readme",
   "protected": false,
   "coreTranslation": false,
   "library": false
