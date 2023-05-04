@@ -775,7 +775,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * Build Skills
          * @private
          */
-        _buildSkills () {
+        _buildStarshipSkills () {
             // Exit if every actor is not the starship type
             if (this.actors.length === 0) return
             if (!this.actors.every((actor) => actor.type === 'starship')) return
