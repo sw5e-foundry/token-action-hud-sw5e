@@ -35,7 +35,7 @@ jobs:
     - run: npm run build
 
     # Create a zip file with all files required by the module to add to the release
-    - run: zip -r ./module.zip module.json readme.md LICENSE languages/ scripts/token-action-hud-sw5e.min.js
+    - run: zip -r ./module.zip module.json readme.md LICENSE languages/ scripts/
 
     # Create a release for this specific version
     - name: Update Release with Files
