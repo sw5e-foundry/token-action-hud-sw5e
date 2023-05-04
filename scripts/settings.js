@@ -75,7 +75,7 @@ export function register (updateFunc) {
         scope: 'client',
         config: true,
         type: Boolean,
-        default: true,
+        default: false,
         onChange: (value) => {
             updateFunc(value)
         }
@@ -91,7 +91,7 @@ export function register (updateFunc) {
         scope: 'client',
         config: true,
         type: Boolean,
-        default: true,
+        default: false,
         onChange: (value) => {
             updateFunc(value)
         }

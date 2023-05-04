@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTIVATION_TYPE_ICON, ACTION_TYPE, PREPARED_ICON, PROFICIENCY_LEVEL_ICON, SUBCATEGORY } from './constants.js'
+import { ACTIVATION_TYPE_ICON, ACTION_TYPE, PREPARED_ICON, PROFICIENCY_LEVEL_ICON, GROUP } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -22,11 +22,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         showUnequippedItems = null
         showUnpreparedPowers = null
 
-        // Initialize subcategoryIds variables
-        activationSubcategoryIds = null
-        featureSubcategoryIds = null
-        inventorySubcategoryIds = null
-        powerSubcategoryIds = null
+        // Initialize groupIds variables
+        activationgroupIds = null
+        featuregroupIds = null
+        inventorygroupIds = null
+        powergroupIds = null
 
         // Initialize action variables
         featureActions = null
@@ -36,10 +36,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         /**
          * Build System Actions
          * @override
-         * @param {array} subcategoryIds
+         * @param {array} groupIds
          * @returns {object}
          */
-        async buildSystemActions (subcategoryIds) {
+        async buildSystemActions (groupIds) {
         // Set actor and token variables
             this.actors = (!this.actor) ? this._getActors() : [this.actor]
             this.tokens = (!this.token) ? this._getTokens() : [this.token]
@@ -49,7 +49,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (this.actor) {
                 let items = this.actor.items
                 items = this._discardSlowItems(items)
-                items = this.sortItemsByName(items)
+                items = coreModule.api.Utils.sortItemsByName(items)
                 this.items = items
             }
 
@@ -61,7 +61,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.showUnequippedItems = Utils.getSetting('showUnequippedItems')
             this.showUnpreparedPowers = Utils.getSetting('showUnpreparedPowers')
 
-            this.activationSubcategoryIds = [
+            this.activationgroupIds = [
                 'actions',
                 'bonus-actions',
                 'crew-actions',
@@ -71,7 +71,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 'other-actions'
             ]
 
-            this.featureSubcategoryIds = [
+            this.featuregroupIds = [
                 'active-features',
                 'passive-features',
                 'background-features',
@@ -96,7 +96,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 'superior-hunters-defense'
             ]
 
-            this.powerSubcategoryIds = [
+            this.powergroupIds = [
                 'cantrips',
                 '1st-level-powers',
                 '2nd-level-powers',
@@ -113,7 +113,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             ]
 
             if (this.actorType === 'character' || this.actorType === 'npc') {
-                this.inventorySubcategoryIds = [
+                this.inventorygroupIds = [
                     'equipped',
                     'consumables',
                     'containers',
@@ -127,7 +127,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this._buildCharacterActions()
             }
             if (this.actorType === 'vehicle') {
-                this.inventorySubcategoryIds = [
+                this.inventorygroupIds = [
                     'consumables',
                     'equipment',
                     'tools',
@@ -198,9 +198,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * Build Abilities
          * @private
          * @param {string} actionType
-         * @param {string} subcategoryId
+         * @param {string} groupId
          */
-        _buildAbilities (actionType, subcategoryId) {
+        _buildAbilities (actionType, groupId) {
         // Get abilities
             const abilities = (!this.actor) ? game.sw5e.config.abilities : this.actor.system.abilities
 
@@ -219,29 +219,29 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                     const listName = `${actionTypeName}${game.sw5e.config.abilities[abilityId]}`
                     const encodedValue = [actionType, abilityId].join(this.delimiter)
-                    const icon = (subcategoryId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
+                    const icon1 = (groupId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
                     return {
                         id,
                         name,
                         encodedValue,
-                        icon,
+                        icon1,
                         listName
                     }
                 })
 
-            // Create subcategory data
-            const subcategoryData = { id: subcategoryId, type: 'system' }
+            // Create group data
+            const groupData = { id: groupId, type: 'system' }
 
             // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            this.addActions(actions, groupData)
         }
 
-        async buildActivations (items, subcategoryData, actionType = 'item') {
+        async buildActivations (items, groupData, actionType = 'item') {
         // Create map of items according to activation type
             const activationItems = new Map()
 
-            // Create subcategory mappings
-            const subcategoryMappings = {
+            // Create group mappings
+            const groupMappings = {
                 actions: 'action',
                 'bonus-actions': 'bonus',
                 'crew-actions': 'crew',
@@ -261,27 +261,27 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 activationItems.get(activationTypeOther).set(key, value)
             }
 
-            // Loop through action subcategory ids
-            for (const subcategoryId of this.activationSubcategoryIds) {
-                const activationType = subcategoryMappings[subcategoryId]
+            // Loop through action group ids
+            for (const groupId of this.activationgroupIds) {
+                const activationType = groupMappings[groupId]
 
                 // Skip if no items exist
                 if (!activationItems.has(activationType)) continue
 
-                // Clone and add to subcategory data
-                const subcategoryDataClone = { ...subcategoryData, id: `${subcategoryId}+${subcategoryData.id}`, type: 'system-derived' }
+                // Clone and add to group data
+                const groupDataClone = { ...groupData, id: `${groupId}+${groupData.id}`, type: 'system-derived' }
 
-                // Create parent subcategory data
-                const parentSubcategoryData = { id: subcategoryId, type: 'system' }
+                // Create parent group data
+                const parentgroupData = { id: groupId, type: 'system' }
 
-                // Add subcategory to action list
-                await this.addSubcategoryToActionList(parentSubcategoryData, subcategoryDataClone)
+                // Add group to HUD
+                await this.addGroup(groupDataClone, parentgroupData)
 
-                // Add power slot info to subcategory
-                this.addSubcategoryInfo(subcategoryData)
+                // Add power slot info to group
+                this.addGroupInfo(groupData)
 
                 // Build actions
-                this._buildActions(activationItems.get(activationType), subcategoryDataClone, actionType)
+                this._buildActions(activationItems.get(activationType), groupDataClone, actionType)
             }
         }
 
@@ -334,11 +334,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             })
 
-            // Create subcategory data
-            const subcategoryData = { id: 'combat', type: 'system' }
+            // Create group data
+            const groupData = { id: 'combat', type: 'system' }
 
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
@@ -383,11 +383,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             })
 
-            // Create subcategory data
-            const subcategoryData = { id: 'conditions', type: 'system' }
+            // Create group data
+            const groupData = { id: 'conditions', type: 'system' }
 
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
@@ -446,29 +446,29 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const featuresMap = new Map()
 
             const featureTypes = [
-                { type: 'background', subcategoryId: 'background-features' },
-                { type: 'class', subcategoryId: 'class-features' },
-                { type: 'monster', subcategoryId: 'monster-features' },
-                { type: 'species', subcategoryId: 'species-features' },
-                { type: 'feats', subcategoryId: 'feats' }
+                { type: 'background', groupId: 'background-features' },
+                { type: 'class', groupId: 'class-features' },
+                { type: 'monster', groupId: 'monster-features' },
+                { type: 'species', groupId: 'species-features' },
+                { type: 'feats', groupId: 'feats' }
             ]
 
             const classFeatureTypes = [
-                { type: 'artificerInfusion', subcategoryId: 'artificer-infusions' },
-                { type: 'channelDivinity', subcategoryId: 'channel-divinity' },
-                { type: 'defensiveTactic', subcategoryId: 'defensive-tactics' },
-                { type: 'eldritchInvocation', subcategoryId: 'eldritch-invocations' },
-                { type: 'elementalDiscipline', subcategoryId: 'elemental-disciplines' },
-                { type: 'fightingStyle', subcategoryId: 'fighting-styles' },
-                { type: 'huntersPrey', subcategoryId: 'hunters-prey' },
-                { type: 'ki', subcategoryId: 'ki-abilities' },
-                { type: 'maneuver', subcategoryId: 'maneuvers' },
-                { type: 'metamagic', subcategoryId: 'metamagic-options' },
-                { type: 'multiattack', subcategoryId: 'multiattacks' },
-                { type: 'pact', subcategoryId: 'pact-boons' },
-                { type: 'psionicPower', subcategoryId: 'psionic-powers' },
-                { type: 'rune', subcategoryId: 'runes' },
-                { type: 'superiorHuntersDefense', subcategoryId: 'superior-hunters-defense' }
+                { type: 'artificerInfusion', groupId: 'artificer-infusions' },
+                { type: 'channelDivinity', groupId: 'channel-divinity' },
+                { type: 'defensiveTactic', groupId: 'defensive-tactics' },
+                { type: 'eldritchInvocation', groupId: 'eldritch-invocations' },
+                { type: 'elementalDiscipline', groupId: 'elemental-disciplines' },
+                { type: 'fightingStyle', groupId: 'fighting-styles' },
+                { type: 'huntersPrey', groupId: 'hunters-prey' },
+                { type: 'ki', groupId: 'ki-abilities' },
+                { type: 'maneuver', groupId: 'maneuvers' },
+                { type: 'metamagic', groupId: 'metamagic-options' },
+                { type: 'multiattack', groupId: 'multiattacks' },
+                { type: 'pact', groupId: 'pact-boons' },
+                { type: 'psionicPower', groupId: 'psionic-powers' },
+                { type: 'rune', groupId: 'runes' },
+                { type: 'superiorHuntersDefense', groupId: 'superior-hunters-defense' }
             ]
 
             for (const [key, value] of feats) {
@@ -485,45 +485,45 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     featuresMap.get('passive-features').set(key, value)
                 }
                 for (const featureType of featureTypes) {
-                    const subcategoryId = featureType.subcategoryId
+                    const groupId = featureType.groupId
                     if (featureType.type === type) {
-                        if (!featuresMap.has(subcategoryId)) featuresMap.set(subcategoryId, new Map())
-                        featuresMap.get(subcategoryId).set(key, value)
+                        if (!featuresMap.has(groupId)) featuresMap.set(groupId, new Map())
+                        featuresMap.get(groupId).set(key, value)
                     }
                 }
                 for (const featureType of classFeatureTypes) {
-                    const subcategoryId = featureType.subcategoryId
+                    const groupId = featureType.groupId
                     if (subType && featureType.type === subType) {
-                        if (!featuresMap.has(subcategoryId)) featuresMap.set(subcategoryId, new Map())
-                        featuresMap.get(subcategoryId).set(key, value)
+                        if (!featuresMap.has(groupId)) featuresMap.set(groupId, new Map())
+                        featuresMap.get(groupId).set(key, value)
                     }
                 }
             }
 
-            // Create subcategory name mappings
-            const subcategoryNameMappings = {
+            // Create group name mappings
+            const groupNameMappings = {
                 'active-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.activeFeatures'),
                 'passive-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.passiveFeatures')
             }
 
-            // Loop through inventory subcateogry ids
-            for (const subcategoryId of this.featureSubcategoryIds) {
-                if (!featuresMap.has(subcategoryId)) continue
+            // Loop through inventory groups ids
+            for (const groupId of this.featuregroupIds) {
+                if (!featuresMap.has(groupId)) continue
 
-                // Create subcategory data
-                const subcategoryData = {
-                    id: subcategoryId,
-                    name: subcategoryNameMappings[subcategoryId] ?? '',
+                // Create group data
+                const groupData = {
+                    id: groupId,
+                    name: groupNameMappings[groupId] ?? '',
                     type: 'system'
                 }
 
-                const features = featuresMap.get(subcategoryId)
+                const features = featuresMap.get(groupId)
 
                 // Build actions
-                this._buildActions(features, subcategoryData, actionType)
+                this._buildActions(features, groupData, actionType)
 
                 // Build activations
-                if (subcategoryNameMappings[subcategoryId]) this.buildActivations(features, subcategoryData, actionType)
+                if (groupNameMappings[groupId]) this.buildActivations(features, groupData, actionType)
             }
         }
 
@@ -585,8 +585,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             }
 
-            // Create subcategory name mappings
-            const subcategoryNameMappings = {
+            // Create group name mappings
+            const groupNameMappings = {
                 equipped: coreModule.api.Utils.i18n('SW5E.Equipped'),
                 unequipped: coreModule.api.Utils.i18n('SW5E.Unequipped'),
                 consumables: coreModule.api.Utils.i18n('ITEM.TypeConsumablePl'),
@@ -598,23 +598,23 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             // Loop through inventory subcateogry ids
-            for (const subcategoryId of this.inventorySubcategoryIds) {
-                if (!inventoryMap.has(subcategoryId)) continue
+            for (const groupId of this.inventorygroupIds) {
+                if (!inventoryMap.has(groupId)) continue
 
-                // Create subcategory data
-                const subcategoryData = {
-                    id: subcategoryId,
-                    name: subcategoryNameMappings[subcategoryId],
+                // Create group data
+                const groupData = {
+                    id: groupId,
+                    name: groupNameMappings[groupId],
                     type: 'system'
                 }
 
-                const inventory = inventoryMap.get(subcategoryId)
+                const inventory = inventoryMap.get(groupId)
 
                 // Build actions
-                this._buildActions(inventory, subcategoryData)
+                this._buildActions(inventory, groupData)
 
                 // Build activations
-                if (this.activationSubcategoryIds) this.buildActivations(inventory, subcategoryData)
+                if (this.activationgroupIds) this.buildActivations(inventory, groupData)
             }
         }
 
@@ -651,11 +651,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     }
                 })
 
-            // Create subcategory data
-            const subcategoryData = { id: 'rests', type: 'system' }
+            // Create group data
+            const groupData = { id: 'rests', type: 'system' }
 
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
@@ -681,12 +681,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                         const listName = `${actionTypeName}${game.sw5e.config.skills[id].label}`
                         const encodedValue = [actionType, id].join(this.delimiter)
-                        const icon = this._getProficiencyIcon(skills[id].value)
+                        const icon1 = this._getProficiencyIcon(skills[id].value)
+                        const mod = skills[id].mod
+                        const info1 = (this.actor) ? { text: (mod || mod === 0) ? `${(mod >= 0) ? '+' : ''}${mod}` : '' } : ''
                         return {
                             id,
                             name,
                             encodedValue,
-                            icon,
+                            icon1,
+                            info1,
                             listName
                         }
                     } catch (error) {
@@ -696,11 +699,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 })
                 .filter((skill) => !!skill)
 
-            // Create subcategory data
-            const subcategoryData = { id: 'skills', type: 'system' }
+            // Create group data
+            const groupData = { id: 'skills', type: 'system' }
 
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
@@ -818,7 +821,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 powerSlots[pactPowerEquivalent][1].slotsAvailable = true
             }
 
-            const subcategoryMappings = {
+            const groupMappings = {
                 '1st-level-powers': { powerMode: 1, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.1stLevelPowers') },
                 '2nd-level-powers': { powerMode: 2, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.2ndLevelPowers') },
                 '3rd-level-powers': { powerMode: 3, name: coreModule.api.Utils.i18n('tokenActionHud.sw5e.3rdLevelPowers') },
@@ -836,12 +839,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const powerSlotModes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'pact']
 
-            for (const subcategoryId of this.powerSubcategoryIds) {
-                const powerMode = subcategoryMappings[subcategoryId].powerMode
-                const subcategoryName = subcategoryMappings[subcategoryId].name
+            for (const groupId of this.powergroupIds) {
+                const powerMode = groupMappings[groupId].powerMode
+                const groupName = groupMappings[groupId].name
 
                 // Skip if no powers exist
-                if (!powersMap.has(subcategoryId)) continue
+                if (!powersMap.has(groupId)) continue
 
                 const levelInfo = (powerMode === 'pact') ? pactSlot[1] : powerSlots.find(powerSlot => powerSlot[0] === `power${powerMode}`)?.[1]
                 const slots = levelInfo?.value
@@ -851,26 +854,26 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 // Skip if powers require power slots and none are available
                 if (!slotsAvailable && powerSlotModes.includes(powerMode)) continue
 
-                // Create subcategory data=
-                const subcategoryInfo = {}
-                subcategoryInfo.info1 = { class: 'tah-spotlight', text: (max >= 0) ? `${slots}/${max}` : '' }
-                const subcategoryData = {
-                    id: subcategoryId,
-                    name: subcategoryName,
+                // Create group data=
+                const groupInfo = {}
+                groupInfo.info1 = { class: 'tah-spotlight', text: (max >= 0) ? `${slots}/${max}` : '' }
+                const groupData = {
+                    id: groupId,
+                    name: groupName,
                     type: 'system',
-                    info: subcategoryInfo
+                    info: groupInfo
                 }
 
-                // Add power slot info to subcategory
-                this.addSubcategoryInfo(subcategoryData)
+                // Add power slot info to group
+                this.addGroupInfo(groupData)
 
-                const powers = powersMap.get(subcategoryId)
+                const powers = powersMap.get(groupId)
 
                 // Build actions
-                this._buildActions(powers, subcategoryData, actionType)
+                this._buildActions(powers, groupData, actionType)
 
                 // Build activations
-                if (this.activationSubcategoryIds) { this.buildActivations(powers, subcategoryData, actionType) }
+                if (this.activationgroupIds) { this.buildActivations(powers, groupData, actionType) }
             }
         }
 
@@ -918,33 +921,33 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     }
                 })
 
-            // Crreate subcategory data
-            const subcategoryData = { id: 'utility', type: 'system' }
+            // Crreate group data
+            const groupData = { id: 'utility', type: 'system' }
 
-            // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
          * Get Actions
          * @private
          * @param {object} items
-         * @param {object} subcategoryData
+         * @param {object} groupData
          * @param {string} actionType
          */
-        _buildActions (items, subcategoryData, actionType = 'item') {
+        _buildActions (items, groupData, actionType = 'item') {
         // Exit if there are no items
             if (items.size === 0) return
 
-            // Exit if there is no subcategoryId
-            const subcategoryId = (typeof subcategoryData === 'string' ? subcategoryData : subcategoryData?.id)
-            if (!subcategoryId) return
+            // Exit if there is no groupId
+            const groupId = (typeof groupData === 'string' ? groupData : groupData?.id)
+            if (!groupId) return
 
             // Get actions
             const actions = [...items].map(item => this._getAction(actionType, item[1]))
 
             // Add actions to action list
-            this.addActionsToActionList(actions, subcategoryData)
+            this.addActions(actions, groupData)
         }
 
         /**
