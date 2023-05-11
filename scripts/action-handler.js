@@ -240,39 +240,38 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         // Create map of items according to activation type
             const activationItems = new Map()
 
-            // Create group mappings
-            const groupMappings = {
-                actions: 'action',
-                'bonus-actions': 'bonus',
-                'crew-actions': 'crew',
-                'lair-actions': 'lair',
-                'legendary-actions': 'legendary',
-                reactions: 'reaction',
-                'other-actions': 'other'
+            // Create activation type mappings
+            const activationTypeMappings = {
+                action: 'actions',
+                bonus: 'bonus-actions',
+                crew: 'crew-actions',
+                lair: 'lair-actions',
+                legendary: 'legendary-actions',
+                reaction: 'reactions',
+                reactiondamage: 'reactions',
+                reactionmanual: 'reactions',
+                other: 'other-actions'
             }
-
-            const activationTypes = ['action', 'bonus', 'crew', 'lair', 'legendary', 'reaction']
 
             // Loop through items
             for (const [key, value] of items) {
                 const activationType = value.system?.activation?.type
-                const activationTypeOther = (activationTypes.includes(activationType)) ? activationType : 'other'
-                if (!activationItems.has(activationTypeOther)) activationItems.set(activationTypeOther, new Map())
-                activationItems.get(activationTypeOther).set(key, value)
+                const activationTypeOther = (Object.keys(activationTypeMappings).includes(activationType)) ? activationType : 'other'
+                const groupId = activationTypeMappings[activationTypeOther]
+                if (!activationItems.has(groupId)) activationItems.set(groupId, new Map())
+                activationItems.get(groupId).set(key, value)
             }
 
             // Loop through action group ids
-            for (const groupId of this.activationgroupIds) {
-                const activationType = groupMappings[groupId]
-
+            for (const activationGroupId of this.activationgroupIds) {
                 // Skip if no items exist
-                if (!activationItems.has(activationType)) continue
+                if (!activationItems.has(activationGroupId)) continue
 
                 // Clone and add to group data
-                const groupDataClone = { ...groupData, id: `${groupId}+${groupData.id}`, type: 'system-derived' }
+                const groupDataClone = { ...groupData, id: `${activationGroupId}+${groupData.id}`, type: 'system-derived' }
 
                 // Create parent group data
-                const parentgroupData = { id: groupId, type: 'system' }
+                const parentgroupData = { id: activationGroupId, type: 'system' }
 
                 // Add group to HUD
                 await this.addGroup(groupDataClone, parentgroupData)
@@ -281,7 +280,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this.addGroupInfo(groupData)
 
                 // Build actions
-                this._buildActions(activationItems.get(activationType), groupDataClone, actionType)
+                this._buildActions(activationItems.get(activationGroupId), groupDataClone, actionType)
             }
         }
 
@@ -682,7 +681,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         const listName = `${actionTypeName}${game.dnd5e.config.skills[id].label}`
                         const encodedValue = [actionType, id].join(this.delimiter)
                         const icon1 = this._getProficiencyIcon(skills[id].value)
-                        const mod = skills[id].mod
+                        const mod = skills[id].total
                         const info1 = (this.actor) ? { text: (mod || mod === 0) ? `${(mod >= 0) ? '+' : ''}${mod}` : '' } : ''
                         return {
                             id,
