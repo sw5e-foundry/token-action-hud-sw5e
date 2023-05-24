@@ -56,32 +56,36 @@
       "superiorHuntersDefense": "Superior Hunter's Defense",
       "settings": {
         "abbreviateSkills": {
-          "hint": "활성화할 경우 기술 및 능력치는 3 글자 약어로 표시된다.",
-          "name": "기술 및 능력치 이름을 줄임"
+          "hint": "Display skill and ability names as a three-character abbreviation",
+          "name": "Abbreviate Skill and Ability Names"
         },
         "displaySpellInfo": {
-          "hint": "활성화할 경우 주문 구성요소 정보, 집중, 의식 상태가 주문 이름 옆에 표시된다.",
-          "name": "주문 정보 표시"
+          "hint": "Display spell component information, concentration, and ritual status next to the spell's name",
+          "name": "Display Spell Information"
         },
         "showItemsWithoutActivationCosts": {
           "hint": "Show items without an activation cost",
           "name": "Show Items without Activation Costs"
         },
         "showSlowActions": {
-          "hint": "한 라운드보다 오래 걸리는 작업 표시",
-          "name": "느린 동작 표시"
+          "hint": "Show actions that take longer than one round",
+          "name": "Show Slow Actions"
         },
         "showUnchargedItems": {
-          "hint": "활성화할 경우 남은 충전량이 없더라도 HUD에 항목이 표시된다.",
-          "name": "빈 항목 표시 (아이템과 주문 포함)"
+          "hint": "Show items with no charges remaining",
+          "name": "Show Uncharged Items"
         },
         "showUnequippedItems": {
-          "hint": "활성화할 경우 NPC가 장비한 아이템 뿐만이 아닌, 모든 아이템이 표시된다.",
-          "name": "모든 NPC 아이템 표시"
+          "hint": "Show unequipped items",
+          "name": "Show Unequipped Items"
+        },
+        "showUnequippedItemsNpcs": {
+          "hint": "Show unequipped items for NPCs",
+          "name": "Show Unequipped Items for NPCs"
         },
         "showUnpreparedSpells": {
-          "hint": "비활성화할 경우 캔트립(소마법), 선천적, 계약, 의지(At-will) 주문들은 주문 상세 정보에서 '준비'하여야 HUD에 표시된다.",
-          "name": "모든 준비 불가능한 주문들 표시"
+          "hint": "Show unprepared spells",
+          "name": "Show Unprepared Spells"
         }
       }
     }

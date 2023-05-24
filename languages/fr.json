@@ -56,32 +56,36 @@
       "superiorHuntersDefense": "Superior Hunter's Defense",
       "settings": {
         "abbreviateSkills": {
-          "hint": "Si activée les caractéristiques et les compétences utiliserons une abréviation de 3 caractères.",
-          "name": "Abréger les noms des caractéristiques et des compétences"
+          "hint": "Display skill and ability names as a three-character abbreviation",
+          "name": "Abbreviate Skill and Ability Names"
         },
         "displaySpellInfo": {
-          "hint": "Si activée, les informations sur les composantes de sort, la concentration et les rituels seront affichées à côté du nom du sort.",
-          "name": "Afficher les informations des sorts"
+          "hint": "Display spell component information, concentration, and ritual status next to the spell's name",
+          "name": "Display Spell Information"
         },
         "showItemsWithoutActivationCosts": {
-          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
-          "name": "Show Items without Activation costs"
+          "hint": "Show items without an activation cost",
+          "name": "Show Items without Activation Costs"
         },
         "showSlowActions": {
-          "hint": "Afficher les actions qui prennent plus d'un tour",
-          "name": "Afficher les actions lentes"
+          "hint": "Show actions that take longer than one round",
+          "name": "Show Slow Actions"
         },
         "showUnchargedItems": {
-          "hint": "Si activée, les objets seront affichés dans le HUD même s'ils n'ont plus de charges.",
-          "name": "Afficher les objets vides (y compris les objets et les sorts)"
+          "hint": "Show items with no charges remaining",
+          "name": "Show Uncharged Items"
         },
         "showUnequippedItems": {
-          "hint": "Si activée, tous les objets seront affichés pour les PNJ, et pas seulement les objets équipés.",
-          "name": "Afficher tous les objets des PNJs"
+          "hint": "Show unequipped items",
+          "name": "Show Unequipped Items"
+        },
+        "showUnequippedItemsNpcs": {
+          "hint": "Show unequipped items for NPCs",
+          "name": "Show Unequipped Items for NPCs"
         },
         "showUnpreparedSpells": {
-          "hint": "Si désactivée, les sorts tels que les tours de magie, innés, de pacte et à volonté doivent être préparés dans le détail du sort pour être affiché dans le HUD.",
-          "name": "Afficher tous les sorts non préparés"
+          "hint": "Show unprepared spells",
+          "name": "Show Unprepared Spells"
         }
       }
     }

@@ -59,6 +59,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.showItemsWithoutActivationCosts = Utils.getSetting('showItemsWithoutActivationCosts')
             this.showUnchargedItems = Utils.getSetting('showUnchargedItems')
             this.showUnequippedItems = Utils.getSetting('showUnequippedItems')
+            if (this.actorType === 'npc' && !this.showUnequippedItems) {
+                this.showUnequippedItems = Utils.getSetting('showUnequippedItemsNpcs')
+            }
             this.showUnpreparedSpells = Utils.getSetting('showUnpreparedSpells')
 
             this.activationgroupIds = [
@@ -474,8 +477,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const activationType = value.system.activation?.type
                 const type = value.system.type.value
                 const subType = value.system.type?.subtype
-                const excludedActivationTypes = ['', 'lair', 'legendary']
-                if (activationType && !excludedActivationTypes.includes(activationType)) {
+                if (activationType) {
                     if (!featuresMap.has('active-features')) featuresMap.set('active-features', new Map())
                     featuresMap.get('active-features').set(key, value)
                 }
@@ -613,7 +615,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this._buildActions(inventory, groupData)
 
                 // Build activations
-                if (this.activationgroupIds) this.buildActivations(inventory, groupData)
+                if (this.activationgroupIds && !['equipped', 'unequipped'].includes(groupId)) {
+                    this.buildActivations(inventory, groupData)
+                }
             }
         }
 
@@ -1215,7 +1219,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @returns {object}
          */
         _discardSlowItems (items) {
-        // Get setting
+            // Get setting
             const showSlowActions = Utils.getSetting('showSlowActions')
 
             // Return all items
@@ -1229,9 +1233,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             // Loop items and set those with fast activation types into the new map
             for (const [key, value] of items.entries()) {
-                const activation = value.system.activation
-                const activationType = value.system.activation?.type
-                if (activation && !slowActivationTypes.includes(activationType)) filteredItems.set(key, value)
+                const activationType = value.system?.activation?.type
+                if (!slowActivationTypes.includes(activationType)) filteredItems.set(key, value)
             }
 
             return filteredItems

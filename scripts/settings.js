@@ -81,6 +81,22 @@ export function register (updateFunc) {
         }
     })
 
+    game.settings.register(MODULE.ID, 'showUnequippedItemsNpcs', {
+        name: game.i18n.localize(
+            'tokenActionHud.dnd5e.settings.showUnequippedItemsNpcs.name'
+        ),
+        hint: game.i18n.localize(
+            'tokenActionHud.dnd5e.settings.showUnequippedItemsNpcs.hint'
+        ),
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: (value) => {
+            updateFunc(value)
+        }
+    })
+
     game.settings.register(MODULE.ID, 'showUnpreparedSpells', {
         name: game.i18n.localize(
             'tokenActionHud.dnd5e.settings.showUnpreparedSpells.name'

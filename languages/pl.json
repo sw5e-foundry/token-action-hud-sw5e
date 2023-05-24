@@ -68,8 +68,8 @@
           "name": "Show Items without Activation Costs"
         },
         "showSlowActions": {
-          "hint": "Pokaż działania, które trwają dłużej niż jedną rundę",
-          "name": "Pokaż powolne działania"
+          "hint": "Show actions that take longer than one round",
+          "name": "Show Slow Actions"
         },
         "showUnchargedItems": {
           "hint": "Show items with no charges remaining",
@@ -78,6 +78,10 @@
         "showUnequippedItems": {
           "hint": "Show unequipped items",
           "name": "Show Unequipped Items"
+        },
+        "showUnequippedItemsNpcs": {
+          "hint": "Show unequipped items for NPCs",
+          "name": "Show Unequipped Items for NPCs"
         },
         "showUnpreparedSpells": {
           "hint": "Show unprepared spells",
