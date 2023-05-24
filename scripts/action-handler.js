@@ -615,7 +615,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this._buildActions(inventory, groupData)
 
                 // Build activations
-                if (this.activationgroupIds && !['equipped', 'unequipped'].includes(groupId)) {
+                if (this.activationgroupIds) {
                     this.buildActivations(inventory, groupData)
                 }
             }
