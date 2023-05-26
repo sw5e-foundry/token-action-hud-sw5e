@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTIVATION_TYPE_ICON, ACTION_TYPE, PREPARED_ICON, PROFICIENCY_LEVEL_ICON, GROUP } from './constants.js'
+import { ACTIVATION_TYPE_ICON, ACTION_TYPE, PREPARED_ICON, PROFICIENCY_LEVEL_ICON } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -32,6 +32,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         featureActions = null
         inventoryActions = null
         spellActions = null
+
+        systemVersion = game.dnd5e.version
 
         /**
          * Build System Actions
@@ -217,10 +219,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const abilityId = ability[0]
                     const id = `${actionType}-${ability[0]}`
                     const abbreviatedName = abilityId.charAt(0).toUpperCase() + abilityId.slice(1)
-                    const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.abilities[abilityId]
+                    const label = this.systemVersion.startsWith('2.2') ? game.dnd5e.config.abilities[abilityId].label : game.dnd5e.config.abilities[abilityId]
+                    const name = this.abbreviateSkills ? abbreviatedName : label
                     // Localise
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
-                    const listName = `${actionTypeName}${game.dnd5e.config.abilities[abilityId]}`
+                    const listName = `${actionTypeName}${label}`
                     const encodedValue = [actionType, abilityId].join(this.delimiter)
                     const icon1 = (groupId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
                     return {
