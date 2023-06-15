@@ -54,24 +54,36 @@ export const ACTIVATION_TYPE_ICON = {
 export const CONCENTRATION_ICON = 'fas fa-circle-c'
 
 /**
- * Prepared icon
+ * Conditions
  */
-export const PREPARED_ICON = 'fas fa-sun'
-
-/**
- * Ritual icon
- */
-export const RITUAL_ICON = 'fas fa-circle-r'
-
-/**
- * Proficiency level icons
- */
-export const PROFICIENCY_LEVEL_ICON = {
-    0.5: 'fas fa-adjust',
-    1: 'fas fa-check',
-    2: 'fas fa-check-double'
+export const CONDITION = {
+    blind: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.0b8N4FymGGfbZGpJ' },
+    blinded: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.0b8N4FymGGfbZGpJ' },
+    charmed: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.zZaEBrKkr66OWJvD' },
+    deaf: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.6G8JSjhn701cBITY' },
+    deafened: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.6G8JSjhn701cBITY' },
+    fear: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.oreoyaFKnvZCrgij' },
+    frightened: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.oreoyaFKnvZCrgij' },
+    grappled: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.gYDAhd02ryUmtwZn' },
+    incapacitated: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.TpkZgLfxCmSndmpb' },
+    invisible: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.3UU5GCTVeRDbZy9u' },
+    paralysis: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xnSV5hLJIMaTABXP' },
+    paralyzed: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xnSV5hLJIMaTABXP' },
+    petrified: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xaNDaW6NwQTgHSmi' },
+    poison: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.lq3TRI6ZlED8ABMx' },
+    poisoned: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.lq3TRI6ZlED8ABMx' },
+    prone: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.y0TkcdyoZlOTmAFT' },
+    restrain: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc' },
+    restrained: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc' },
+    stun: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.ZyZMUwA2rboh4ObS' },
+    stunned: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.ZyZMUwA2rboh4ObS' },
+    unconscious: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.UWw13ISmMxDzmwbd' },
+    exhaustion: { uuid: 'Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' }
 }
 
+/**
+ * Groups
+ */
 export const GROUP = {
     _1stLevelSpells: { id: '1st-level-spells', name: 'tokenActionHud.dnd5e.1stLevelSpells', type: 'system' },
     _2ndLevelSpells: { id: '2nd-level-spells', name: 'tokenActionHud.dnd5e.2ndLevelSpells', type: 'system' },
@@ -134,4 +146,58 @@ export const GROUP = {
     unequipped: { id: 'unequipped', name: 'DND5E.Unequipped', type: 'system' },
     utility: { id: 'utility', name: 'tokenActionHud.utility', type: 'system' },
     weapons: { id: 'weapons', name: 'ITEM.TypeWeaponPl', type: 'system' }
+}
+
+/**
+ * Prepared icon
+ */
+export const PREPARED_ICON = 'fas fa-sun'
+
+/**
+ * Proficiency level icons
+ */
+export const PROFICIENCY_LEVEL_ICON = {
+    0.5: 'fas fa-adjust',
+    1: 'fas fa-check',
+    2: 'fas fa-check-double'
+}
+
+/**
+ * Rarity
+ */
+export const RARITY = {
+    common: 'tokenActionHud.dnd5e.common',
+    uncommon: 'tokenActionHud.dnd5e.uncommon',
+    rare: 'tokenActionHud.dnd5e.rare',
+    veryRare: 'tokenActionHud.dnd5e.veryRare',
+    legendary: 'tokenActionHud.dnd5e.legendary',
+    artifact: 'tokenActionHud.dnd5e.artifact'
+}
+
+/**
+ * Ritual icon
+ */
+export const RITUAL_ICON = 'fas fa-circle-r'
+
+/**
+ * Weapon properties
+ */
+export const WEAPON_PROPERTY = {
+    ada: 'DND5E.WeaponPropertiesAda',
+    amm: 'DND5E.WeaponPropertiesAmm',
+    fin: 'DND5E.WeaponPropertiesFin',
+    fir: 'DND5E.WeaponPropertiesFir',
+    foc: 'DND5E.WeaponPropertiesFoc',
+    hvy: 'DND5E.WeaponPropertiesHvy',
+    lgt: 'DND5E.WeaponPropertiesLgt',
+    lod: 'DND5E.WeaponPropertiesLod',
+    mgc: 'DND5E.WeaponPropertiesMgc',
+    rch: 'DND5E.WeaponPropertiesRch',
+    rel: 'DND5E.WeaponPropertiesRel',
+    ret: 'DND5E.WeaponPropertiesRet',
+    sil: 'DND5E.WeaponPropertiesSil',
+    spc: 'DND5E.WeaponPropertiesSpc',
+    thr: 'DND5E.WeaponPropertiesThr',
+    two: 'DND5E.WeaponPropertiesTwo',
+    ver: 'DND5E.WeaponPropertiesVer'
 }

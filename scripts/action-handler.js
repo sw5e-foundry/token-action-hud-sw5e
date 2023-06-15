@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTIVATION_TYPE_ICON, ACTION_TYPE, PREPARED_ICON, PROFICIENCY_LEVEL_ICON } from './constants.js'
+import { ACTIVATION_TYPE_ICON, ACTION_TYPE, CONDITION, PREPARED_ICON, PROFICIENCY_LEVEL_ICON, RARITY, WEAPON_PROPERTY } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -43,14 +43,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         async buildSystemActions (groupIds) {
         // Set actor and token variables
-            this.actors = (!this.actor) ? this._getActors() : [this.actor]
-            this.tokens = (!this.token) ? this._getTokens() : [this.token]
+            this.actors = (!this.actor) ? this.#getActors() : [this.actor]
+            this.tokens = (!this.token) ? this.#getTokens() : [this.token]
             this.actorType = this.actor?.type
 
             // Set items variable
             if (this.actor) {
                 let items = this.actor.items
-                items = this._discardSlowItems(items)
+                items = this.#discardSlowItems(items)
                 items = coreModule.api.Utils.sortItemsByName(items)
                 this.items = items
             }
@@ -129,9 +129,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     'unequipped'
                 ]
 
-                this._buildCharacterActions()
-            }
-            if (this.actorType === 'vehicle') {
+                await this.#buildCharacterActions()
+            } else if (this.actorType === 'vehicle') {
                 this.inventorygroupIds = [
                     'consumables',
                     'equipment',
@@ -139,73 +138,76 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     'weapons'
                 ]
 
-                this._buildVehicleActions()
+                await this.#buildVehicleActions()
+            } else if (!this.actor) {
+                await this.#buildMultipleTokenActions()
             }
-            if (!this.actor) {
-                this._buildMultipleTokenActions()
-            }
         }
 
         /**
-         * Build Character Actions
+         * Build character actions
          * @private
          * @returns {object}
          */
-        async _buildCharacterActions () {
-            this._buildAbilities('ability', 'abilities')
-            this._buildAbilities('check', 'checks')
-            this._buildAbilities('save', 'saves')
-            this._buildCombat()
-            this._buildConditions()
-            this._buildEffects()
-            this._buildFeatures()
-            this._buildInventory()
-            this._buildRests()
-            this._buildSkills()
-            this._buildSpells()
-            this._buildUtility()
+        async #buildCharacterActions () {
+            await Promise.all([
+                this.#buildConditions(),
+                this.#buildFeatures(),
+                this.#buildInventory(),
+                this.#buildSpells()
+            ])
+            this.#buildAbilities('ability', 'abilities')
+            this.#buildAbilities('check', 'checks')
+            this.#buildAbilities('save', 'saves')
+            this.#buildCombat()
+            this.#buildEffects()
+            this.#buildRests()
+            this.#buildSkills()
+            this.#buildUtility()
         }
 
         /**
-         * Build Vehicle  Actions
+         * Build vehicle actions
          * @private
          * @returns {object}
          */
-        async _buildVehicleActions () {
-            this._buildAbilities('ability', 'abilities')
-            this._buildAbilities('check', 'checks')
-            this._buildAbilities('save', 'saves')
-            this._buildCombat()
-            this._buildConditions()
-            this._buildEffects()
-            this._buildFeatures()
-            this._buildInventory()
-            this._buildUtility()
+        async #buildVehicleActions () {
+            await Promise.all([
+                this.#buildConditions(),
+                this.#buildFeatures(),
+                this.#buildInventory()
+            ])
+            this.#buildAbilities('ability', 'abilities')
+            this.#buildAbilities('check', 'checks')
+            this.#buildAbilities('save', 'saves')
+            this.#buildCombat()
+            this.#buildEffects()
+            this.#buildUtility()
         }
 
         /**
-         * Build Multiple Token Actions
+         * Build multiple token actions
          * @private
          * @returns {object}
          */
-        async _buildMultipleTokenActions () {
-            this._buildAbilities('ability', 'abilities')
-            this._buildAbilities('check', 'checks')
-            this._buildAbilities('save', 'saves')
-            this._buildCombat()
-            this._buildConditions()
-            this._buildRests()
-            this._buildSkills()
-            this._buildUtility()
+        async #buildMultipleTokenActions () {
+            this.#buildAbilities('ability', 'abilities')
+            this.#buildAbilities('check', 'checks')
+            this.#buildAbilities('save', 'saves')
+            this.#buildCombat()
+            await this.#buildConditions()
+            this.#buildRests()
+            this.#buildSkills()
+            this.#buildUtility()
         }
 
         /**
-         * Build Abilities
+         * Build abilities
          * @private
          * @param {string} actionType
          * @param {string} groupId
          */
-        _buildAbilities (actionType, groupId) {
+        #buildAbilities (actionType, groupId) {
         // Get abilities
             const abilities = (!this.actor) ? game.dnd5e.config.abilities : this.actor.system.abilities
 
@@ -225,7 +227,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                     const listName = `${actionTypeName}${label}`
                     const encodedValue = [actionType, abilityId].join(this.delimiter)
-                    const icon1 = (groupId !== 'checks') ? this._getProficiencyIcon(abilities[abilityId].proficient) : ''
+                    const icon1 = (groupId !== 'checks') ? this.#getProficiencyIcon(abilities[abilityId].proficient) : ''
                     return {
                         id,
                         name,
@@ -242,7 +244,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.addActions(actions, groupData)
         }
 
-        async buildActivations (items, groupData, actionType = 'item') {
+        /**
+         * Build activations
+         * @param {array} items       The items
+         * @param {object} groupData  The group data
+         * @param {string} actionType The action type
+         */
+        async #buildActivations (items, groupData, actionType = 'item') {
         // Create map of items according to activation type
             const activationItems = new Map()
 
@@ -286,15 +294,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this.addGroupInfo(groupData)
 
                 // Build actions
-                this._buildActions(activationItems.get(activationGroupId), groupDataClone, actionType)
+                await this.#buildActions(activationItems.get(activationGroupId), groupDataClone, actionType)
             }
         }
 
         /**
-         * Build Combat
+         * Build combat
          * @private
          */
-        _buildCombat () {
+        #buildCombat () {
             const actionType = 'utility'
 
             // Set combat types
@@ -347,10 +355,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Conditions
+         * Build conditions
          * @private
          */
-        _buildConditions () {
+        async #buildConditions () {
             if (this.tokens?.length === 0) return
 
             const actionType = 'condition'
@@ -362,7 +370,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (conditions.length === 0) return
 
             // Get actions
-            const actions = conditions.map((condition) => {
+            const actions = await Promise.all(conditions.map(async (condition) => {
                 const id = condition.id
                 const name = coreModule.api.Utils.i18n(condition.label)
                 const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
@@ -378,15 +386,23 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     : ''
                 const cssClass = `toggle${active}`
                 const img = coreModule.api.Utils.getImage(condition)
+                const journalEntry = (CONDITION[id]) ? (CONDITION[id]?.uuid) ? await fromUuid(CONDITION[id].uuid) : null : null
+                const descriptionLocalised = journalEntry?.text?.content ?? ''
+                const tooltipData = {
+                    name,
+                    descriptionLocalised
+                }
+                const tooltip = await this.#getTooltip(tooltipData)
                 return {
                     id,
                     name,
                     encodedValue,
                     img,
                     cssClass,
-                    listName
+                    listName,
+                    tooltip
                 }
-            })
+            }))
 
             // Create group data
             const groupData = { id: 'conditions', type: 'system' }
@@ -396,10 +412,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Effects
+         * Build effects
          * @private
          */
-        _buildEffects () {
+        async #buildEffects () {
             const actionType = 'effect'
 
             // Get effects
@@ -423,18 +439,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             }
 
-            // Build passive effects
-            this._buildActions(passiveEffects, { id: 'passive-effects', type: 'system' }, actionType)
-
-            // Build temporary effects
-            this._buildActions(temporaryEffects, { id: 'temporary-effects', type: 'system' }, actionType)
+            await Promise.all([
+                // Build passive effects
+                this.#buildActions(passiveEffects, { id: 'passive-effects', type: 'system' }, actionType),
+                // Build temporary effects
+                this.#buildActions(temporaryEffects, { id: 'temporary-effects', type: 'system' }, actionType)
+            ])
         }
 
         /**
-         * Build Features
+         * Build features
          * @private
          */
-        _buildFeatures () {
+        async #buildFeatures () {
             const actionType = 'feature'
 
             // Get feats
@@ -524,18 +541,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const features = featuresMap.get(groupId)
 
                 // Build actions
-                this._buildActions(features, groupData, actionType)
+                await this.#buildActions(features, groupData, actionType)
 
                 // Build activations
-                if (groupNameMappings[groupId]) this.buildActivations(features, groupData, actionType)
+                if (groupNameMappings[groupId]) await this.#buildActivations(features, groupData, actionType)
             }
         }
 
         /**
-         * Build Inventory
+         * Build inventory
          * @private
          */
-        _buildInventory () {
+        async #buildInventory () {
         // Exit early if no items exist
             if (this.items.size === 0) return
 
@@ -545,9 +562,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             // Set variables
                 const equipped = value.system.equipped
                 const hasQuantity = value.system?.quantity > 0
-                const isActiveItem = this._isActiveItem(value)
-                const isUsableItem = this._isUsableItem(value)
-                const isEquippedItem = this._isEquippedItem(value)
+                const isActiveItem = this.#isActiveItem(value)
+                const isUsableItem = this.#isUsableItem(value)
+                const isEquippedItem = this.#isEquippedItem(value)
                 const type = value.type
 
                 // Set items into maps
@@ -615,20 +632,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const inventory = inventoryMap.get(groupId)
 
                 // Build actions
-                this._buildActions(inventory, groupData)
+                await this.#buildActions(inventory, groupData)
 
                 // Build activations
                 if (this.activationgroupIds) {
-                    this.buildActivations(inventory, groupData)
+                    await this.#buildActivations(inventory, groupData)
                 }
             }
         }
 
         /**
-         * Build Rests
+         * Build rests
          * @private
          */
-        _buildRests () {
+        #buildRests () {
             // Exit if every actor is not the character type
             if (this.actors.length === 0) return
             if (!this.actors.every(actor => actor.type === 'character')) return
@@ -665,10 +682,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Skills
+         * Build skills
          * @private
          */
-        _buildSkills () {
+        #buildSkills () {
             const actionType = 'skill'
 
             // Get skills
@@ -687,7 +704,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                         const listName = `${actionTypeName}${game.dnd5e.config.skills[id].label}`
                         const encodedValue = [actionType, id].join(this.delimiter)
-                        const icon1 = this._getProficiencyIcon(skills[id].value)
+                        const icon1 = this.#getProficiencyIcon(skills[id].value)
                         const mod = skills[id].total
                         const info1 = (this.actor) ? { text: (mod || mod === 0) ? `${(mod >= 0) ? '+' : ''}${mod}` : '' } : ''
                         return {
@@ -713,9 +730,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Spells
+         * Build spells
          */
-        _buildSpells () {
+        async #buildSpells () {
             const actionType = 'spell'
 
             const spellsMap = new Map()
@@ -724,8 +741,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             for (const [key, value] of this.items) {
                 const type = value.type
                 if (type === 'spell') {
-                    const isUsableItem = this._isUsableItem(value)
-                    const isUsableSpell = this._isUsableSpell(value)
+                    const isUsableItem = this.#isUsableItem(value)
+                    const isUsableSpell = this.#isUsableSpell(value)
                     if (isUsableItem && isUsableSpell) {
                         const preparationMode = value.system.preparation.mode
                         switch (preparationMode) {
@@ -876,18 +893,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const spells = spellsMap.get(groupId)
 
                 // Build actions
-                this._buildActions(spells, groupData, actionType)
+                await this.#buildActions(spells, groupData, actionType)
 
                 // Build activations
-                if (this.activationgroupIds) { this.buildActivations(spells, groupData, actionType) }
+                if (this.activationgroupIds) { await this.#buildActivations(spells, groupData, actionType) }
             }
         }
 
         /**
-         * Build Utility
+         * Build utility
          * @private
          */
-        _buildUtility () {
+        #buildUtility () {
             // Exit if every actor is not the character type
             if (this.actors.length === 0) return
             if (!this.actors.every((actor) => actor.type === 'character')) return
@@ -935,13 +952,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Actions
+         * Build actions
          * @private
          * @param {object} items
          * @param {object} groupData
          * @param {string} actionType
          */
-        _buildActions (items, groupData, actionType = 'item') {
+        async #buildActions (items, groupData, actionType = 'item') {
         // Exit if there are no items
             if (items.size === 0) return
 
@@ -950,20 +967,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (!groupId) return
 
             // Get actions
-            const actions = [...items].map(item => this._getAction(actionType, item[1]))
+            const actions = await Promise.all([...items].map(async item => await this.#getAction(actionType, item[1])))
 
             // Add actions to action list
             this.addActions(actions, groupData)
         }
 
         /**
-         * Get Action
+         * Get action
          * @private
          * @param {string} actionType
          * @param {object} entity
          * @returns {object}
          */
-        _getAction (actionType, entity) {
+        async #getAction (actionType, entity) {
             const id = entity.id ?? entity._id
             let name = entity?.name ?? entity?.label
             if (
@@ -982,18 +999,22 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
             const encodedValue = [actionType, id].join(this.delimiter)
             const img = coreModule.api.Utils.getImage(entity)
-            const icon1 = this._getActivationTypeIcon(entity?.system?.activation?.type)
+            const icon1 = this.#getActivationTypeIcon(entity?.system?.activation?.type)
             let icon2 = null
             let info = null
             if (entity.type === 'spell') {
-                icon2 = this._getPreparedIcon(entity)
-                if (this.displaySpellInfo) info = this._getSpellInfo(entity)
+                icon2 = this.#getPreparedIcon(entity)
+                if (this.displaySpellInfo) info = this.#getSpellInfo(entity)
             } else {
-                info = this._getItemInfo(entity)
+                info = this.#getItemInfo(entity)
             }
             const info1 = info?.info1
             const info2 = info?.info2
             const info3 = info?.info3
+            const chatData = (typeof entity?.getChatData === 'function') ? await entity?.getChatData() : null
+            const tooltipData = { ...chatData, name: entity?.name }
+            if (entity?.type === 'weapon') { tooltipData.traits = this.#getWeaponProperties(entity?.system?.properties) }
+            const tooltip = await this.#getTooltip(tooltipData)
             return {
                 id,
                 name,
@@ -1005,16 +1026,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 info1,
                 info2,
                 info3,
-                listName
+                listName,
+                tooltip
             }
         }
 
         /**
-         * Is Active Item
+         * Is active item
          * @param {object} item
          * @returns {boolean}
          */
-        _isActiveItem (item) {
+        #isActiveItem (item) {
             if (this.showItemsWithoutActivationCosts) return true
             const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes).filter((at) => at !== 'none')
             const activation = item.system.activation
@@ -1024,12 +1046,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Is Equipped Item
+         * Is equipped item
          * @private
          * @param {object} item
          * @returns {boolean}
          */
-        _isEquippedItem (item) {
+        #isEquippedItem (item) {
             const type = item.type
             const excludedTypes = ['consumable', 'spell', 'feat']
             if (this.showUnequippedItems && !excludedTypes.includes(type)) return true
@@ -1039,12 +1061,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Is Usable Item
+         * Is usable item
          * @private
          * @param {object} item The item
          * @returns {boolean}
          */
-        _isUsableItem (item) {
+        #isUsableItem (item) {
             if (this.showUnchargedItems) return true
             const uses = item.system.uses
             if (!uses) return false
@@ -1052,11 +1074,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Is Usable Spell
+         * Is usable spell
          * @param {object} spell  The spell
          * @returns {boolean}
          */
-        _isUsableSpell (spell) {
+        #isUsableSpell (spell) {
             if (this.actorType !== 'character' && this.showUnequippedItems) return true
             const prepared = spell.system.preparation.prepared
             if (this.showUnpreparedSpells) return true
@@ -1072,15 +1094,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Item Info
+         * Get item info
          * @private
          * @param {object} item
          * @returns {object}
          */
-        _getItemInfo (item) {
-            const quantityData = this._getQuantityData(item)
-            const usesData = this._getUsesData(item)
-            const consumeData = this._getConsumeData(item)
+        #getItemInfo (item) {
+            const quantityData = this.#getQuantityData(item)
+            const usesData = this.#getUsesData(item)
+            const consumeData = this.#getConsumeData(item)
 
             return {
                 info1: { text: quantityData },
@@ -1090,10 +1112,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Add Spell Info
+         * Add spell info
          * @param {object} spell
          */
-        _getSpellInfo (spell) {
+        #getSpellInfo (spell) {
             const components = spell.system.components
 
             const componentsArray = []
@@ -1129,11 +1151,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Actors
+         * Get actors
          * @private
          * @returns {object}
          */
-        _getActors () {
+        #getActors () {
             const allowedTypes = ['character', 'npc']
             const actors = canvas.tokens.controlled.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
@@ -1144,11 +1166,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Actors
+         * Get tokens
          * @private
          * @returns {object}
          */
-        _getTokens () {
+        #getTokens () {
             const allowedTypes = ['character', 'npc']
             const tokens = canvas.tokens.controlled
             const actors = tokens.filter(token => token.actor).map((token) => token.actor)
@@ -1160,36 +1182,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Quantity
+         * Get quantity
          * @private
          * @param {object} item
          * @returns {string}
          */
-        _getQuantityData (item) {
+        #getQuantityData (item) {
             const quantity = item?.system?.quantity ?? 0
             return (quantity > 1) ? quantity : ''
         }
 
         /**
-         * Get Uses
+         * Get uses
          * @private
          * @param {object} item
          * @returns {string}
          */
-        _getUsesData (item) {
+        #getUsesData (item) {
             const uses = item?.system?.uses
             if (!uses) return ''
             return (uses.value > 0 || uses.max > 0) ? `${uses.value ?? '0'}${(uses.max > 0) ? `/${uses.max}` : ''}` : ''
         }
 
         /**
-         * Get Consume
+         * Get consume
          * @private
          * @param {object} item
          * @param {object} actor
          * @returns {string}
          */
-        _getConsumeData (item) {
+        #getConsumeData (item) {
         // Get consume target and type
             const consumeId = item?.system?.consume?.target
             const consumeType = item?.system?.consume?.type
@@ -1216,12 +1238,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Discard Slow Items
+         * Discard slow items
          * @private
          * @param {object} items
          * @returns {object}
          */
-        _discardSlowItems (items) {
+        #discardSlowItems (items) {
             // Get setting
             const showSlowActions = Utils.getSetting('showSlowActions')
 
@@ -1244,11 +1266,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Proficiency Icon
+         * Get proficiency icon
          * @param {string} level
          * @returns {string}
          */
-        _getProficiencyIcon (level) {
+        #getProficiencyIcon (level) {
             const title = CONFIG.DND5E.proficiencyLevels[level] ?? ''
             const icon = PROFICIENCY_LEVEL_ICON[level]
             if (icon) return `<i class="${icon}" title="${title}"></i>`
@@ -1256,10 +1278,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /**
          * Get icon for the activation type
+         * @private
          * @param {object} activationType
          * @returns {string}
          */
-        _getActivationTypeIcon (activationType) {
+        #getActivationTypeIcon (activationType) {
             const title = CONFIG.DND5E.abilityActivationTypes[activationType] ?? ''
             const icon = ACTIVATION_TYPE_ICON[activationType]
             if (icon) return `<i class="${icon}" title="${title}"></i>`
@@ -1267,10 +1290,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /**
          * Get icon for a prepared spell
+         * @private
          * @param {boolean} prepararation
          * @returns
          */
-        _getPreparedIcon (spell) {
+        #getPreparedIcon (spell) {
             const level = spell.system.level
             const preparationMode = spell.system.preparation.mode
             const prepared = spell.system.preparation.prepared
@@ -1279,6 +1303,72 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             // Return icon if the preparation mode is 'prepared' and the spell is not a cantrip
             return (preparationMode === 'prepared' && level !== 0) ? `<i class="${icon}" title="${title}"></i>` : ''
+        }
+
+        /**
+         * Get tooltip
+         * @param {object} tooltipData The tooltip data
+         * @returns {string}           The tooltip
+         */
+        async #getTooltip (tooltipData) {
+            if (typeof tooltipData === 'string') return tooltipData
+
+            const name = coreModule.api.Utils.i18n(tooltipData.name)
+            const nameHtml = `<h3>${name}</h3>`
+
+            const descriptionValue = (typeof tooltipData?.description === 'string') ? tooltipData?.description : tooltipData?.description?.value ?? null
+            const description = coreModule.api.Utils.i18n(descriptionValue ?? tooltipData?.descriptionLocalised ?? '')
+
+            const rarityHtml = tooltipData?.rarity
+                ? `<span class="tah-tag ${tooltipData.rarity}">${coreModule.api.Utils.i18n(RARITY[tooltipData.rarity])}</span>`
+                : ''
+
+            const propertiesHtml = tooltipData?.properties
+                ? `<div class="tah-properties">${tooltipData.properties.map(property => `<span class="tah-property">${coreModule.api.Utils.i18n(property)}</span>`).join('')}</div>`
+                : ''
+
+            const traitsHtml = tooltipData?.traits
+                ? tooltipData.traits.map(trait => `<span class="tah-tag">${coreModule.api.Utils.i18n(trait.label ?? trait)}</span>`).join('')
+                : ''
+
+            const traits2Html = tooltipData?.traits2
+                ? tooltipData.traits2.map(trait => `<span class="tah-tag tah-tag-secondary">${coreModule.api.Utils.i18n(trait.label ?? trait)}</span>`).join('')
+                : ''
+
+            const traitsAltHtml = tooltipData?.traitsAlt
+                ? tooltipData.traitsAlt.map(trait => `<span class="tah-tag tah-tag-alt">${coreModule.api.Utils.i18n(trait.label)}</span>`).join('')
+                : ''
+
+            const modifiersHtml = tooltipData?.modifiers
+                ? `<div class="tah-tags">${tooltipData.modifiers.filter(modifier => modifier.enabled).map(modifier => {
+                    const label = coreModule.api.Utils.i18n(modifier.label)
+                    const sign = modifier.modifier >= 0 ? '+' : ''
+                    const mod = `${sign}${modifier.modifier ?? ''}`
+                    return `<span class="tah-tag tah-tag-transparent">${label} ${mod}</span>`
+                }).join('')}</div>`
+                : ''
+
+            const tagsJoined = [rarityHtml, traitsHtml, traits2Html, traitsAltHtml].join('')
+
+            const tagsHtml = (tagsJoined) ? `<div class="tah-tags">${tagsJoined}</div>` : ''
+
+            const headerTags = (tagsHtml || modifiersHtml) ? `<div class="tah-tags-wrapper">${tagsHtml}${modifiersHtml}</div>` : ''
+
+            if (!description && !tagsHtml && !modifiersHtml) return name
+
+            const tooltipHtml = await TextEditor.enrichHTML(
+                `<div>${nameHtml}${headerTags}${description}${propertiesHtml}</div>`,
+                { async: true }
+            )
+
+            return tooltipHtml
+        }
+
+        #getWeaponProperties (weaponProperties) {
+            if (!weaponProperties) return null
+            return Object.entries(weaponProperties)
+                .filter(([id, selected]) => selected && WEAPON_PROPERTY[id])
+                .map(([id, _]) => coreModule.api.Utils.i18n(WEAPON_PROPERTY[id]))
         }
     }
 })

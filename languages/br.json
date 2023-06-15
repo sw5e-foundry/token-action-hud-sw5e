@@ -12,6 +12,7 @@
       "9thLevelSpells": "9th Level Spells",
       "abilities": "Atributos",
       "activeFeatures": "Active Features",
+      "artifact": "Artifact",
       "artificerInfusions": "Artificer Infusions",
       "atWillSpells": "At-Will Spells",
       "backgroundFeatures": "Background Features",
@@ -21,6 +22,7 @@
       "check": "Check",
       "checks": "Testes",
       "classFeatures": "Class Features",
+      "common": "Common",
       "condition": "Condition",
       "conditions": "Condições",
       "crewActions": "Ações da tripulação",
@@ -48,17 +50,18 @@
       "passiveFeatures": "Passive Features",
       "psionicPowers": "Psionic Powers",
       "raceFeatures": "Race Features",
+      "rare": "Rare",
       "rests": "Descansos",
       "rollInitiative": "Rolar Iniciativa",
       "runes": "Runes",
       "saves": "Salvaguarda",
-      "superiorHuntersDefense": "Superior Hunter's Defense",
       "skill": "Skill",
       "skills": "Pericias",
+      "superiorHuntersDefense": "Superior Hunter's Defense",
+      "uncommon": "Uncommon",
+      "veryRare": "Very Rare",
       "settings": {
-        
-      }
-    }"abbreviateSkills": {
+        "abbreviateSkills": {
           "hint": "Display skill and ability names as a three-character abbreviation",
           "name": "Abbreviate Skill and Ability Names"
         },
@@ -90,5 +93,7 @@
           "hint": "Show unprepared spells",
           "name": "Show Unprepared Spells"
         }
+      }
+    }
   }
 }
