@@ -1196,7 +1196,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 .filter(preparationMode => preparationMode !== 'prepared')
             const preparationMode = power.system.preparation.mode
 
-            // Return true if power is a cantrip, has a preparation mode other than 'prepared' or is prepared
+            // Return true if power is a at-will, has a preparation mode other than 'prepared' or is prepared
             if (level === 0 || preparationModes.includes(preparationMode) || prepared) return true
             return false
         }
@@ -1408,7 +1408,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const icon = (prepared) ? PREPARED_ICON : `${PREPARED_ICON} tah-icon-disabled`
             const title = (prepared) ? coreModule.api.Utils.i18n('SW5E.PowerPrepared') : coreModule.api.Utils.i18n('SW5E.PowerUnprepared')
 
-            // Return icon if the preparation mode is 'prepared' and the power is not a cantrip
+            // Return icon if the preparation mode is 'prepared' and the power is not an at-will
             return (preparationMode === 'prepared' && level !== 0) ? `<i class="${icon}" title="${title}"></i>` : ''
         }
     }
