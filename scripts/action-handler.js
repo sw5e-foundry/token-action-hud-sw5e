@@ -855,6 +855,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         default:
                         { const level = value.system.level
                             switch (level) {
+                            case 0: // To be removed after at-will power prep mode is migrated to atwill
+                                if (!powersMap.has('at-will-powers')) powersMap.set('at-will-powers', new Map())
+                                powersMap.get('at-will-powers').set(key, value)
+                                break    
                             case 1:
                                 if (!powersMap.has('1st-level-powers')) powersMap.set('1st-level-powers', new Map())
                                 powersMap.get('1st-level-powers').set(key, value)
