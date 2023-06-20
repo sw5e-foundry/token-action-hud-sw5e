@@ -377,10 +377,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const listName = `${actionTypeName}${name}`
                 const encodedValue = [actionType, id].join(this.delimiter)
                 const active = this.actors.every((actor) => {
-                    const effects = actor.effects
-                    return effects
-                        .map((effect) => effect.flags?.core?.statusId)
-                        .some((statusId) => statusId === id)
+                    return actor.effects.some(effect => effect.statuses.some(status => status === id))
                 })
                     ? ' active'
                     : ''
@@ -429,13 +426,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const temporaryEffects = new Map()
 
             // Iterate effects and add to a map based on the isTemporary value
-            for (const effect of effects) {
-                const key = effect.id
+            for (const [effectId, effect] of effects.entries()) {
                 const isTemporary = effect.isTemporary
                 if (isTemporary) {
-                    temporaryEffects.set(key, effect)
+                    temporaryEffects.set(effectId, effect)
                 } else {
-                    passiveEffects.set(key, effect)
+                    passiveEffects.set(effectId, effect)
                 }
             }
 
