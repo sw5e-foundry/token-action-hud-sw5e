@@ -56,7 +56,7 @@ jobs:
       # commited to the repository, and only exist in the action's filesystem.
       - name: Modify Module Manifest With Release-Specific Values
         id: sub_manifest_link_version
-        uses: cschleiden/replace-tokens@v1
+        uses: microsoft/variable-substitution@v1
         with:
           files: 'module.json'
         env:
