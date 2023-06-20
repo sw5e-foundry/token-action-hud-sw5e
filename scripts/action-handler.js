@@ -1212,6 +1212,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const consumeId = item?.system?.consume?.target
             const consumeType = item?.system?.consume?.type
 
+            if (consumeId === item.id) return ''
+
             // Return resources
             if (consumeType === 'attribute') {
                 const parentId = consumeId.substr(0, consumeId.lastIndexOf('.'))
