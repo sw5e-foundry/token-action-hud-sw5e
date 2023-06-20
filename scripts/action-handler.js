@@ -377,7 +377,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const listName = `${actionTypeName}${name}`
                 const encodedValue = [actionType, id].join(this.delimiter)
                 const active = this.actors.every((actor) => {
-                    return actor.effects.some(effect => effect.statuses.some(status => status === id))
+                    if (game.version.startsWith('11')) {
+                        return actor.effects.some(effect => effect.statuses.some(status => status === id))
+                    } else {
+                        // V10
+                        return actor.effects.some(effect => effect.flags?.core?.statusId === id)
+                    }
                 })
                     ? ' active'
                     : ''
