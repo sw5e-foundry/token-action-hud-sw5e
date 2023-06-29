@@ -284,6 +284,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 // Clone and add to group data
                 const groupDataClone = { ...groupData, id: `${activationGroupId}+${groupData.id}`, type: 'system-derived' }
 
+                // Set Equipped and Unequipped groups to not selected by default
+                if (['equipped', 'unequipped'].includes(groupData.id)) { groupDataClone.defaultSelected = false }
+
                 // Create parent group data
                 const parentgroupData = { id: activationGroupId, type: 'system' }
 
