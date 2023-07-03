@@ -238,18 +238,27 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {object} token    The token
          * @param {string} actionId The action id
-         * @param {object} effect   The effect
          */
-        async #toggleCondition (event, actor, token, actionId, effect = null) {
+        async #toggleCondition (event, actor, token, actionId) {
             if (!token) return
+
             const isRightClick = this.isRightClick(event)
-            if (game.dfreds && effect?.flags?.isConvenient) {
-                const effectLabel = effect.label
-                game.dfreds.effectInterface.#toggleEffect(effectLabel)
+            const statusEffect = CONFIG.statusEffects.find(statusEffect => statusEffect.id === actionId)
+            const isConvenient = (statusEffect?.flags)
+                ? Object.hasOwn(statusEffect.flags, 'dfreds-convenient-effects')
+                    ? statusEffect.flags['dfreds-convenient-effects'].isConvenient
+                    : null
+                : null ??
+                actionId.startsWith('Convenient Effect')
+
+            if (game.dfreds && isConvenient) {
+                isRightClick
+                    ? await game.dfreds.effectInterface.toggleEffect(statusEffect.name, { overlay: true })
+                    : await game.dfreds.effectInterface.toggleEffect(statusEffect.name)
             } else {
                 const condition = this.#findCondition(actionId)
-                const effect = this.#findEffect(actor, actionId)
                 if (!condition) return
+                const effect = this.#findEffect(actor, actionId)
                 if (effect?.disabled) { await effect.delete() }
 
                 isRightClick
