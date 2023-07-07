@@ -253,8 +253,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             if (game.dfreds && isConvenient) {
                 isRightClick
-                    ? await game.dfreds.effectInterface.toggleEffect(statusEffect.name, { overlay: true })
-                    : await game.dfreds.effectInterface.toggleEffect(statusEffect.name)
+                    ? await game.dfreds.effectInterface.toggleEffect(statusEffect.name ?? statusEffect.label, { overlay: true })
+                    : await game.dfreds.effectInterface.toggleEffect(statusEffect.name ?? statusEffect.label)
             } else {
                 const condition = this.#findCondition(actionId)
                 if (!condition) return
