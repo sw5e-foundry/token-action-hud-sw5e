@@ -391,12 +391,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     : ''
                 const cssClass = `toggle${active}`
                 const img = coreModule.api.Utils.getImage(condition)
-                const journalEntry = (CONDITION[id]) ? (CONDITION[id]?.uuid) ? await fromUuid(CONDITION[id].uuid) : null : null
-                const descriptionLocalised = journalEntry?.text?.content ?? ''
-                const tooltipData = {
-                    name,
-                    descriptionLocalised
-                }
+                const tooltipData = await this.#getConditionTooltipData(id, name)
                 const tooltip = await this.#getTooltip(tooltipData)
                 return {
                     id,
@@ -1311,8 +1306,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         #getTooltipData (entity) {
-            const name = entity?.name ?? null
-            const description = (typeof entity?.system?.description === 'string') ? entity?.system?.description : entity?.system?.description?.value ?? null
+            if (this.tooltipsSetting === 'none') return ''
+
+            const name = entity?.name ?? ''
+
+            if (this.tooltipsSetting === 'nameOnly') return name
+
+            const description = TextEditor.enrichHTML(
+                coreModule.api.Utils.i18n(
+                    (typeof entity?.system?.description === 'string') ? entity?.system?.description : entity?.system?.description?.value ?? ''
+                ),
+                { async: true }
+            )
             const modifiers = entity?.modifiers ?? null
             const properties = [
                 ...entity.system?.chatProperties ?? [],
@@ -1325,14 +1330,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
+         * Get condition tooltip data
+         * @param {*} id     The condition id
+         * @param {*} name   The condition name
+         * @returns {object} The tooltip data
+         */
+        async #getConditionTooltipData (id, name) {
+            if (this.tooltipsSetting === 'none') return ''
+            if (this.tooltipsSetting === 'nameOnly') return name
+
+            const journalEntry = (CONDITION[id]) ? (CONDITION[id]?.uuid) ? await fromUuid(CONDITION[id].uuid) : null : null
+            const description = journalEntry?.text?.content ?? ''
+            return {
+                name,
+                description
+            }
+        }
+
+        /**
          * Get tooltip
          * @param {object} tooltipData The tooltip data
          * @returns {string}           The tooltip
          */
         async #getTooltip (tooltipData) {
+            if (this.tooltipsSetting === 'none') return ''
             if (typeof tooltipData === 'string') return tooltipData
 
             const name = coreModule.api.Utils.i18n(tooltipData.name)
+
+            if (this.tooltipsSetting === 'nameOnly') return name
+
             const nameHtml = `<h3>${name}</h3>`
 
             const description = tooltipData?.descriptionLocalised ??
