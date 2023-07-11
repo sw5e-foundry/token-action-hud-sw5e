@@ -1015,9 +1015,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const info1 = info?.info1
             const info2 = info?.info2
             const info3 = info?.info3
-            const chatData = (typeof entity?.getChatData === 'function') ? await entity?.getChatData() : null
-            const tooltipData = { ...chatData, name: entity?.name }
-            if (entity?.type === 'weapon') { tooltipData.traits = this.#getWeaponProperties(entity?.system?.properties) }
+            const tooltipData = this.#getTooltipData(entity)
             const tooltip = await this.#getTooltip(tooltipData)
             return {
                 id,
@@ -1312,6 +1310,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             return (preparationMode === 'prepared' && level !== 0) ? `<i class="${icon}" title="${title}"></i>` : ''
         }
 
+        #getTooltipData (entity) {
+            const name = entity?.name ?? null
+            const description = (typeof entity?.system?.description === 'string') ? entity?.system?.description : entity?.system?.description?.value ?? null
+            const modifiers = entity?.modifiers ?? null
+            const properties = [
+                ...entity.system?.chatProperties ?? [],
+                ...entity.system?.equippableItemChatProperties ?? [],
+                ...entity.system?.activatedEffectChatProperties ?? []
+            ].filter(p => p)
+            const rarity = entity?.rarity ?? null
+            const traits = (entity?.type === 'weapon') ? this.#getWeaponProperties(entity?.system?.properties) : null
+            return { name, description, modifiers, properties, rarity, traits }
+        }
+
         /**
          * Get tooltip
          * @param {object} tooltipData The tooltip data
@@ -1323,8 +1335,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const name = coreModule.api.Utils.i18n(tooltipData.name)
             const nameHtml = `<h3>${name}</h3>`
 
-            const descriptionValue = (typeof tooltipData?.description === 'string') ? tooltipData?.description : tooltipData?.description?.value ?? null
-            const description = coreModule.api.Utils.i18n(descriptionValue ?? tooltipData?.descriptionLocalised ?? '')
+            const description = tooltipData?.descriptionLocalised ??
+                await TextEditor.enrichHTML(coreModule.api.Utils.i18n(tooltipData?.description ?? ''), { async: true })
 
             const rarityHtml = tooltipData?.rarity
                 ? `<span class="tah-tag ${tooltipData.rarity}">${coreModule.api.Utils.i18n(RARITY[tooltipData.rarity])}</span>`
@@ -1363,12 +1375,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             if (!description && !tagsHtml && !modifiersHtml) return name
 
-            const tooltipHtml = await TextEditor.enrichHTML(
-                `<div>${nameHtml}${headerTags}${description}${propertiesHtml}</div>`,
-                { async: true }
-            )
-
-            return tooltipHtml
+            return `<div>${nameHtml}${headerTags}${description}${propertiesHtml}</div>`
         }
 
         #getWeaponProperties (weaponProperties) {
