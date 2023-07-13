@@ -1010,7 +1010,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const info1 = info?.info1
             const info2 = info?.info2
             const info3 = info?.info3
-            const tooltipData = this.#getTooltipData(entity)
+            const tooltipData = await this.#getTooltipData(entity)
             const tooltip = await this.#getTooltip(tooltipData)
             return {
                 id,
@@ -1305,19 +1305,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             return (preparationMode === 'prepared' && level !== 0) ? `<i class="${icon}" title="${title}"></i>` : ''
         }
 
-        #getTooltipData (entity) {
+        async #getTooltipData (entity) {
             if (this.tooltipsSetting === 'none') return ''
 
             const name = entity?.name ?? ''
 
             if (this.tooltipsSetting === 'nameOnly') return name
 
-            const description = TextEditor.enrichHTML(
-                coreModule.api.Utils.i18n(
-                    (typeof entity?.system?.description === 'string') ? entity?.system?.description : entity?.system?.description?.value ?? ''
-                ),
-                { async: true }
-            )
+            const description = (typeof entity?.system?.description === 'string') ? entity?.system?.description : entity?.system?.description?.value ?? ''
             const modifiers = entity?.modifiers ?? null
             const properties = [
                 ...entity.system?.chatProperties ?? [],
