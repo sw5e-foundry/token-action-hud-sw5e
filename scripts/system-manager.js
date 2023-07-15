@@ -18,7 +18,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         /** @override */
         doGetActionHandler (categoryManager) {
             const actionHandler = new ActionHandler(categoryManager)
-            if (coreModule.api.Utils.isModuleActive('magicitems')) { actionHandler.addFurtherActionHandler(new MagicItemActionListExtender(actionHandler)) }
+            if (coreModule.api.Utils.isModuleActive('magic-items-2')) { actionHandler.addFurtherActionHandler(new MagicItemActionListExtender(actionHandler)) }
             return actionHandler
         }
 
@@ -59,11 +59,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async doRegisterDefaultFlags () {
             const defaults = DEFAULTS
             // If the 'Magic Items' module is active, then add a group for it
-            if (game.modules.get('magicitems')?.active) {
+            if (game.modules.get('magic-items-2')?.active) {
                 const name = coreModule.api.Utils.i18n('tokenActionHud.dnd5e.magicItems')
                 defaults.groups.push(
                     {
-                        id: 'magic-items',
+                        id: 'magic-items-2',
                         name,
                         listName: `Group: ${name}`,
                         type: 'system'
