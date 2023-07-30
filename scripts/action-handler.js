@@ -152,6 +152,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #buildCharacterActions () {
             await Promise.all([
                 this.#buildConditions(),
+                this.#buildEffects(),
                 this.#buildFeatures(),
                 this.#buildInventory(),
                 this.#buildSpells()
@@ -160,7 +161,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.#buildAbilities('check', 'checks')
             this.#buildAbilities('save', 'saves')
             this.#buildCombat()
-            this.#buildEffects()
             this.#buildRests()
             this.#buildSkills()
             this.#buildUtility()
@@ -174,6 +174,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #buildVehicleActions () {
             await Promise.all([
                 this.#buildConditions(),
+                this.#buildEffects(),
                 this.#buildFeatures(),
                 this.#buildInventory()
             ])
@@ -181,7 +182,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.#buildAbilities('check', 'checks')
             this.#buildAbilities('save', 'saves')
             this.#buildCombat()
-            this.#buildEffects()
             this.#buildUtility()
         }
 
