@@ -24,7 +24,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             if (magicItems.length === 0) return
 
-            const parentGroupId = 'magic-items-2'
+            const parentGroupId = 'magic-items'
             const parentGroupType = 'system'
             const parentGroupData = {
                 id: parentGroupId,
