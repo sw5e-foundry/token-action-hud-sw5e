@@ -217,9 +217,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             // Get actions
             const actions = Object.entries(abilities)
                 .filter((ability) => abilities[ability[0]].value !== 0)
-                .map((ability) => {
-                    const abilityId = ability[0]
-                    const id = `${actionType}-${ability[0]}`
+                .map(([abilityId, ability]) => {
+                    const id = `${actionType}-${abilityId}`
                     const abbreviatedName = abilityId.charAt(0).toUpperCase() + abilityId.slice(1)
                     const label = this.systemVersion >= '2.2' ? game.dnd5e.config.abilities[abilityId].label : game.dnd5e.config.abilities[abilityId]
                     const name = this.abbreviateSkills ? abbreviatedName : label
@@ -228,11 +227,16 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const listName = `${actionTypeName}${label}`
                     const encodedValue = [actionType, abilityId].join(this.delimiter)
                     const icon1 = (groupId !== 'checks') ? this.#getProficiencyIcon(abilities[abilityId].proficient) : ''
+                    const mod = (groupId !== 'saves') ? ability?.mod : ((groupId === 'saves') ? ability?.save : '')
+                    const info1 = (this.actor) ? { text: coreModule.api.Utils.getModifier(mod) } : null
+                    const info2 = (this.actor && groupId === 'abilities') ? { text: `(${coreModule.api.Utils.getModifier(ability?.save)})` } : null
                     return {
                         id,
                         name,
                         encodedValue,
                         icon1,
+                        info1,
+                        info2,
                         listName
                     }
                 })
