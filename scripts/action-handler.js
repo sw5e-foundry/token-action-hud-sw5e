@@ -221,7 +221,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const abilityId = ability[0]
                     const id = `${actionType}-${ability[0]}`
                     const abbreviatedName = abilityId.charAt(0).toUpperCase() + abilityId.slice(1)
-                    const label = this.systemVersion.startsWith('2.2') ? game.dnd5e.config.abilities[abilityId].label : game.dnd5e.config.abilities[abilityId]
+                    const label = this.systemVersion >= '2.2' ? game.dnd5e.config.abilities[abilityId].label : game.dnd5e.config.abilities[abilityId]
                     const name = this.abbreviateSkills ? abbreviatedName : label
                     // Localise
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
