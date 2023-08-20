@@ -72,6 +72,10 @@
           "hint": "Show unequipped items",
           "name": "Show Unequipped Items"
         },
+        "showUnequippedItemsNpcs": {
+          "hint": "Show unequipped items for NPCs",
+          "name": "Show Unequipped Items for NPCs"
+        },
         "showUnpreparedPowers": {
           "hint": "Show unprepared powers",
           "name": "Show Unprepared Powers"
