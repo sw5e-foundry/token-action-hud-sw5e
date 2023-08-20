@@ -16,12 +16,12 @@
     "verified": "11.307"
   },
   "esmodules": [
-    "./scripts/init.js"
+    "./scripts/token-action-hud-sw5e.min.js"
   ],
   "scripts": [
   ],
   "styles": [
-    "./styles/tah-dnd5e.css"
+    "./styles/tah-sw5e.css"
   ],
   "languages": [
     {
@@ -39,7 +39,7 @@
         "compatibility": [
           {
             "minimum": "2.1.0",
-            "verified": "2.2.3"
+            "verified": "2.2.2"
           }
         ]
       }

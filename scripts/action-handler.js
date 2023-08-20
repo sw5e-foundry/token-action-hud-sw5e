@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTIVATION_TYPE_ICON, ACTION_TYPE, CONDITION, PREPARED_ICON, PROFICIENCY_LEVEL_ICON, RARITY, WEAPON_PROPERTY } from './constants.js'
+import { ACTIVATION_TYPE_ICON, ACTION_TYPE, CONDITION, PREPARED_ICON, WEAPON_PROPERTY } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -33,7 +33,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         inventoryActions = null
         powerActions = null
 
-        systemVersion = game.dnd5e.version
+        systemVersion = game.sw5e.version
 
         /**
          * Build System Actions
@@ -106,7 +106,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 '9th-level-powers'
             ]
 
-            if (["character", "npc"].includes(this.actorType)) {
+            if (this.actorType === 'character' || this.actorType === 'npc') {
                 this.inventoryGroupIds = [
                     'equipped',
                     'consumables',
@@ -119,8 +119,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ]
 
                 await this.#buildCharacterActions()
-
-            if (this.actorType === 'starship') {
+            } else if (this.actorType === 'starship') {
                 this.inventoryGroupIds = [
                     'equipped',
                     'consumables',
@@ -132,9 +131,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     'unequipped'
                 ]
 
-                this._buildStarshipActions()
-            }
-
+                await this.#buildStarshipActions()
             } else if (this.actorType === 'vehicle') {
                 this.inventoryGroupIds = [
                     'consumables',
@@ -160,13 +157,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this.#buildEffects(),
                 this.#buildFeatures(),
                 this.#buildInventory(),
-                this.#buildSpells()
+                this.#buildPowers()
             ])
             this.#buildAbilities('ability', 'abilities')
             this.#buildAbilities('check', 'checks')
             this.#buildAbilities('save', 'saves')
+            this.#buildCombat()
+            this.#buildRepairs()
             this.#buildRests()
-            this._buildSpells()
+            this.#buildSkills()
             this.#buildUtility()
         }
 
@@ -175,22 +174,24 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          * @returns {object}
          */
-        async _buildStarshipActions () {
-            this._buildAbilities('ability', 'abilities')
-            this._buildAbilities('check', 'checks')
-            this._buildAbilities('save', 'saves')
-            this._buildCombat()
-            this._buildConditions()
-            this._buildEffects()
-            this._buildFeatures()
-            this._buildInventory()
-            this._buildRepairs()
-            this._buildStarshipSkills()
-            this._buildStarshipUtility()
+        async #buildStarshipActions () {
+            await Promise.all([
+                this.#buildConditions(),
+                this.#buildEffects(),
+                this.#buildFeatures(),
+                this.#buildInventory()
+            ])
+            this.#buildAbilities('ability', 'abilities')
+            this.#buildAbilities('check', 'checks')
+            this.#buildAbilities('save', 'saves')
+            this.#buildCombat()
+            this.#buildRepairs()
+            this.#buildStarshipSkills()
+            this.#buildStarshipUtility()
         }
 
         /**
-         * Build Vehicle  Actions
+         * Build vehicle actions
          * @private
          * @returns {object}
          */
@@ -220,9 +221,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.#buildCombat()
             await this.#buildConditions()
             this.#buildRests()
-            this._buildRepairs()
+            this.#buildRepairs()
             this.#buildSkills()
-            this._buildStarshipSkills()
+            this.#buildStarshipSkills()
             this.#buildUtility()
         }
 
@@ -245,11 +246,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 .map(([abilityId, ability]) => {
                     const id = `${actionType}-${abilityId}`
                     const abbreviatedName = abilityId.charAt(0).toUpperCase() + abilityId.slice(1)
-                    const name = this.abbreviateSkills ? abbreviatedName : game.dnd5e.config.abilities[abilityId]
+                    const label = this.systemVersion >= '2.2' ? game.sw5e.config.abilities[abilityId].label : game.sw5e.config.abilities[abilityId]
                     const name = this.abbreviateSkills ? abbreviatedName : label
                     // Localise
                     const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
-                    const listName = `${actionTypeName}${game.dnd5e.config.abilities[abilityId]}`
+                    const listName = `${actionTypeName}${label}`
                     const encodedValue = [actionType, abilityId].join(this.delimiter)
                     const icon1 = (groupId !== 'checks') ? this.#getProficiencyIcon(abilities[abilityId].proficient) : ''
                     const mod = (groupId !== 'saves') ? ability?.mod : ((groupId === 'saves') ? ability?.save : '')
@@ -306,7 +307,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             // Loop through action group ids
-            for (const groupId of this.activationgroupIds) {
+            for (const activationGroupId of this.activationGroupIds) {
                 // Skip if no items exist
                 if (!activationItems.has(activationGroupId)) continue
 
@@ -317,10 +318,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if (['equipped', 'unequipped'].includes(groupData.id)) { groupDataClone.defaultSelected = false }
 
                 // Create parent group data
-                const parentgroupData = { id: groupId, type: 'system' }
+                const parentgroupData = { id: activationGroupId, type: 'system' }
 
                 // Add group to HUD
-                await this.addGroup(groupDataClone, parentGroupData)
+                await this.addGroup(groupDataClone, parentgroupData)
 
                 // Add power slot info to group
                 this.addGroupInfo(groupData)
@@ -518,7 +519,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const activationType = value.system.activation?.type
                 const type = value.system.type.value
                 const subType = value.system.type?.subtype
-                if (activationType) {
+                const excludedActivationTypes = ['', 'lair', 'legendary']
+                if (activationType && !excludedActivationTypes.includes(activationType)) {
                     if (!featuresMap.has('active-features')) featuresMap.set('active-features', new Map())
                     featuresMap.get('active-features').set(key, value)
                 }
@@ -656,8 +658,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 await this.#buildActions(inventory, groupData)
 
                 // Build activations
-                if (this.activationgroupIds) {
-                if (this.activationgroupIds) this.buildActivations(inventory, groupData)
+                if (this.activationGroupIds) {
+                    await this.#buildActivations(inventory, groupData)
                 }
             }
         }
@@ -706,7 +708,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * Build Repairs
          * @private
          */
-        _buildRepairs () {
+        #buildRepairs () {
             // Exit if every actor is not the starship type
             if (this.actors.length === 0) return
             if (!this.actors.every(actor => actor.type === 'starship')) return
@@ -744,7 +746,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build skills
+         * Build Skills
          * @private
          */
         #buildSkills () {
@@ -796,10 +798,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Build Spells
+         * Build Starship Skills
          * @private
          */
-        _buildSpells () {
+        #buildStarshipSkills () {
             // Exit if every actor is not the starship type
             if (this.actors.length === 0) return
             if (!this.actors.every((actor) => actor.type === 'starship')) return
@@ -822,7 +824,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
                         const listName = `${actionTypeName}${game.sw5e.config.starshipSkills[id].label}`
                         const encodedValue = [actionType, id].join(this.delimiter)
-                        const icon1 = this._getProficiencyIcon(skills[id].value)
+                        const icon1 = this.#getProficiencyIcon(skills[id].value)
                         const mod = skills[id].mod
                         const info1 = (this.actor) ? { text: (mod || mod === 0) ? `${(mod >= 0) ? '+' : ''}${mod}` : '' } : ''
                         return {
@@ -850,7 +852,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         /**
          * Build Powers
          */
-        _buildPowers () {
+        async #buildPowers () {
             // Exit if there are any starships selected
             if (this.actors.length === 0) return
             if (!this.actors.every((actor) => actor.type !== 'starship')) return
@@ -864,7 +866,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const type = value.type
                 if (type === 'power') {
                     const isUsableItem = this.#isUsableItem(value)
-                    const isUsableSpell = this._isUsableSpell(value)
+                    const isUsablePower = this.#isUsablePower(value)
                     if (isUsableItem && isUsablePower) {
                         const preparationMode = value.system.preparation.mode
                         switch (preparationMode) {
@@ -994,15 +996,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const powers = powersMap.get(groupId)
 
                 // Build actions
-                this._buildActions(spells, groupData, actionType)
+                await this.#buildActions(powers, groupData, actionType)
 
                 // Build activations
-                if (this.activationgroupIds) { this.buildActivations(spells, groupData, actionType) }
+                if (this.activationGroupIds) { await this.#buildActivations(powers, groupData, actionType) }
             }
         }
 
         /**
-         * Build utility
+         * Build Utility
          * @private
          */
         #buildUtility () {
@@ -1056,7 +1058,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * Build Starship Utility
          * @private
          */
-        _buildStarshipUtility () {
+        #buildStarshipUtility () {
             // Exit if starship is not destroyed
             if (this.actor.system.attributes.hp.value > 0) return
 
@@ -1110,7 +1112,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             // Get actions
             const actions = await Promise.all([...items].map(async item => await this.#getAction(actionType, item[1])))
 
-            // Add actions to HUD
+            // Add actions to action list
             this.addActions(actions, groupData)
         }
 
@@ -1145,7 +1147,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             let info = null
             if (entity.type === 'power') {
                 icon2 = this.#getPreparedIcon(entity)
-                if (this.displaySpellInfo) info = this._getSpellInfo(entity)
+                if (this.displayPowerInfo) info = this.#getPowerInfo(entity)
             } else {
                 info = this.#getItemInfo(entity)
             }
@@ -1213,11 +1215,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Is Usable Spell
+         * Is Usable Power
          * @param {object} power  The power
          * @returns {boolean}
          */
-        _isUsableSpell (spell) {
+        #isUsablePower (power) {
             if (this.actorType !== 'character' && this.showUnequippedItems) return true
             const prepared = power.system.preparation.prepared
             if (this.showUnpreparedPowers) return true
@@ -1251,10 +1253,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Add Spell Info
+         * Add Power Info
          * @param {object} power
          */
-        _getSpellInfo (spell) {
+        #getPowerInfo (power) {
             const components = power.system.components
 
             const componentsArray = []
@@ -1413,14 +1415,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @returns {string}
          */
         #getProficiencyIcon (level) {
-            const title = CONFIG.SW5E.proficiencyLevels[level] ?? ''
-            const icon = PROFICIENCY_LEVEL_ICON[level]
+            const title = CONFIG.SW5E.proficiencyLevels[level]?.label ?? ''
+            const icon = CONFIG.SW5E.proficiencyLevels[level]?.icon ?? undefined
             if (icon) return `<i class="${icon}" title="${title}"></i>`
         }
 
         /**
          * Get icon for the activation type
-         * @private
          * @param {object} activationType
          * @returns {string}
          */
@@ -1436,7 +1437,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {boolean} prepararation
          * @returns
          */
-        _getPreparedIcon (spell) {
+        #getPreparedIcon (power) {
             const level = power.system.level
             const preparationMode = power.system.preparation.mode
             const prepared = power.system.preparation.prepared
@@ -1461,7 +1462,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ...entity.system?.equippableItemChatProperties ?? [],
                 ...entity.system?.activatedEffectChatProperties ?? []
             ].filter(p => p)
-            const rarity = entity?.rarity ?? null
+            const rarity = entity?.system?.rarity ?? null
             const traits = (entity?.type === 'weapon') ? this.#getWeaponProperties(entity?.system?.properties) : null
             return { name, description, modifiers, properties, rarity, traits }
         }
@@ -1503,11 +1504,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 await TextEditor.enrichHTML(coreModule.api.Utils.i18n(tooltipData?.description ?? ''), { async: true })
 
             const rarityHtml = tooltipData?.rarity
-                ? `<span class="tah-tag ${tooltipData.rarity}">${coreModule.api.Utils.i18n(RARITY[tooltipData.rarity])}</span>`
+                ? `<span class="tah-tag ${tooltipData.rarity}">${coreModule.api.Utils.i18n(CONFIG.SW5E.itemRarity[tooltipData.rarity])}</span>`
                 : ''
 
+            // FIXME: This condition is only needed on 2.2.2.2.5.0 due to: sw5e-foundry/sw5e#722
             const propertiesHtml = tooltipData?.properties
-                ? `<div class="tah-properties">${tooltipData.properties.map(property => `<span class="tah-property">${coreModule.api.Utils.i18n(property)}</span>`).join('')}</div>`
+                ? '<div class="tah-properties">' + tooltipData.properties.map(property => {
+                    if (typeof property === 'string') {
+                        return `<span class="tah-property">${coreModule.api.Utils.i18n(property)}</span>`
+                    } else {
+                        console.error('tooltipData.properties was not a string:', tooltipData.properties)
+                        return ''
+                    }
+                }).join('') + '</div>'
                 : ''
 
             const traitsHtml = tooltipData?.traits

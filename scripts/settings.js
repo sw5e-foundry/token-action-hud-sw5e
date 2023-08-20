@@ -80,13 +80,13 @@ export function register (updateFunc) {
             updateFunc(value)
         }
     })
-
+    
     game.settings.register(MODULE.ID, 'showUnequippedItemsNpcs', {
         name: game.i18n.localize(
-            'tokenActionHud.dnd5e.settings.showUnequippedItemsNpcs.name'
+            'tokenActionHud.sw5e.settings.showUnequippedItemsNpcs.name'
         ),
         hint: game.i18n.localize(
-            'tokenActionHud.dnd5e.settings.showUnequippedItemsNpcs.hint'
+            'tokenActionHud.sw5e.settings.showUnequippedItemsNpcs.hint'
         ),
         scope: 'client',
         config: true,

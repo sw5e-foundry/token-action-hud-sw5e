@@ -250,6 +250,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {object} token    The token
          * @param {string} actionId The action id
+         * @param {object} effect   The effect
          */
         async #toggleCondition (event, actor, token, actionId) {
             if (!token) return

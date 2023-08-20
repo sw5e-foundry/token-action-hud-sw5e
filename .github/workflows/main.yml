@@ -1,7 +1,8 @@
-name: Create Module Files For GitHub Release
-on:
-     release:
-      types: [published]
+name: Release Creation
+
+on: 
+  release:
+    types: [published]
 
 jobs:
   build:
