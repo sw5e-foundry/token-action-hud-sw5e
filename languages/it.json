@@ -12,15 +12,17 @@
       "9thLevelPowers": "9th Level Powers",
       "abilities": "Capacità",
       "activeFeatures": "Active Features",
+      "artifact": "Artifact",
       "artificerInfusions": "Artificer Infusions",
       "atWillPowers": "At-Will Powers",
       "backgroundFeatures": "Background Features",
       "bonusActions": "Azioni bonus",
-      "cantrips": "Cantrips",
+      "at-Wills": "At-Wills",
       "channelDivinity": "Channel Divinity",
       "check": "Check",
       "checks": "Caratteristiche",
       "classFeatures": "Class Features",
+      "common": "Common",
       "condition": "Condition",
       "conditions": "Condizioni",
       "crewActions": "Azioni dell'equipaggio",
@@ -48,40 +50,47 @@
       "passiveFeatures": "Passive Features",
       "psionicPowers": "Psionic Powers",
       "speciesFeatures": "Species Features",
+      "rare": "Rare",
       "rests": "Riposi",
       "rollInitiative": "Tira Iniziativa",
       "runes": "Runes",
       "skill": "Skill",
       "skills": "Abilità",
       "superiorHuntersDefense": "Superior Hunter's Defense",
+      "uncommon": "Uncommon",
+      "veryRare": "Very Rare",
       "settings": {
         "abbreviateSkills": {
-          "hint": "If enabled, skills and abilities will use a three-character abbreviation.",
+          "hint": "Display skill and ability names as a three-character abbreviation",
           "name": "Abbreviate Skill and Ability Names"
         },
         "displayPowerInfo": {
-          "hint": "If enabled, power component information, concentration, and ritual status will be noted next to the power name.",
-          "name": "Display power information"
+          "hint": "Display power component information, concentration, and ritual status next to the power's name",
+          "name": "Display Power Information"
         },
         "showItemsWithoutActivationCosts": {
-          "hint": "If enabled, Items that have no activation information will be added to the Inventory list",
-          "name": "Show Items without Activation costs"
+          "hint": "Show items without an activation cost",
+          "name": "Show Items without Activation Costs"
         },
         "showSlowActions": {
-          "hint": "Mostra le azioni che richiedono più di un round",
-          "name": "Mostra azioni lente"
+          "hint": "Show actions that take longer than one round",
+          "name": "Show Slow Actions"
         },
         "showUnchargedItems": {
-          "hint": "If enabled, items are shown in the HUD even if they have no remaining charges.",
-          "name": "Show empty items (includes items and powers)"
+          "hint": "Show items with no charges remaining",
+          "name": "Show Uncharged Items"
         },
         "showUnequippedItems": {
-          "hint": "If enabled, all items are shown for NPCs, not just equipped items.",
-          "name": "Show all NPC items"
+          "hint": "Show unequipped items",
+          "name": "Show Unequipped Items"
+        },
+        "showUnequippedItemsNpcs": {
+          "hint": "Show unequipped items for NPCs",
+          "name": "Show Unequipped Items for NPCs"
         },
         "showUnpreparedPowers": {
-          "hint": "If disabled, powers such as cantrips, innate, pact, and at-will powers need to be 'prepared' via the power details to be shown on the HUD.",
-          "name": "Show all non-preparable powers"
+          "hint": "Show unprepared powers",
+          "name": "Show Unprepared Powers"
         }
       }
     }

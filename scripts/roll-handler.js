@@ -21,15 +21,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (!this.actor) {
                 for (const token of canvas.tokens.controlled) {
                     const actor = token.actor
-                    await this._handleMacros(event, actionType, actor, token, actionId)
+                    await this.#handleAction(event, actionType, actor, token, actionId)
                 }
             } else {
-                await this._handleMacros(event, actionType, this.actor, this.token, actionId)
+                await this.#handleAction(event, actionType, this.actor, this.token, actionId)
             }
         }
 
         /**
-         * Handle Macros
+         * Handle action
          * @private
          * @param {object} event
          * @param {string} actionType
@@ -37,39 +37,39 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} token
          * @param {string} actionId
          */
-        async _handleMacros (event, actionType, actor, token, actionId) {
+        async #handleAction (event, actionType, actor, token, actionId) {
             switch (actionType) {
             case 'ability':
-                this._rollAbility(event, actor, actionId)
+                this.#rollAbility(event, actor, actionId)
                 break
             case 'check':
-                this._rollAbilityTest(event, actor, actionId)
+                this.#rollAbilityTest(event, actor, actionId)
                 break
             case 'save':
-                this._rollAbilitySave(event, actor, actionId)
+                this.#rollAbilitySave(event, actor, actionId)
                 break
             case 'condition':
                 if (!token) return
-                await this._toggleCondition(event, token, actionId)
+                await this.#toggleCondition(event, actor, token, actionId)
                 break
             case 'effect':
-                await this._toggleEffect(event, actor, actionId)
+                await this.#toggleEffect(event, actor, actionId)
                 break
             case 'feature':
             case 'item':
             case 'power':
             case 'weapon':
                 if (this.isRenderItem()) this.doRenderItem(actor, actionId)
-                else this._useItem(event, actor, actionId)
+                else this.#useItem(event, actor, actionId)
                 break
             case 'magicItem':
-                this._rollMagicItem(actor, actionId)
+                this.#rollMagicItem(actor, actionId)
                 break
             case 'skill':
-                this._rollSkill(event, actor, actionId)
+                this.#rollSkill(event, actor, actionId)
                 break
             case 'utility':
-                await this._performUtilityMacro(event, actor, token, actionId)
+                await this.#performUtilityAction(event, actor, token, actionId)
                 break
             default:
                 break
@@ -83,7 +83,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        _rollAbility (event, actor, actionId) {
+        #rollAbility (event, actor, actionId) {
             if (!actor) return
             if (!actor.system?.abilities) return
             actor.rollAbility(actionId, { event })
@@ -96,7 +96,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        _rollAbilitySave (event, actor, actionId) {
+        #rollAbilitySave (event, actor, actionId) {
             if (!actor) return
             if (!actor.system?.abilities) return
             actor.rollAbilitySave(actionId, { event })
@@ -109,7 +109,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        _rollAbilityTest (event, actor, actionId) {
+        #rollAbilityTest (event, actor, actionId) {
             if (!actor) return
             if (!actor.system?.abilities) return
             actor.rollAbilityTest(actionId, { event })
@@ -121,7 +121,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        _rollMagicItem (actor, actionId) {
+        #rollMagicItem (actor, actionId) {
             const actionParts = actionId.split('>')
 
             const itemId = actionParts[0]
@@ -142,7 +142,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        _rollSkill (event, actor, actionId) {
+        #rollSkill (event, actor, actionId) {
             if (!actor) return
             if (!actor.system?.skills) return
             actor.rollSkill(actionId, { event })
@@ -156,10 +156,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} actionId The action id
          * @returns {object}        The item
          */
-        _useItem (event, actor, actionId) {
+        #useItem (event, actor, actionId) {
             const item = coreModule.api.Utils.getItem(actor, actionId)
 
-            if (this._needsRecharge(item)) {
+            if (this.#needsRecharge(item)) {
                 item.rollRecharge()
                 return
             }
@@ -173,7 +173,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} item
          * @returns {boolean}
          */
-        _needsRecharge (item) {
+        #needsRecharge (item) {
             return (
                 item.system.recharge &&
                 !item.system.recharge.charged &&
@@ -182,13 +182,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Perform Utility Macro
+         * Perform utility action
          * @param {object} event    The event
          * @param {object} actor    The actor
          * @param {object} token    The token
          * @param {string} actionId The action id
          */
-        async _performUtilityMacro (event, actor, token, actionId) {
+        async #performUtilityAction (event, actor, token, actionId) {
             switch (actionId) {
             case 'deathSave':
                 actor.rollDeathSave({ event })
@@ -200,7 +200,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
                 break
             case 'initiative':
-                await this._rollInitiative(actor)
+                await this.#rollInitiative(actor)
                 break
             case 'inspiration': {
                 const update = !actor.system.attributes.inspiration
@@ -224,7 +224,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} actor The actor
          * @private
          */
-        async _rollInitiative (actor) {
+        async #rollInitiative (actor) {
             if (!actor) return
             await actor.rollInitiative({ createCombatants: true })
 
@@ -235,19 +235,31 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * Toggle Condition
          * @private
          * @param {object} event    The event
+         * @param {object} actor    The actor
          * @param {object} token    The token
          * @param {string} actionId The action id
-         * @param {object} effect   The effect
          */
-        async _toggleCondition (event, token, actionId, effect = null) {
+        async #toggleCondition (event, actor, token, actionId) {
             if (!token) return
+
             const isRightClick = this.isRightClick(event)
-            if (game.dfreds && effect?.flags?.isConvenient) {
-                const effectLabel = effect.label
-                game.dfreds.effectInterface._toggleEffect(effectLabel)
+            const statusEffect = CONFIG.statusEffects.find(statusEffect => statusEffect.id === actionId)
+            const isConvenient = (statusEffect?.flags)
+                ? Object.hasOwn(statusEffect.flags, 'dfreds-convenient-effects')
+                    ? statusEffect.flags['dfreds-convenient-effects'].isConvenient
+                    : null
+                : null ??
+                actionId.startsWith('Convenient Effect')
+
+            if (game.dfreds && isConvenient) {
+                isRightClick
+                    ? await game.dfreds.effectInterface.toggleEffect(statusEffect.name ?? statusEffect.label, { overlay: true })
+                    : await game.dfreds.effectInterface.toggleEffect(statusEffect.name ?? statusEffect.label)
             } else {
-                const condition = this.findCondition(actionId)
+                const condition = this.#findCondition(actionId)
                 if (!condition) return
+                const effect = this.#findEffect(actor, actionId)
+                if (effect?.disabled) { await effect.delete() }
 
                 isRightClick
                     ? await token.toggleEffect(condition, { overlay: true })
@@ -258,22 +270,38 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-         * Get Condition
+         * Find condition
          * @private
-         * @param {string} actionId
-         * @returns {object}
+         * @param {string} actionId The action id
+         * @returns {object}        The condition
          */
-        findCondition (actionId) {
+        #findCondition (actionId) {
             return CONFIG.statusEffects.find((effect) => effect.id === actionId)
         }
 
         /**
+         * Find effect
+         * @param {object} actor    The actor
+         * @param {string} actionId The action id
+         * @returns {object}        The effect
+         */
+        #findEffect (actor, actionId) {
+            if (game.version.startsWith('11')) {
+                return actor.effects.find(effect => effect.statuses.every(status => status === actionId))
+            } else {
+                // V10
+                return actor.effects.find(effect => effect.flags?.core?.statusId === actionId)
+            }
+        }
+
+        /**
          * Toggle Effect
+         * @private
          * @param {object} event    The event
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        async _toggleEffect (event, actor, actionId) {
+        async #toggleEffect (event, actor, actionId) {
             const effects = 'find' in actor.effects.entries ? actor.effects.entries : actor.effects
             const effect = effects.find(effect => effect.id === actionId)
 

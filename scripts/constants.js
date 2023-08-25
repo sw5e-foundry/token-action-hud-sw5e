@@ -54,24 +54,55 @@ export const ACTIVATION_TYPE_ICON = {
 export const CONCENTRATION_ICON = 'fas fa-circle-c'
 
 /**
- * Prepared icon
+ * Conditions
  */
-export const PREPARED_ICON = 'fas fa-sun'
-
-/**
- * Ritual icon
- */
-export const RITUAL_ICON = 'fas fa-circle-r'
-
-/**
- * Proficiency level icons
- */
-export const PROFICIENCY_LEVEL_ICON = {
-    0.5: 'fas fa-adjust',
-    1: 'fas fa-check',
-    2: 'fas fa-check-double'
+export const CONDITION = {
+    blind: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.0b8N4FymGGfbZGpJ' },
+    blinded: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.0b8N4FymGGfbZGpJ' },
+    'Convenient Effect: Blinded': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.0b8N4FymGGfbZGpJ' },
+    charmed: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.zZaEBrKkr66OWJvD' },
+    'Convenient Effect: Charmed': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.zZaEBrKkr66OWJvD' },
+    deaf: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.6G8JSjhn701cBITY' },
+    deafened: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.6G8JSjhn701cBITY' },
+    'Convenient Effect: Deafened': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.6G8JSjhn701cBITY' },
+    fear: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.oreoyaFKnvZCrgij' },
+    'Convenient Effect: Frightened': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.oreoyaFKnvZCrgij' },
+    frightened: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.oreoyaFKnvZCrgij' },
+    grappled: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.gYDAhd02ryUmtwZn' },
+    'Convenient Effect: Grappled': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.gYDAhd02ryUmtwZn' },
+    incapacitated: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.TpkZgLfxCmSndmpb' },
+    'Convenient Effect: Incapacitated': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.TpkZgLfxCmSndmpb' },
+    invisible: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.3UU5GCTVeRDbZy9u' },
+    'Convenient Effect: Invisible': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.3UU5GCTVeRDbZy9u' },
+    paralysis: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xnSV5hLJIMaTABXP' },
+    paralyzed: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xnSV5hLJIMaTABXP' },
+    'Convenient Effect: Paralyzed': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xnSV5hLJIMaTABXP' },
+    petrified: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xaNDaW6NwQTgHSmi' },
+    'Convenient Effect: Petrified': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.xaNDaW6NwQTgHSmi' },
+    poison: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.lq3TRI6ZlED8ABMx' },
+    poisoned: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.lq3TRI6ZlED8ABMx' },
+    'Convenient Effect: Poisoned': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.lq3TRI6ZlED8ABMx' },
+    prone: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.y0TkcdyoZlOTmAFT' },
+    'Convenient Effect: Prone': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.y0TkcdyoZlOTmAFT' },
+    restrain: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc' },
+    restrained: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc' },
+    'Convenient Effect: Restrained': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cSVcyZyNe2iG1fIc' },
+    stun: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.ZyZMUwA2rboh4ObS' },
+    stunned: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.ZyZMUwA2rboh4ObS' },
+    'Convenient Effect: Stunned': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.ZyZMUwA2rboh4ObS' },
+    unconscious: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.UWw13ISmMxDzmwbd' },
+    'Convenient Effect: Unconscious': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.UWw13ISmMxDzmwbd' },
+    exhaustion: { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' },
+    'Convenient Effect: Exhaustion 1': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' },
+    'Convenient Effect: Exhaustion 2': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' },
+    'Convenient Effect: Exhaustion 3': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' },
+    'Convenient Effect: Exhaustion 4': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' },
+    'Convenient Effect: Exhaustion 5': { uuid: 'Compendium.sw5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.cspWveykstnu3Zcv' }
 }
 
+/**
+ * Groups
+ */
 export const GROUP = {
     _1stLevelPowers: { id: '1st-level-powers', name: 'tokenActionHud.sw5e.1stLevelPowers', type: 'system' },
     _2ndLevelPowers: { id: '2nd-level-powers', name: 'tokenActionHud.sw5e.2ndLevelPowers', type: 'system' },
@@ -89,7 +120,7 @@ export const GROUP = {
     atWillPowers: { id: 'at-will-powers', name: 'tokenActionHud.sw5e.atWillPowers', type: 'system' },
     backgroundFeatures: { id: 'background-features', name: 'tokenActionHud.sw5e.backgroundFeatures', type: 'system' },
     bonusActions: { id: 'bonus-actions', name: 'tokenActionHud.sw5e.bonusActions', type: 'system' },
-    cantrips: { id: 'cantrips', name: 'tokenActionHud.sw5e.cantrips', type: 'system' },
+    at-Wills: { id: 'at-Wills', name: 'tokenActionHud.sw5e.at-Wills', type: 'system' },
     channelDivinity: { id: 'channel-divinity', name: 'tokenActionHud.sw5e.channelDivinity', type: 'system' },
     checks: { id: 'checks', name: 'tokenActionHud.sw5e.checks', type: 'system' },
     classFeatures: { id: 'class-features', name: 'tokenActionHud.sw5e.classFeatures', type: 'system' },
@@ -134,4 +165,58 @@ export const GROUP = {
     unequipped: { id: 'unequipped', name: 'SW5E.Unequipped', type: 'system' },
     utility: { id: 'utility', name: 'tokenActionHud.utility', type: 'system' },
     weapons: { id: 'weapons', name: 'ITEM.TypeWeaponPl', type: 'system' }
+}
+
+/**
+ * Prepared icon
+ */
+export const PREPARED_ICON = 'fas fa-sun'
+
+/**
+ * Proficiency level icons
+ */
+export const PROFICIENCY_LEVEL_ICON = {
+    0.5: 'fas fa-adjust',
+    1: 'fas fa-check',
+    2: 'fas fa-check-double'
+}
+
+/**
+ * Rarity
+ */
+export const RARITY = {
+    common: 'tokenActionHud.sw5e.common',
+    uncommon: 'tokenActionHud.sw5e.uncommon',
+    rare: 'tokenActionHud.sw5e.rare',
+    veryRare: 'tokenActionHud.sw5e.veryRare',
+    legendary: 'tokenActionHud.sw5e.legendary',
+    artifact: 'tokenActionHud.sw5e.artifact'
+}
+
+/**
+ * Ritual icon
+ */
+export const RITUAL_ICON = 'fas fa-circle-r'
+
+/**
+ * Weapon properties
+ */
+export const WEAPON_PROPERTY = {
+    ada: 'SW5E.WeaponPropertiesAda',
+    amm: 'SW5E.WeaponPropertiesAmm',
+    fin: 'SW5E.WeaponPropertiesFin',
+    fir: 'SW5E.WeaponPropertiesFir',
+    foc: 'SW5E.WeaponPropertiesFoc',
+    hvy: 'SW5E.WeaponPropertiesHvy',
+    lgt: 'SW5E.WeaponPropertiesLgt',
+    lod: 'SW5E.WeaponPropertiesLod',
+    mgc: 'SW5E.WeaponPropertiesMgc',
+    rch: 'SW5E.WeaponPropertiesRch',
+    rel: 'SW5E.WeaponPropertiesRel',
+    ret: 'SW5E.WeaponPropertiesRet',
+    sil: 'SW5E.WeaponPropertiesSil',
+    spc: 'SW5E.WeaponPropertiesSpc',
+    thr: 'SW5E.WeaponPropertiesThr',
+    two: 'SW5E.WeaponPropertiesTwo',
+    ver: 'SW5E.WeaponPropertiesVer'
 }

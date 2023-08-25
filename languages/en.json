@@ -12,15 +12,17 @@
       "9thLevelPowers": "9th Level Powers",
       "abilities": "Abilities",
       "activeFeatures": "Active Features",
+      "artifact": "Artifact",
       "artificerInfusions": "Artificer Infusions",
       "atWillPowers": "At-Will Powers",
       "backgroundFeatures": "Background Features",
       "bonusActions": "Bonus Actions",
-      "cantrips": "Cantrips",
+      "at-Wills": "At-Wills",
       "channelDivinity": "Channel Divinity",
       "check": "Check",
       "checks": "Checks",
       "classFeatures": "Class Features",
+      "common": "Common",
       "condition": "Condition",
       "conditions": "Conditions",
       "crewActions": "Crew Actions",
@@ -48,12 +50,15 @@
       "passiveFeatures": "Passive Features",
       "psionicPowers": "Psionic Powers",
       "speciesFeatures": "Species Features",
+      "rare": "Rare",
       "rests": "Rests",
       "rollInitiative": "Roll Initiative",
       "runes": "Runes",
       "skill": "Skill",
       "skills": "Skills",
       "superiorHuntersDefense": "Superior Hunter's Defense",
+      "uncommon": "Uncommon",
+      "veryRare": "Very Rare",
       "settings": {
         "abbreviateSkills": {
           "hint": "Display skill and ability names as a three-character abbreviation",
@@ -78,6 +83,10 @@
         "showUnequippedItems": {
           "hint": "Show unequipped items",
           "name": "Show Unequipped Items"
+        },
+        "showUnequippedItemsNpcs": {
+          "hint": "Show unequipped items for NPCs",
+          "name": "Show Unequipped Items for NPCs"
         },
         "showUnpreparedPowers": {
           "hint": "Show unprepared powers",
