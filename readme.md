@@ -43,3 +43,5 @@ Enormous thanks also goes to the following people for their help in getting the 
 # License
 
 This Foundry VTT module is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/) and this work is licensed under [Foundry Virtual Tabletop EULA - Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+The original [fvtt-token-action-hud-dnd5e](https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e) module by [Larkinabout](https://github.com/Larkinabout) which this module is based on is also licensed under CC BY 4.0.
