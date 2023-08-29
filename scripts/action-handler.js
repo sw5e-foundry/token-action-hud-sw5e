@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTIVATION_TYPE_ICON, ACTION_TYPE, CONDITION, PREPARED_ICON, WEAPON_PROPERTY } from './constants.js'
+import { ACTIVATION_TYPE_ICON, ACTION_TYPE, CONDITION, PREPARED_ICON, RARITY, WEAPON_PROPERTY } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -1504,7 +1504,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 await TextEditor.enrichHTML(coreModule.api.Utils.i18n(tooltipData?.description ?? ''), { async: true })
 
             const rarityHtml = tooltipData?.rarity
-                ? `<span class="tah-tag ${tooltipData.rarity}">${coreModule.api.Utils.i18n(CONFIG.SW5E.itemRarity[tooltipData.rarity])}</span>`
+                ? `<span class="tah-tag ${tooltipData.rarity}">${coreModule.api.Utils.i18n(RARITY[tooltipData.rarity])}</span>`
                 : ''
 
             // FIXME: This condition is only needed on 2.2.2.2.5.0 due to: sw5e-foundry/sw5e#722
