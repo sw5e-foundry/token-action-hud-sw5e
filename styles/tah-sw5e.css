@@ -48,22 +48,22 @@
     border-radius: 4px;
   }
 
-  .tah-tags .tah-tag.common {
+  .tah-tags .tah-tag.standard {
     border-color: #323232;
     background-color: #323232;
   }
 
-  .tah-tags .tah-tag.uncommon {
+  .tah-tags .tah-tag.premium {
     border-color: #008000;
     background-color: #006000;
   }
 
-  .tah-tags .tah-tag.rare {
+  .tah-tags .tah-tag.prototype {
     border-color: #002664;
     background-color: #002664;
   }
   
-  .tah-tags .tah-tag.veryRare {
+  .tah-tags .tah-tag.advanced {
     border-color: #54166e;
     background-color: #54166e;
   }
