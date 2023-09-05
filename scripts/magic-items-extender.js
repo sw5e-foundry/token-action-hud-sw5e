@@ -71,7 +71,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     }
                 })
 
-                // Add actions to HUD
+                // Add actions to action list
                 this.actionHandler.addActions(actions, groupData)
             })
         }

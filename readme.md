@@ -8,7 +8,7 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 - Make rolls directly from the HUD instead of opening your character sheet.
 - Use items from the HUD or right-click an item to open its sheet.
 - Move the HUD and choose to expand the menus up or down.
-- Unlock the HUD to customise categories and subcategories per user, and actions per actor.
+- Unlock the HUD to customise groups and actions.
 - Add your own macros and Journal Entry and Roll Table compendiums.
 
 # Installation
@@ -29,6 +29,8 @@ Token Action HUD uses either the [Color Picker](https://foundryvtt.com/packages/
 
 # Support
 
+For a guide on using Token Action HUD, go to: [How to Use Token Action HUD](https://github.com/Larkinabout/fvtt-token-action-hud-core/wiki/How-to-Use-Token-Action-HUD)
+
 For questions, feature requests or bug reports, please open an issue [here](https://github.com/sw5e-foundry/token-action-hud-sw5e/issues).
 
 Pull requests are welcome. Please include a reason for the request or create an issue before starting one.
@@ -41,3 +43,5 @@ Enormous thanks also goes to the following people for their help in getting the 
 # License
 
 This Foundry VTT module is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/) and this work is licensed under [Foundry Virtual Tabletop EULA - Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+The original [fvtt-token-action-hud-dnd5e](https://github.com/Larkinabout/fvtt-token-action-hud-dnd5e) module by [Larkinabout](https://github.com/Larkinabout) which this module is based on is also licensed under CC BY 4.0.

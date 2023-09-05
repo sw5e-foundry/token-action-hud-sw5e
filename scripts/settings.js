@@ -80,6 +80,22 @@ export function register (updateFunc) {
             updateFunc(value)
         }
     })
+    
+    game.settings.register(MODULE.ID, 'showUnequippedItemsNpcs', {
+        name: game.i18n.localize(
+            'tokenActionHud.sw5e.settings.showUnequippedItemsNpcs.name'
+        ),
+        hint: game.i18n.localize(
+            'tokenActionHud.sw5e.settings.showUnequippedItemsNpcs.hint'
+        ),
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: (value) => {
+            updateFunc(value)
+        }
+    })
 
     game.settings.register(MODULE.ID, 'showUnpreparedPowers', {
         name: game.i18n.localize(
