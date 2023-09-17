@@ -55,6 +55,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             case 'effect':
                 await this.#toggleEffect(event, actor, actionId)
                 break
+            case 'exhaustion':
+                await this.#modifyExhaustion(event, actor)
+                break
             case 'feature':
             case 'item':
             case 'spell':
@@ -73,6 +76,21 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 break
             default:
                 break
+            }
+        }
+
+        /**
+         * Modify Exhaustion
+         * @private
+         * @param {object} event The event
+         * @param {object} actor The actor
+         */
+        async #modifyExhaustion (event, actor) {
+            const isRightClick = this.isRightClick(event)
+            const exhaustion = actor.system.attributes.exhaustion
+            const update = (isRightClick) ? exhaustion - 1 : exhaustion + 1
+            if (update >= 0) {
+                actor.update({ 'system.attributes.exhaustion': update })
             }
         }
 
@@ -204,7 +222,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 break
             case 'inspiration': {
                 const update = !actor.system.attributes.inspiration
-                actor.update({ 'data.attributes.inspiration': update })
+                actor.update({ 'system.attributes.inspiration': update })
                 break
             }
             case 'longRest':

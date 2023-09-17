@@ -161,6 +161,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.#buildAbilities('check', 'checks')
             this.#buildAbilities('save', 'saves')
             this.#buildCombat()
+            this.#buildExhaustion()
             this.#buildRests()
             this.#buildSkills()
             this.#buildUtility()
@@ -448,6 +449,48 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 // Build temporary effects
                 this.#buildActions(temporaryEffects, { id: 'temporary-effects', type: 'system' }, actionType)
             ])
+        }
+
+        /**
+         * Build exhaustion
+         * @private
+         */
+        #buildExhaustion () {
+            // Exit if every actor is not the character type
+            if (this.actors.length === 0) return
+            if (!this.actors.every(actor => actor.type === 'character')) return
+
+            const actionType = 'exhaustion'
+
+            const id = 'exhaustion'
+            const name = coreModule.api.Utils.i18n('DND5E.Exhaustion')
+            const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+            const listName = `${actionTypeName}${name}`
+            const encodedValue = [actionType, id].join(this.delimiter)
+            const img = coreModule.api.Utils.getImage('modules/token-action-hud-dnd5e/icons/exhaustion.svg')
+            const info1 = { text: this.actor.system.attributes.exhaustion }
+            let cssClass = ''
+            const active = this.actor.system.attributes.exhaustion > 0
+                ? ' active'
+                : ''
+            cssClass = `toggle${active}`
+
+            // Get actions
+            const actions = [{
+                cssClass,
+                id,
+                name,
+                encodedValue,
+                img,
+                info1,
+                listName
+            }]
+
+            // Create group data
+            const groupData = { id: 'exhaustion', type: 'system' }
+
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
@@ -1042,7 +1085,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const activationTypes = Object.keys(game.dnd5e.config.abilityActivationTypes).filter((at) => at !== 'none')
             const activation = item.system.activation
             const activationType = activation?.type
-            if (activation && activationTypes.includes(activationType)) return true
+            if ((activation && activationTypes.includes(activationType)) || item.type === 'tool') return true
             return false
         }
 
