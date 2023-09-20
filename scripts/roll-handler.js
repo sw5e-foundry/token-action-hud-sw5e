@@ -19,7 +19,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const actionId = payload[1]
 
             if (!this.actor) {
-                for (const token of canvas.tokens.controlled) {
+                for (const token of coreModule.api.Utils.getControlledTokens()) {
                     const actor = token.actor
                     await this.#handleAction(event, actionType, actor, token, actionId)
                 }

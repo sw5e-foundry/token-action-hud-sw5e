@@ -332,7 +332,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const info1 = {}
                 let cssClass = ''
                 if (combatType[0] === 'initiative' && game.combat) {
-                    const tokenIds = canvas.tokens.controlled.map((token) => token.id)
+                    const tokens = coreModule.api.Utils.getControlledTokens()
+                    const tokenIds = tokens?.map((token) => token.id)
                     const combatants = game.combat.combatants.filter((combatant) => tokenIds.includes(combatant.tokenId))
 
                     // Get initiative for single token
@@ -1201,7 +1202,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         #getActors () {
             const allowedTypes = ['character', 'npc']
-            const actors = canvas.tokens.controlled.filter(token => token.actor).map((token) => token.actor)
+            const tokens = coreModule.api.Utils.getControlledTokens()
+            const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
                 return actors
             } else {
@@ -1216,8 +1218,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         #getTokens () {
             const allowedTypes = ['character', 'npc']
-            const tokens = canvas.tokens.controlled
-            const actors = tokens.filter(token => token.actor).map((token) => token.actor)
+            const tokens = coreModule.api.Utils.getControlledTokens()
+            const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
                 return tokens
             } else {
