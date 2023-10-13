@@ -52,6 +52,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if (!token) return
                 await this.#toggleCondition(event, actor, token, actionId)
                 break
+            case 'counter':
+                await this.#modifyCounter(event, actor, actionId)
+                break
             case 'effect':
                 await this.#toggleEffect(event, actor, actionId)
                 break
@@ -80,6 +83,30 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
+         * Modify Counter
+         * @private
+         * @param {object} event The event
+         * @param {object} actor The actor
+         * @param {string} actionId The action id
+         */
+        async #modifyCounter (event, actor, actionId) {
+            switch (actionId) {
+            case 'death-saves':
+                this.#rollDeathSave(event, actor)
+                break
+            case 'exhaustion':
+                await this.#modifyExhaustion(event, actor)
+                break
+            case 'inspiration':
+                await this.#modifyInspiration(actor)
+                break
+            default:
+                await this.#modifyCustomCounter(event, actor, actionId)
+                break
+            }
+        }
+
+        /**
          * Modify Exhaustion
          * @private
          * @param {object} event The event
@@ -91,6 +118,70 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const update = (isRightClick) ? exhaustion - 1 : exhaustion + 1
             if (update >= 0) {
                 actor.update({ 'system.attributes.exhaustion': update })
+            }
+        }
+
+        /**
+         * Modify Inspiration
+         * @private
+         * @param {object} actor The actor
+         */
+        async #modifyInspiration (actor) {
+            const update = !actor.system.attributes.inspiration
+            actor.update({ 'system.attributes.inspiration': update })
+        }
+
+        /**
+         * Modify Custom Counter
+         * @private
+         * @param {object} event The event
+         * @param {object} actor The actor
+         * * @param {string} actionId The action id
+         */
+        async #modifyCustomCounter (event, actor, actionId) {
+            if (!coreModule.api.Utils.isModuleActive('dnd5e-custom-counters')) return
+
+            const [id, type] = decodeURIComponent(actionId).split('>')
+
+            const isRightClick = this.isRightClick(event)
+            const isCtrl = this.isCtrl(event)
+            let value = actor.getFlag('dnd5e-custom-counters', id)
+
+            switch (type) {
+            case 'checkbox':
+                await actor.setFlag('dnd5e-custom-counters', id, !value)
+                break
+            case 'number':
+                value = value ?? 0
+                if (isRightClick) {
+                    if (value > 0) {
+                        await actor.setFlag('dnd5e-custom-counters', id, value - 1)
+                    }
+                } else {
+                    await actor.setFlag('dnd5e-custom-counters', id, value + 1)
+                }
+                break
+            case 'successFailure':
+                value = value ?? {}
+                value.success = value?.success ?? 0
+                value.failure = value?.failure ?? 0
+                if (isRightClick) {
+                    if (isCtrl) {
+                        if (value?.failure > 0) {
+                            await actor.setFlag('dnd5e-custom-counters', `${id}.failure`, value.failure - 1)
+                        }
+                    } else {
+                        if (value?.success > 0) {
+                            await actor.setFlag('dnd5e-custom-counters', `${id}.success`, value.success - 1)
+                        }
+                    }
+                } else {
+                    if (isCtrl) {
+                        await actor.setFlag('dnd5e-custom-counters', `${id}.failure`, value.failure + 1)
+                    } else {
+                        await actor.setFlag('dnd5e-custom-counters', `${id}.success`, value.success + 1)
+                    }
+                }
             }
         }
 
@@ -131,6 +222,16 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (!actor) return
             if (!actor.system?.abilities) return
             actor.rollAbilityTest(actionId, { event })
+        }
+
+        /**
+         * Roll Death Save
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         */
+        #rollDeathSave (event, actor) {
+            actor.rollDeathSave({ event })
         }
 
         /**
@@ -209,7 +310,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #performUtilityAction (event, actor, token, actionId) {
             switch (actionId) {
             case 'deathSave':
-                actor.rollDeathSave({ event })
+                this.#rollDeathSave(event, actor)
                 break
             case 'endTurn':
                 if (!token) break
@@ -220,11 +321,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             case 'initiative':
                 await this.#rollInitiative(actor)
                 break
-            case 'inspiration': {
-                const update = !actor.system.attributes.inspiration
-                actor.update({ 'system.attributes.inspiration': update })
+            case 'inspiration':
+                await this.#modifyInspiration(actor)
                 break
-            }
             case 'longRest':
                 actor.longRest()
                 break

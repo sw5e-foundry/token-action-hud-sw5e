@@ -161,6 +161,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.#buildAbilities('check', 'checks')
             this.#buildAbilities('save', 'saves')
             this.#buildCombat()
+            this.#buildCounters()
             this.#buildExhaustion()
             this.#buildRests()
             this.#buildSkills()
@@ -412,6 +413,119 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             // Create group data
             const groupData = { id: 'conditions', type: 'system' }
+
+            // Add actions to HUD
+            this.addActions(actions, groupData)
+        }
+
+        /**
+         * Build counters
+         * @private
+         */
+        async #buildCounters () {
+            const actionType = 'counter'
+
+            // Get counters
+            let counters = []
+
+            if (coreModule.api.Utils.isModuleActive('dnd5e-custom-counters')) {
+                if (this.actorType === 'character') {
+                    counters = Object.entries(game.settings.get('dnd5e-custom-counters', 'characterCounters'))
+                        .filter(([_, value]) => value.visible)
+                        .map(([key, value]) => {
+                            value.key = key
+                            return value
+                        })
+                } else {
+                    return
+                }
+            } else {
+                counters = [
+                    {
+                        name: coreModule.api.Utils.i18n('DND5E.DeathSave'),
+                        type: 'successFailure',
+                        system: true,
+                        visible: true,
+                        key: 'death-saves'
+                    },
+                    {
+                        name: coreModule.api.Utils.i18n('DND5E.Exhaustion'),
+                        type: 'number',
+                        system: true,
+                        visible: true,
+                        key: 'exhaustion'
+                    },
+                    {
+                        name: coreModule.api.Utils.i18n('DND5E.Inspiration'),
+                        type: 'checkbox',
+                        system: true,
+                        visible: true,
+                        key: 'inspiration'
+                    }
+                ]
+            }
+
+            // Get actions
+            const actions = counters.map(counter => {
+                const id = counter.key
+                const name = counter.name
+                const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+                const listName = `${actionTypeName}${name}`
+                const value = (counter.system) ? id : encodeURIComponent(`${id}>${counter.type}`)
+                const encodedValue = [actionType, value].join(this.delimiter)
+                let active = ''
+                let cssClass = ''
+                let img = ''
+                let info1 = ''
+                if (counter.system) {
+                    switch (id) {
+                    case 'exhaustion':
+                        active = (this.actor.system.attributes.exhaustion > 0) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        img = coreModule.api.Utils.getImage('modules/token-action-hud-dnd5e/icons/exhaustion.svg')
+                        info1 = { text: this.actor.system.attributes.exhaustion }
+                        break
+                    case 'death-saves':
+                        img = coreModule.api.Utils.getImage('modules/token-action-hud-dnd5e/icons/death-saves.svg')
+                        info1 = { text: `${this.actor.system.attributes.death.success}/${this.actor.system.attributes.death.failure}` }
+                        break
+                    case 'inspiration':
+                        active = (this.actor.system.attributes.inspiration) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        img = coreModule.api.Utils.getImage('modules/token-action-hud-dnd5e/icons/inspiration.svg')
+                        break
+                    }
+                } else {
+                    const value = this.actor.getFlag('dnd5e-custom-counters', id)
+                    switch (counter.type) {
+                    case 'checkbox':
+                        active = (value) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        break
+                    case 'number':
+                        active = (value > 0) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        info1 = { text: value }
+                        break
+                    case 'successFailure':
+                        info1 = { text: `${value?.success ?? 0}/${value?.failure ?? 0}` }
+                        break
+                    }
+                }
+
+                return {
+                    id,
+                    name,
+                    listName,
+                    encodedValue,
+                    cssClass,
+                    img,
+                    info1
+                }
+            })
+
+            // Create group data
+            const groupData = { id: 'counters', type: 'system' }
 
             // Add actions to HUD
             this.addActions(actions, groupData)
