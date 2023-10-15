@@ -423,6 +423,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         async #buildCounters () {
+            if (this.actorType !== 'character') return
+
             const actionType = 'counter'
 
             // Get counters
