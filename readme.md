@@ -38,6 +38,12 @@ Token Action HUD Core requires the [socketlib](https://foundryvtt.com/packages/s
 # Recommended Modules
 Token Action HUD uses the [Color Picker](https://foundryvtt.com/packages/color-picker) library module for its color picker settings.
 
+# For Developers
+## Hooks
+The following hooks are available to use:
+- **tokenActionHudSystemActionHoverOn**: Called when an action in the HUD is hovered on.
+- **tokenActionHudSystemActionHoverOff**: Called when an action in the HUD is hovered off.
+
 # Support
 
 For a guide on using Token Action HUD, go to: [How to Use Token Action HUD](https://github.com/Larkinabout/fvtt-token-action-hud-core/wiki/How-to-Use-Token-Action-HUD)
