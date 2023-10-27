@@ -3,20 +3,13 @@ export let RollHandler = null
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     RollHandler = class RollHandler extends coreModule.api.RollHandler {
     /**
-     * Handle Action Event
+     * Handle action click
      * @override
      * @param {object} event
      * @param {string} encodedValue
      */
-        async doHandleActionEvent (event, encodedValue) {
-            const payload = encodedValue.split('|')
-
-            if (payload.length !== 2) {
-                super.throwInvalidValueErr()
-            }
-
-            const actionType = payload[0]
-            const actionId = payload[1]
+        async handleActionClick (event, encodedValue) {
+            const [actionType, actionId ] = encodedValue.split('|')
 
             if (!this.actor) {
                 for (const token of coreModule.api.Utils.getControlledTokens()) {
@@ -433,6 +426,27 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             Hooks.callAll('forceUpdateTokenActionHud')
+        }
+
+        /**
+         * Handle action hover
+         * @override
+         * @param {object} event
+         * @param {string} encodedValue
+         */
+        async handleActionHover (event, encodedValue) {
+            const types = ['feature', 'item', 'spell', 'weapon', 'magicItem']
+            const [actionType, actionId] = encodedValue.split('|')
+
+            if (!types.includes(actionType)) return
+
+            const item = coreModule.api.Utils.getItem(this.actor, actionId)
+
+            if (event.type === 'mouseenter') {
+                Hooks.call('tokenActionHudSystemActionHoverOn', event, item)
+            } else {
+                Hooks.call('tokenActionHudSystemActionHoverOff', event, item)
+            }
         }
     }
 })

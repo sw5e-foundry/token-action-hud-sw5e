@@ -1,18 +1,17 @@
-export let MagicItemActionListExtender = null
+export let MagicItemActionHandlerExtender = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
-    MagicItemActionListExtender = class MagicItemActionListExtender extends coreModule.api.ActionListExtender {
+    MagicItemActionHandlerExtender = class MagicItemActionHandlerExtender extends coreModule.api.ActionHandlerExtender {
         constructor (actionHandler) {
-            super(actionHandler.categoryManager)
+            super()
             this.actionHandler = actionHandler
-            this.categoryManager = actionHandler.categoryManager
             this.actor = null
         }
 
         /**
      * Extend the action list
      */
-        extendActionList () {
+        extendActionHandler () {
             this.actor = this.actionHandler.actor
             if (!this.actor) return
 
