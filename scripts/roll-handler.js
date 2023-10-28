@@ -442,10 +442,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const item = coreModule.api.Utils.getItem(this.actor, actionId)
 
-            if (event.type === 'mouseenter') {
+            switch (event.type) {
+            case 'mouseenter':
+            case 'mouseover':
                 Hooks.call('tokenActionHudSystemActionHoverOn', event, item)
-            } else {
+                break
+            case 'mouseleave':
+            case 'mouseout':
                 Hooks.call('tokenActionHudSystemActionHoverOff', event, item)
+                break
             }
         }
     }
