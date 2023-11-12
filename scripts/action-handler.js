@@ -164,6 +164,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.#buildAbilities('save', 'saves')
             this.#buildCombat()
             this.#buildRepairs()
+            this.#buildCounters()
+            this.#buildExhaustion()
             this.#buildRests()
             this.#buildSkills()
             this.#buildUtility()
@@ -357,7 +359,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const info1 = {}
                 let cssClass = ''
                 if (combatType[0] === 'initiative' && game.combat) {
-                    const tokenIds = canvas.tokens.controlled.map((token) => token.id)
+                    const tokens = coreModule.api.Utils.getControlledTokens()
+                    const tokenIds = tokens?.map((token) => token.id)
                     const combatants = game.combat.combatants.filter((combatant) => tokenIds.includes(combatant.tokenId))
 
                     // Get initiative for single token
@@ -442,6 +445,123 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
+         * Build counters
+         * @private
+         */
+        async #buildCounters () {
+            if (this.actorType !== 'character') return
+
+            const actionType = 'counter'
+
+            // Get counters
+            let counters = []
+
+            // TODO: Rename if a sw5e-custom-counters is created.
+            // It "works" when dnd5e-custom-counters has sw5e added to the system list, but DND5E strings won't be localized.
+            if (coreModule.api.Utils.isModuleActive('dnd5e-custom-counters')) {
+                if (this.actorType === 'character') {
+                    counters = Object.entries(game.settings.get('dnd5e-custom-counters', 'characterCounters'))
+                        .filter(([_, value]) => value.visible)
+                        .map(([key, value]) => {
+                            value.key = key
+                            return value
+                        })
+                } else {
+                    return
+                }
+            } else {
+                counters = [
+                    {
+                        name: coreModule.api.Utils.i18n('SW5E.DeathSave'),
+                        type: 'successFailure',
+                        system: true,
+                        visible: true,
+                        key: 'death-saves'
+                    },
+                    {
+                        name: coreModule.api.Utils.i18n('SW5E.Exhaustion'),
+                        type: 'number',
+                        system: true,
+                        visible: true,
+                        key: 'exhaustion'
+                    },
+                    {
+                        name: coreModule.api.Utils.i18n('SW5E.Inspiration'),
+                        type: 'checkbox',
+                        system: true,
+                        visible: true,
+                        key: 'inspiration'
+                    }
+                ]
+            }
+
+            // Get actions
+            const actions = counters.map(counter => {
+                const id = counter.key
+                const name = counter.name
+                const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+                const listName = `${actionTypeName}${name}`
+                const value = (counter.system) ? id : encodeURIComponent(`${id}>${counter.type}`)
+                const encodedValue = [actionType, value].join(this.delimiter)
+                let active = ''
+                let cssClass = ''
+                let img = ''
+                let info1 = ''
+                if (counter.system) {
+                    switch (id) {
+                    case 'exhaustion':
+                        active = (this.actor.system.attributes.exhaustion > 0) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        img = coreModule.api.Utils.getImage('modules/token-action-hud-sw5e/icons/exhaustion.svg')
+                        info1 = { text: this.actor.system.attributes.exhaustion }
+                        break
+                    case 'death-saves':
+                        img = coreModule.api.Utils.getImage('modules/token-action-hud-sw5e/icons/death-saves.svg')
+                        info1 = { text: `${this.actor.system.attributes.death.success}/${this.actor.system.attributes.death.failure}` }
+                        break
+                    case 'inspiration':
+                        active = (this.actor.system.attributes.inspiration) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        img = coreModule.api.Utils.getImage('modules/token-action-hud-sw5e/icons/inspiration.svg')
+                        break
+                    }
+                } else {
+                    const value = this.actor.getFlag('dnd5e-custom-counters', id)
+                    switch (counter.type) {
+                    case 'checkbox':
+                        active = (value) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        break
+                    case 'number':
+                        active = (value > 0) ? ' active' : ''
+                        cssClass = `toggle${active}`
+                        info1 = { text: value }
+                        break
+                    case 'successFailure':
+                        info1 = { text: `${value?.success ?? 0}/${value?.failure ?? 0}` }
+                        break
+                    }
+                }
+
+                return {
+                    id,
+                    name,
+                    listName,
+                    encodedValue,
+                    cssClass,
+                    img,
+                    info1
+                }
+            })
+
+            // Create group data
+            const groupData = { id: 'counters', type: 'system' }
+
+            // Add actions to HUD
+            this.addActions(actions, groupData)
+        }
+
+        /**
          * Build effects
          * @private
          */
@@ -474,6 +594,48 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 // Build temporary effects
                 this.#buildActions(temporaryEffects, { id: 'temporary-effects', type: 'system' }, actionType)
             ])
+        }
+
+        /**
+         * Build exhaustion
+         * @private
+         */
+        #buildExhaustion () {
+            // Exit if every actor is not the character type
+            if (this.actors.length === 0) return
+            if (!this.actors.every(actor => actor.type === 'character')) return
+
+            const actionType = 'exhaustion'
+
+            const id = 'exhaustion'
+            const name = coreModule.api.Utils.i18n('SW5E.Exhaustion')
+            const actionTypeName = `${coreModule.api.Utils.i18n(ACTION_TYPE[actionType])}: ` ?? ''
+            const listName = `${actionTypeName}${name}`
+            const encodedValue = [actionType, id].join(this.delimiter)
+            const img = coreModule.api.Utils.getImage('modules/token-action-hud-sw5e/icons/exhaustion.svg')
+            const info1 = { text: this.actor.system.attributes.exhaustion }
+            let cssClass = ''
+            const active = this.actor.system.attributes.exhaustion > 0
+                ? ' active'
+                : ''
+            cssClass = `toggle${active}`
+
+            // Get actions
+            const actions = [{
+                cssClass,
+                id,
+                name,
+                encodedValue,
+                img,
+                info1,
+                listName
+            }]
+
+            // Create group data
+            const groupData = { id: 'exhaustion', type: 'system' }
+
+            // Add actions to HUD
+            this.addActions(actions, groupData)
         }
 
         /**
@@ -1182,7 +1344,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const activationTypes = Object.keys(game.sw5e.config.abilityActivationTypes).filter((at) => at !== 'none')
             const activation = item.system.activation
             const activationType = activation?.type
-            if (activation && activationTypes.includes(activationType)) return true
+            if ((activation && activationTypes.includes(activationType)) || item.type === 'tool') return true
             return false
         }
 
@@ -1298,7 +1460,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         #getActors () {
             const allowedTypes = ['character', 'npc', 'starship']
-            const actors = canvas.tokens.controlled.filter(token => token.actor).map((token) => token.actor)
+            const tokens = coreModule.api.Utils.getControlledTokens()
+            const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
                 return actors
             } else {
@@ -1313,8 +1476,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         #getTokens () {
             const allowedTypes = ['character', 'npc', 'starship']
-            const tokens = canvas.tokens.controlled
-            const actors = tokens.filter(token => token.actor).map((token) => token.actor)
+            const tokens = coreModule.api.Utils.getControlledTokens()
+            const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
                 return tokens
             } else {
