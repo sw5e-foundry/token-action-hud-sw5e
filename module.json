@@ -19,7 +19,7 @@
   "version": "This is auto replaced",
   "compatibility": {
     "minimum": "10",
-    "verified": "11.307"
+    "verified": "11.313"
   },
   "esmodules": [
     "./scripts/token-action-hud-sw5e.min.js"
@@ -90,7 +90,7 @@
         "compatibility": [
           {
             "minimum": "2.1.0",
-            "verified": "2.2.3"
+            "verified": "2.3.1"
           }
         ]
       }
@@ -101,9 +101,9 @@
         "type": "module",
         "compatibility": [
           {
-            "minimum": "1.4.8",
-            "maximum": "1.4",
-            "verified": "1.4.18"
+            "minimum": "1.5.0",
+            "maximum": "1.5",
+            "verified": "1.5.0"
           }
         ]
       }

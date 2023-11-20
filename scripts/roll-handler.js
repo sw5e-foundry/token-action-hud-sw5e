@@ -3,23 +3,16 @@ export let RollHandler = null
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     RollHandler = class RollHandler extends coreModule.api.RollHandler {
     /**
-     * Handle Action Event
+     * Handle action click
      * @override
      * @param {object} event
      * @param {string} encodedValue
      */
-        async doHandleActionEvent (event, encodedValue) {
-            const payload = encodedValue.split('|')
-
-            if (payload.length !== 2) {
-                super.throwInvalidValueErr()
-            }
-
-            const actionType = payload[0]
-            const actionId = payload[1]
+        async handleActionClick (event, encodedValue) {
+            const [actionType, actionId ] = encodedValue.split('|')
 
             if (!this.actor) {
-                for (const token of canvas.tokens.controlled) {
+                for (const token of coreModule.api.Utils.getControlledTokens()) {
                     const actor = token.actor
                     await this.#handleAction(event, actionType, actor, token, actionId)
                 }
@@ -52,8 +45,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if (!token) return
                 await this.#toggleCondition(event, actor, token, actionId)
                 break
+            case 'counter':
+                await this.#modifyCounter(event, actor, actionId)
+                break
             case 'effect':
                 await this.#toggleEffect(event, actor, actionId)
+                break
+            case 'exhaustion':
+                await this.#modifyExhaustion(event, actor)
                 break
             case 'feature':
             case 'item':
@@ -73,6 +72,109 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 break
             default:
                 break
+            }
+        }
+
+        /**
+         * Modify Counter
+         * @private
+         * @param {object} event The event
+         * @param {object} actor The actor
+         * @param {string} actionId The action id
+         */
+        async #modifyCounter (event, actor, actionId) {
+            switch (actionId) {
+            case 'death-saves':
+                this.#rollDeathSave(event, actor)
+                break
+            case 'exhaustion':
+                await this.#modifyExhaustion(event, actor)
+                break
+            case 'inspiration':
+                await this.#modifyInspiration(actor)
+                break
+            default:
+                await this.#modifyCustomCounter(event, actor, actionId)
+                break
+            }
+        }
+
+        /**
+         * Modify Exhaustion
+         * @private
+         * @param {object} event The event
+         * @param {object} actor The actor
+         */
+        async #modifyExhaustion (event, actor) {
+            const isRightClick = this.isRightClick(event)
+            const exhaustion = actor.system.attributes.exhaustion
+            const update = (isRightClick) ? exhaustion - 1 : exhaustion + 1
+            if (update >= 0) {
+                actor.update({ 'system.attributes.exhaustion': update })
+            }
+        }
+
+        /**
+         * Modify Inspiration
+         * @private
+         * @param {object} actor The actor
+         */
+        async #modifyInspiration (actor) {
+            const update = !actor.system.attributes.inspiration
+            actor.update({ 'system.attributes.inspiration': update })
+        }
+
+        /**
+         * Modify Custom Counter
+         * @private
+         * @param {object} event The event
+         * @param {object} actor The actor
+         * * @param {string} actionId The action id
+         */
+        async #modifyCustomCounter (event, actor, actionId) {
+            if (!coreModule.api.Utils.isModuleActive('sw5e-custom-counters')) return
+
+            const [id, type] = decodeURIComponent(actionId).split('>')
+
+            const isRightClick = this.isRightClick(event)
+            const isCtrl = this.isCtrl(event)
+            let value = actor.getFlag('sw5e-custom-counters', id)
+
+            switch (type) {
+            case 'checkbox':
+                await actor.setFlag('sw5e-custom-counters', id, !value)
+                break
+            case 'number':
+                value = value ?? 0
+                if (isRightClick) {
+                    if (value > 0) {
+                        await actor.setFlag('sw5e-custom-counters', id, value - 1)
+                    }
+                } else {
+                    await actor.setFlag('sw5e-custom-counters', id, value + 1)
+                }
+                break
+            case 'successFailure':
+                value = value ?? {}
+                value.success = value?.success ?? 0
+                value.failure = value?.failure ?? 0
+                if (isRightClick) {
+                    if (isCtrl) {
+                        if (value?.failure > 0) {
+                            await actor.setFlag('sw5e-custom-counters', `${id}.failure`, value.failure - 1)
+                        }
+                    } else {
+                        if (value?.success > 0) {
+                            await actor.setFlag('sw5e-custom-counters', `${id}.success`, value.success - 1)
+                        }
+                    }
+                } else {
+                    if (isCtrl) {
+                        await actor.setFlag('sw5e-custom-counters', `${id}.failure`, value.failure + 1)
+                    } else {
+                        await actor.setFlag('sw5e-custom-counters', `${id}.success`, value.success + 1)
+                    }
+                }
             }
         }
 
@@ -113,6 +215,16 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (!actor) return
             if (!actor.system?.abilities) return
             actor.rollAbilityTest(actionId, { event })
+        }
+
+        /**
+         * Roll Death Save
+         * @private
+         * @param {object} event    The event
+         * @param {object} actor    The actor
+         */
+        #rollDeathSave (event, actor) {
+            actor.rollDeathSave({ event })
         }
 
         /**
@@ -191,7 +303,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #performUtilityAction (event, actor, token, actionId) {
             switch (actionId) {
             case 'deathSave':
-                actor.rollDeathSave({ event })
+                this.#rollDeathSave(event, actor)
                 break
             case 'endTurn':
                 if (!token) break
@@ -202,11 +314,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             case 'initiative':
                 await this.#rollInitiative(actor)
                 break
-            case 'inspiration': {
-                const update = !actor.system.attributes.inspiration
-                actor.update({ 'data.attributes.inspiration': update })
+            case 'inspiration':
+                await this.#modifyInspiration(actor)
                 break
-            }
             case 'longRest':
                 actor.longRest()
                 break
@@ -316,6 +426,32 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             Hooks.callAll('forceUpdateTokenActionHud')
+        }
+
+        /**
+         * Handle action hover
+         * @override
+         * @param {object} event
+         * @param {string} encodedValue
+         */
+        async handleActionHover (event, encodedValue) {
+            const types = ['feature', 'item', 'power', 'weapon', 'magicItem']
+            const [actionType, actionId] = encodedValue.split('|')
+
+            if (!types.includes(actionType)) return
+
+            const item = coreModule.api.Utils.getItem(this.actor, actionId)
+
+            switch (event.type) {
+            case 'mouseenter':
+            case 'mouseover':
+                Hooks.call('tokenActionHudSystemActionHoverOn', event, item)
+                break
+            case 'mouseleave':
+            case 'mouseout':
+                Hooks.call('tokenActionHudSystemActionHoverOff', event, item)
+                break
+            }
         }
     }
 })

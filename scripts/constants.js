@@ -15,7 +15,7 @@ export const CORE_MODULE = {
 /**
  * Core module version required by the system module
  */
-export const REQUIRED_CORE_MODULE_VERSION = '1.4'
+export const REQUIRED_CORE_MODULE_VERSION = '1.5'
 
 /**
  * Action type
@@ -24,7 +24,9 @@ export const ACTION_TYPE = {
     ability: 'SW5E.Ability',
     check: 'tokenActionHud.sw5e.check',
     condition: 'tokenActionHud.sw5e.condition',
+    counter: 'tokenActionHud.sw5e.counter',
     effect: 'SW5E.Effect',
+    exhaustion: 'SW5E.Exhaustion',
     feature: 'ITEM.TypeFeat',
     item: 'tokenActionHud.sw5e.item',
     save: 'SW5E.ActionSave',
@@ -120,7 +122,7 @@ export const GROUP = {
     atWillPowers: { id: 'at-will-powers', name: 'tokenActionHud.sw5e.atWillPowers', type: 'system' },
     backgroundFeatures: { id: 'background-features', name: 'tokenActionHud.sw5e.backgroundFeatures', type: 'system' },
     bonusActions: { id: 'bonus-actions', name: 'tokenActionHud.sw5e.bonusActions', type: 'system' },
-    at-Wills: { id: 'at-Wills', name: 'tokenActionHud.sw5e.at-Wills', type: 'system' },
+    at-wills: { id: 'at-wills', name: 'tokenActionHud.sw5e.at-wills', type: 'system' },
     channelDivinity: { id: 'channel-divinity', name: 'tokenActionHud.sw5e.channelDivinity', type: 'system' },
     checks: { id: 'checks', name: 'tokenActionHud.sw5e.checks', type: 'system' },
     classFeatures: { id: 'class-features', name: 'tokenActionHud.sw5e.classFeatures', type: 'system' },
@@ -128,12 +130,14 @@ export const GROUP = {
     conditions: { id: 'conditions', name: 'tokenActionHud.sw5e.conditions', type: 'system' },
     consumables: { id: 'consumables', name: 'ITEM.TypeConsumablePl', type: 'system' },
     containers: { id: 'containers', name: 'ITEM.TypeContainerPl', type: 'system' },
+    counters: { id: 'counters', name: 'tokenActionHud.sw5e.counters', type: 'system' },
     crewActions: { id: 'crew-actions', name: 'tokenActionHud.sw5e.crewActions', type: 'system' },
     defensiveTactics: { id: 'defensive-tactics', name: 'tokenActionHud.sw5e.defensiveTactics', type: 'system' },
     eldritchInvocations: { id: 'eldritch-invocations', name: 'tokenActionHud.sw5e.eldritchInvocations', type: 'system' },
     elementalDisciplines: { id: 'elemental-disciplines', name: 'tokenActionHud.sw5e.elementalDisciplines', type: 'system' },
     equipment: { id: 'equipment', name: 'ITEM.TypeEquipmentPl', type: 'system' },
     equipped: { id: 'equipped', name: 'SW5E.Equipped', type: 'system' },
+    exhaustion: { id: 'exhaustion', name: 'SW5E.Exhaustion', type: 'system' },
     feats: { id: 'feats', name: 'tokenActionHud.sw5e.feats', type: 'system' },
     fightingStyles: { id: 'fighting-styles', name: 'tokenActionHud.sw5e.fightingStyles', type: 'system' },
     huntersPrey: { id: 'hunters-prey', name: 'tokenActionHud.sw5e.huntersPrey', type: 'system' },

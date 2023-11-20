@@ -44,7 +44,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     { ...groups.atWillPowers, nestId: 'powers_at-will-powers' },
                     { ...groups.innatePowers, nestId: 'powers_innate-powers' },
                     { ...groups.pactPowers, nestId: 'powers_pact-powers' },
-                    { ...groups.at-Wills, nestId: 'powers_at-Wills' },
+                    { ...groups.at-wills, nestId: 'powers_at-wills' },
                     { ...groups._1stLevelPowers, nestId: 'powers_1st-level-powers' },
                     { ...groups._2ndLevelPowers, nestId: 'powers_2nd-level-powers' },
                     { ...groups._3rdLevelPowers, nestId: 'powers_3rd-level-powers' },

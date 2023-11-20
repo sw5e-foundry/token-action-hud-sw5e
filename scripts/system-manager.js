@@ -1,6 +1,6 @@
 // System Module Imports
 import { ActionHandler } from './action-handler.js'
-import { MagicItemActionListExtender } from './magic-items-extender.js'
+import { MagicItemActionHandlerExtender } from './magic-items-extender.js'
 import { RollHandler as Core } from './roll-handler.js'
 import { RollHandlerObsidian as Obsidian5e } from './roll-handler-obsidian.js'
 import { DEFAULTS } from './defaults.js'
@@ -10,15 +10,10 @@ export let SystemManager = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     SystemManager = class SystemManager extends coreModule.api.SystemManager {
-    /** @override */
-        doGetCategoryManager () {
-            return new coreModule.api.CategoryManager()
-        }
-
         /** @override */
-        doGetActionHandler (categoryManager) {
-            const actionHandler = new ActionHandler(categoryManager)
-            if (coreModule.api.Utils.isModuleActive('magic-items-2') || coreModule.api.Utils.isModuleActive('magicitems')) { actionHandler.addFurtherActionHandler(new MagicItemActionListExtender(actionHandler)) }
+        getActionHandler () {
+            const actionHandler = new ActionHandler()
+            if (coreModule.api.Utils.isModuleActive('magic-items-2') || coreModule.api.Utils.isModuleActive('magicitems')) { actionHandler.addActionHandlerExtender(new MagicItemActionHandlerExtender(actionHandler)) }
             return actionHandler
         }
 
@@ -35,9 +30,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @override */
-        doGetRollHandler (handlerId) {
+        getRollHandler (rollHandlerId) {
             let rollHandler
-            switch (handlerId) {
+            switch (rollHandlerId) {
             case 'obsidian':
                 rollHandler = new Obsidian5e()
                 break
@@ -51,12 +46,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @override */
-        doRegisterSettings (updateFunc) {
-            systemSettings.register(updateFunc)
+        registerSettings (onChangeFunction) {
+            systemSettings.register(onChangeFunction)
         }
 
         /** @override */
-        async doRegisterDefaultFlags () {
+        async registerDefaults () {
             const defaults = DEFAULTS
             // If the 'Magic Items' module is active, then add a group for it
             if (game.modules.get('magicitems')?.active || game.modules.get('magic-items-2')?.active) {
