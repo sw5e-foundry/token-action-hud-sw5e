@@ -25,8 +25,10 @@
       "crewActions": "Crew Actions",
       "deathSave": "Death Save",
       "defensiveTactics": "Defensive Tactics",
+      "deploymentFeatures": "Deployment Features",
       "destructionSave": "Destruction Save",
       "feats": "Feats",
+      "fightingMasteries": "Fighting Masteries",
       "fightingStyles": "Fighting Styles",
       "innatePowers": "Innate Powers",
       "item": "Item",
@@ -34,6 +36,7 @@
       "lairActions": "Lair Actions",
       "legendary": "Legendary",
       "legendaryActions": "Legendary Actions",
+      "lightsaberForms": "Lightsaber Forms",
       "naturalPowers": "Natural Powers",
       "magicItems": "Magic Items",
       "maneuvers": "Maneuvers",
@@ -49,6 +52,7 @@
       "runes": "Runes",
       "skill": "Skill",
       "skills": "Skills",
+      "starshipFeatures": "Starship Features",
       "settings": {
         "abbreviateSkills": {
           "hint": "Display skill and ability names as a three-character abbreviation",

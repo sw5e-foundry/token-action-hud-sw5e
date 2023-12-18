@@ -645,11 +645,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #buildFeatures () {
             const actionType = 'feature'
 
-            // Get feats
+            // Get feats and maneuvers
             const feats = new Map()
             for (const [key, value] of this.items) {
                 const type = value.type
-                if (type === 'feat') feats.set(key, value)
+                if (['feat','maneuver'].includes(type)) feats.set(key, value)
             }
 
             // Early exit if no feats exist
@@ -660,16 +660,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const featureTypes = [
                 { type: 'background', groupId: 'background-features' },
-                { type: 'classfeature', groupId: 'class-features' },
-                { type: 'deploymentfeature', groupId: 'deployment-features' },
-                { type: 'starshipfeature', groupId: 'starship-features' },
+                { type: 'class', groupId: 'class-features' },
+                { type: 'deployment', groupId: 'deployment-features' },
+                { type: 'starship', groupId: 'starship-features' },
                 { type: 'monster', groupId: 'monster-features' },
                 { type: 'species', groupId: 'species-features' },
                 { type: 'feats', groupId: 'feats' }
             ]
 
             const classFeatureTypes = [
-                { type: 'defensiveTactic', groupId: 'defensive-tactics' },
+                { type: 'lightsaberForm', groupId: 'lightsaber-forms' },
+                { type: 'fightingMastery', groupId: 'fighting-masteries' },
                 { type: 'fightingStyle', groupId: 'fighting-styles' },
                 { type: 'maneuver', groupId: 'maneuvers' },
                 { type: 'metamagic', groupId: 'metamagic-options' },
@@ -679,8 +680,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             for (const [key, value] of feats) {
                 const activationType = value.system.activation?.type
-                const type = value.system.type.value
-                const subType = value.system.type?.subtype
+                const type = value.type === 'feat' ? value.system.type.value : 'manuever'
+                const subType = value.type === 'feat' ? value.system.type?.subtype : 'manuever'
                 const excludedActivationTypes = ['', 'lair', 'legendary']
                 if (activationType && !excludedActivationTypes.includes(activationType)) {
                     if (!featuresMap.has('active-features')) featuresMap.set('active-features', new Map())
@@ -709,7 +710,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             // Create group name mappings
             const groupNameMappings = {
                 'active-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.activeFeatures'),
-                'passive-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.passiveFeatures')
+                'passive-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.passiveFeatures'),
+                'background-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.backgroundFeatures'),
+                'class-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.classFeatures'),
+                'deployment-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.deploymentFeatures'),
+                'starship-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.starshipFeatures'),
+                'monster-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.monsterFeatures'),
+                'species-features': coreModule.api.Utils.i18n('tokenActionHud.sw5e.speciesFeatures'),
+                'lightsaber-forms': coreModule.api.Utils.i18n('tokenActionHud.sw5e.lightsaberForms'),
+                'fighting-masteries': coreModule.api.Utils.i18n('tokenActionHud.sw5e.fightingMateries'),
+                'fighting-styles': coreModule.api.Utils.i18n('tokenActionHud.sw5e.fightingStyles'),
+                'maneuvers': coreModule.api.Utils.i18n('tokenActionHud.sw5e.maneuvers'),
+                'metamagic-options': coreModule.api.Utils.i18n('tokenActionHud.sw5e.metamagicOptions'),
+                'multiattacks': coreModule.api.Utils.i18n('tokenActionHud.sw5e.multiattacks'),
             }
 
             // Loop through inventory groups ids
